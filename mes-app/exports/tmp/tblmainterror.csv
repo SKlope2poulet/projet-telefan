@@ -1,0 +1,60 @@
+ErrorNo;ErrorDesc
+0;Preventive maintenance
+11;Unknown tool type gripped
+12;Unknown Program number
+23;No workpiece on the Pallet at stopper
+31;Camera found no workpiece
+41;Workpiece assembly position occupied
+42;No workpiece placed at the assembly position
+43;Workpiece upside down oriented
+44;Workpiece orientation not correct
+45;Workpiece not clamped at assembly position
+52;Unknown PCB pallet number
+63;All Fuse magazines empty
+20001;Machine without function
+20002;Application drilling is not executed
+20003;Application pressing without pressure air
+20004;Assembling robot lost gripper for positioning fuses
+20005;MES orders are not executed
+20006;Conveyer belt stops at application robot assembling
+20007;Conveyer belt fails
+20008;Conveyer belt doesn't start
+20009;Conveyer motor is stopped
+20010;Break of the CNC door glass
+20011;CNC working is underbreak
+20012;Failure message "Interactive failure message" on CNC station
+20013;Failure message "Time monitoring cylinder movement" at high-rack storage
+20014;Housing drops down during turning
+20015;Robot gripper without function
+20016;Gripper lost part on the application turning
+20017;All part are detected as wrong parts by application camera
+20018;No output signals on the periphery of station 2
+20019;left fuse will not gripped by assembling robot
+20020;Upper part isn't fixed after pressing
+20021;Upper part will not pushed out
+20022;Board dropped down from the vacuum sucker (assembling)
+20023;Application pressing doesn't start
+20024;Product will not dried with adjusted temperature
+20025;Application drilling without function
+20026;Stopper on application CNC working is blocked
+20027;Failure on Application heating
+20028;Part crashes before CNC working
+20029;Part will not put down on application turning
+20030;Part doesn't turn on application turning
+20031;Part will not lift
+20032;Part will not lift on application turning
+20033;Parts will not put down after turning
+20034;Parts will transfer after application drilling without holes
+20035;Parts will not dried
+20036;Tray will not transported
+20037;Tray will not transported after high-rack storage
+20038;Heater without function
+20039;Tray will not transported
+20040;Tray will not stop on RFID reader
+20041;Tray will not transported to application pressing
+20042;Manual shut-off valve leaking
+20043;Pressure below lower error limit
+20044;Pneumatic axis travel time high
+20045;Automated storage does not start
+20046;CNC tool worn out.
+20047;Pressure above higher error limit

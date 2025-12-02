@@ -1,0 +1,298 @@
+WPNo;StepNo;Description;OpNo;NextStepNo;FirstStep;ErrorStepNo;NewPNo;OpNoType;ResourceID;TransportTime;ErrorStep;SqlWrite;ElectricEnergyCalc;CompressedAirCalc;WorkingTimeCalc;FreeString
+210;10;release a part on stopper 1;212;20;1;0;0;1;1;0;0;/* update buffer table */
+UPDATE tblbufferpos SET tblbufferpos.PNo = 0, tblbufferpos.ONo = 0, tblbufferpos.OPos = 0, tblbufferpos.TimeStamp = Null, tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID;
+
+/*update buffer table when error */
+Error(UPDATE tblbufferpos SET tblbufferpos.PNo = 26, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo=1 AND tblbufferpos.ResourceId = #ResourceID);;0;0;20;
+210;20;manual;510;30;0;0;0;1;6;0;0;;0;0;6;http://172.21.0.90/I4.0/mes4/EN/mes4.php?content=manual&OpNo=510&Workpiece=#Parameter1&Action=#Parameter2&PNo=#Parameter3
+210;30;store a part from stopper 2;211;0;0;0;0;1;1;0;0;/* update buffer table */
+UPDATE tblbufferpos 
+SET tblbufferpos.PNo = #Parameter3, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter2 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID;
+
+/* update buffer table when error */
+Error(UPDATE tblbufferpos SET tblbufferpos.PNo = 26, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0 
+WHERE tblbufferpos.BufPos = #Parameter2 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID);;0;0;20;
+1214;10;release a defined part on stopper 2;213;20;1;0;0;1;1;0;0;/* update buffer table */
+UPDATE tblbufferpos SET tblbufferpos.PNo = 0, tblbufferpos.ONo = 0, tblbufferpos.OPos = 0, tblbufferpos.TimeStamp = Null, tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID;
+
+/*update buffer table when error */
+Error(UPDATE tblbufferpos SET tblbufferpos.PNo = 26, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo=1 AND tblbufferpos.ResourceId = #ResourceID);;0;0;20;
+1214;20;place fuses;116;30;0;0;0;1;2;0;0;0;0;0;15;http://172.21.0.90/I4.0/mes4/EN/mes4.php?content=manual&OpNo=116&program=#Parameter1
+1214;30;check part with camera;400;40;0;900;0;1;3;0;0;;0;0;2;
+1214;40;feed back cover from magazine;201;50;0;0;0;1;4;0;0;;1257000;180;3;
+1214;50;pressing with force regulation;111;60;0;0;0;1;5;0;0;;1837000;151;6;
+1214;60;store a part from stopper 1;210;0;0;0;0;1;1;0;0;/* update buffer table */
+UPDATE tblbufferpos 
+SET tblbufferpos.PNo = #Parameter3, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter2 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID;
+
+/* update buffer table when error */
+Error(UPDATE tblbufferpos SET tblbufferpos.PNo = 26, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0 
+WHERE tblbufferpos.BufPos = #Parameter2 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID);;0;0;20;
+1214;900;pick part;116;30;0;0;0;1;2;0;1;0;0;0;15;http://172.21.0.90/I4.0/mes4/EN/mes4.php?content=manual&OpNo=116&program=#Parameter1
+2000;10;release a defined part on stopper 2;213;20;1;0;0;1;1;0;0;/* update buffer table */
+UPDATE tblbufferpos SET tblbufferpos.PNo = 0, tblbufferpos.ONo = 0, tblbufferpos.OPos = 0, tblbufferpos.TimeStamp = Null, tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID;
+
+/*update buffer table when error */
+Error(UPDATE tblbufferpos SET tblbufferpos.PNo = 26, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo=1 AND tblbufferpos.ResourceId = #ResourceID);;0;0;20;
+2000;20;place fuses;116;30;0;0;0;1;2;0;0;0;0;0;15;http://172.21.0.90/I4.0/mes4/EN/mes4.php?content=manual&OpNo=116&program=#Parameter1
+2000;30;check part with camera;400;40;0;900;0;1;3;0;0;;0;0;2;
+2000;40;place back cover;116;50;0;0;0;1;2;0;0;0;0;0;15;http://172.21.0.90/I4.0/mes4/EN/mes4.php?content=manual&OpNo=116&program=#Parameter1
+2000;50;pressing with force regulation;111;60;0;0;0;1;5;0;0;;1837000;151;6;
+2000;60;store a part from stopper 1;210;0;0;0;0;1;1;0;0;/* update buffer table */
+UPDATE tblbufferpos 
+SET tblbufferpos.PNo = #Parameter3, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter2 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID;
+
+/* update buffer table when error */
+Error(UPDATE tblbufferpos SET tblbufferpos.PNo = 26, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0 
+WHERE tblbufferpos.BufPos = #Parameter2 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID);;0;0;20;
+2000;900;pick part;116;30;0;0;0;1;2;0;1;0;0;0;15;http://172.21.0.90/I4.0/mes4/EN/mes4.php?content=manual&OpNo=116&program=#Parameter1
+2200;10;search for a box that have this part and book the order in this box position;1040;20;1;0;0;1;0;0;0;;0;0;0;
+2200;20;manual boxing;502;30;0;0;0;1;9;0;0;UPDATE tblboxpos 
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblboxpos.BoxPNo AND tblbufferpos.BoxID = tblboxpos.BoxId 
+SET tblboxpos.PNo = #Parameter2
+
+WHERE tblboxpos.ONo = #ONo AND 
+;tblboxpos.OPos = #OPos AND 
+;tblbufferpos.ResourceId = #ResourceID;;0;0;4;
+2200;30;store box to target;215;0;0;0;0;1;8;0;0;/* Update PNo in position in box and remove ONo OPos */
+UPDATE tblboxpos 
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblboxpos.BoxPNo AND tblbufferpos.BoxID = tblboxpos.BoxId 
+SET tblboxpos.ONo = IF(#Parameter3, 0, tblboxpos.ONo), tblboxpos.OPos = IF(#Parameter3, 0, tblboxpos.OPos) 
+WHERE tblboxpos.ONo = #ONo AND 
+;tblboxpos.OPos = #OPos AND 
+;tblbufferpos.ResourceId = #ResourceID;;0;0;10;
+2210;10;search for a box that have this part and book the order in this box position;1040;20;1;0;0;1;0;0;0;;0;0;0;
+2210;20;store box to target;215;30;0;0;0;1;7;0;0;/* Update PNo in position in box and remove ONo OPos */
+UPDATE tblboxpos 
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblboxpos.BoxPNo AND tblbufferpos.BoxID = tblboxpos.BoxId 
+SET tblboxpos.ONo = IF(#Parameter3, 0, tblboxpos.ONo), tblboxpos.OPos = IF(#Parameter3, 0, tblboxpos.OPos) 
+WHERE tblboxpos.ONo = #ONo AND 
+;tblboxpos.OPos = #OPos AND 
+;tblbufferpos.ResourceId = #ResourceID;;0;0;0;
+2210;30;release a part on stopper 1;212;40;0;0;0;1;1;0;0;/* update buffer table */
+UPDATE tblbufferpos SET tblbufferpos.PNo = 0, tblbufferpos.ONo = 0, tblbufferpos.OPos = 0, tblbufferpos.TimeStamp = Null, tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID;
+
+/*update buffer table when error */
+Error(UPDATE tblbufferpos SET tblbufferpos.PNo = 26, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo=1 AND tblbufferpos.ResourceId = #ResourceID);;0;0;20;
+2210;40;place part from box to carrier;311;50;0;0;0;1;7;0;0;/* clear position in box */
+UPDATE tblboxpos 
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblboxpos.BoxPNo AND tblbufferpos.BoxID = tblboxpos.BoxId 
+SET tblboxpos.ONo = IF(#Parameter11, 0, tblboxpos.ONo), tblboxpos.OPos = IF(#Parameter11, 0, tblboxpos.OPos), tblBoxPos.PNo = 0
+WHERE tblbufferpos.ResourceId = #ResourceID AND 
+;tblBufferPos.BufNo = #Parameter2 AND 
+;tblBoxPos.BoxPos= #Parameter3;0;0;10;http://172.21.0.90/I4.0/mes4/EN/mes4.php?content=manual&OpNo=311&program=#Parameter9&text=The robot is looking for the following part
+2210;50;store a part from stopper 2;211;0;0;0;0;1;1;0;0;/* update buffer table */
+UPDATE tblbufferpos 
+SET tblbufferpos.PNo = #Parameter3, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter2 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID;
+
+/* update buffer table when error */
+Error(UPDATE tblbufferpos SET tblbufferpos.PNo = 26, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0 
+WHERE tblbufferpos.BufPos = #Parameter2 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID);;0;0;20;
+2300;10;release a part on stopper 1;212;20;1;0;0;1;1;0;0;/* update buffer table */
+UPDATE tblbufferpos SET tblbufferpos.PNo = 0, tblbufferpos.ONo = 0, tblbufferpos.OPos = 0, tblbufferpos.TimeStamp = Null, tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID;
+
+/*update buffer table when error */
+Error(UPDATE tblbufferpos SET tblbufferpos.PNo = 26, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo=1 AND tblbufferpos.ResourceId = #ResourceID);;0;0;20;
+2300;20;manual;510;30;0;0;0;1;6;0;0;;0;0;6;http://172.21.0.90/I4.0/mes4/EN/mes4.php?content=manual&OpNo=510&Workpiece=#Parameter1&Action=#Parameter2&PNo=#Parameter3
+2300;30;store a part from stopper 2;211;0;0;0;0;1;1;0;0;/* update buffer table */
+UPDATE tblbufferpos 
+SET tblbufferpos.PNo = #Parameter3, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter2 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID;
+
+/* update buffer table when error */
+Error(UPDATE tblbufferpos SET tblbufferpos.PNo = 26, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0 
+WHERE tblbufferpos.BufPos = #Parameter2 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID);;0;0;20;
+2310;10;search for a box that have this part and book the order in this box position;1040;20;1;0;0;1;0;0;0;;0;0;0;
+2310;20;store box to target;215;30;0;0;0;1;7;0;0;/* Update PNo in position in box and remove ONo OPos */
+UPDATE tblboxpos 
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblboxpos.BoxPNo AND tblbufferpos.BoxID = tblboxpos.BoxId 
+SET tblboxpos.ONo = IF(#Parameter3, 0, tblboxpos.ONo), tblboxpos.OPos = IF(#Parameter3, 0, tblboxpos.OPos) 
+WHERE tblboxpos.ONo = #ONo AND 
+;tblboxpos.OPos = #OPos AND 
+;tblbufferpos.ResourceId = #ResourceID;;0;0;0;
+2310;30;release a part on stopper 1;212;40;0;0;0;1;1;0;0;/* update buffer table */
+UPDATE tblbufferpos SET tblbufferpos.PNo = 0, tblbufferpos.ONo = 0, tblbufferpos.OPos = 0, tblbufferpos.TimeStamp = Null, tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID;
+
+/*update buffer table when error */
+Error(UPDATE tblbufferpos SET tblbufferpos.PNo = 26, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo=1 AND tblbufferpos.ResourceId = #ResourceID);;0;0;20;
+2310;40;place part from carrier to box;310;50;0;0;0;1;7;0;0;/* Update PNo in position in box and remove ONo OPos */
+UPDATE tblboxpos 
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblboxpos.BoxPNo AND tblbufferpos.BoxID = tblboxpos.BoxId 
+SET tblboxpos.ONo = IF(#Parameter11, 0, tblboxpos.ONo), tblboxpos.OPos = IF(#Parameter11, 0, tblboxpos.OPos), tblBoxPos.PNo = #Parameter9
+WHERE tblbufferpos.ResourceId = #ResourceID AND 
+;tblBufferPos.BufNo = #Parameter2 AND 
+;tblBoxPos.BoxPos= #Parameter3;0;0;10;http://172.21.0.90/I4.0/mes4/EN/mes4.php?content=manual&OpNo=310&program=2000&text=The robot is placing the part into box
+2310;50;store a part from stopper 2;211;0;0;0;0;1;1;0;0;/* update buffer table */
+UPDATE tblbufferpos 
+SET tblbufferpos.PNo = #Parameter3, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter2 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID;
+
+/* update buffer table when error */
+Error(UPDATE tblbufferpos SET tblbufferpos.PNo = 26, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0 
+WHERE tblbufferpos.BufPos = #Parameter2 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID);;0;0;20;
+2320;10;search for a box that have this part and book the order in this box position;1040;20;1;0;0;1;0;0;0;;0;0;0;
+2320;20;manual unboxing;503;0;0;0;0;1;9;0;0;UPDATE tblboxpos 
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblboxpos.BoxPNo AND tblbufferpos.BoxID = tblboxpos.BoxId 
+SET tblboxpos.PNo = 0, tblboxpos.ONo = 0, tblboxpos.OPos = 0
+WHERE tblboxpos.ONo = #ONo AND 
+;tblboxpos.OPos = #OPos AND 
+;tblbufferpos.ResourceId = #ResourceID;;0;0;4;
+2555;10;release a defined part on stopper 2;213;20;1;0;0;1;1;0;0;/* update buffer table */
+UPDATE tblbufferpos SET tblbufferpos.PNo = 0, tblbufferpos.ONo = 0, tblbufferpos.OPos = 0, tblbufferpos.TimeStamp = Null, tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID;
+
+/*update buffer table when error */
+Error(UPDATE tblbufferpos SET tblbufferpos.PNo = 26, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo=1 AND tblbufferpos.ResourceId = #ResourceID);;0;0;20;
+2555;20;pick part;116;30;0;0;514;1;2;0;0;0;0;0;15;http://172.21.0.90/I4.0/mes4/EN/mes4.php?content=manual&OpNo=116&program=#Parameter1
+2555;30;check part with camera;400;40;0;0;0;1;3;0;0;;0;0;2;
+2555;40;feed back cover from magazine;201;50;0;0;0;1;4;0;0;;1257000;180;3;
+2555;50;pressing with force regulation;111;60;0;0;0;1;5;0;0;;1837000;151;6;
+2555;60;place part from carrier to box;310;70;0;0;0;1;7;0;0;/* Update PNo in position in box and remove ONo OPos */
+UPDATE tblboxpos 
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblboxpos.BoxPNo AND tblbufferpos.BoxID = tblboxpos.BoxId 
+SET tblboxpos.ONo = IF(#Parameter11, 0, tblboxpos.ONo), tblboxpos.OPos = IF(#Parameter11, 0, tblboxpos.OPos), tblBoxPos.PNo = #Parameter9
+WHERE tblbufferpos.ResourceId = #ResourceID AND 
+;tblBufferPos.BufNo = #Parameter2 AND 
+;tblBoxPos.BoxPos= #Parameter3;0;0;10;http://172.21.0.90/I4.0/mes4/EN/mes4.php?content=manual&OpNo=310&program=2000&text=The robot is placing the part into box
+2555;70;store box to target;215;0;0;0;0;1;8;0;0;/* Update PNo in position in box and remove ONo OPos */
+UPDATE tblboxpos 
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblboxpos.BoxPNo AND tblbufferpos.BoxID = tblboxpos.BoxId 
+SET tblboxpos.ONo = IF(#Parameter3, 0, tblboxpos.ONo), tblboxpos.OPos = IF(#Parameter3, 0, tblboxpos.OPos) 
+WHERE tblboxpos.ONo = #ONo AND 
+;tblboxpos.OPos = #OPos AND 
+;tblbufferpos.ResourceId = #ResourceID;;0;0;10;
+9000;10;service;1030;0;1;0;0;1;0;0;0;;0;0;0;
+9001;10;release a defined part on stopper 2;213;20;1;0;25;1;1;0;0;/* update buffer table */
+UPDATE tblbufferpos SET tblbufferpos.PNo = 0, tblbufferpos.ONo = 0, tblbufferpos.OPos = 0, tblbufferpos.TimeStamp = Null, tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID;
+
+/*update buffer table when error */
+Error(UPDATE tblbufferpos SET tblbufferpos.PNo = 26, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo=1 AND tblbufferpos.ResourceId = #ResourceID);;0;0;20;
+9001;20;Both fuses;116;30;0;0;0;1;2;0;0;0;0;0;15;http://172.21.0.90/I4.0/mes4/EN/mes4.php?content=manual&OpNo=116&program=#Parameter1
+9001;30;check part with camera;400;40;0;0;414;1;3;0;0;;0;0;2;
+9001;40;store a part from stopper 1;210;0;0;0;0;1;1;0;0;/* update buffer table */
+UPDATE tblbufferpos 
+SET tblbufferpos.PNo = #Parameter3, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter2 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID;
+
+/* update buffer table when error */
+Error(UPDATE tblbufferpos SET tblbufferpos.PNo = 26, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0 
+WHERE tblbufferpos.BufPos = #Parameter2 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID);;0;0;20;
+9005;10;release a defined part on stopper 2;213;20;1;0;0;1;1;0;0;/* update buffer table */
+UPDATE tblbufferpos SET tblbufferpos.PNo = 0, tblbufferpos.ONo = 0, tblbufferpos.OPos = 0, tblbufferpos.TimeStamp = Null, tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID;
+
+/*update buffer table when error */
+Error(UPDATE tblbufferpos SET tblbufferpos.PNo = 26, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo=1 AND tblbufferpos.ResourceId = #ResourceID);;0;0;20;
+9005;20;pick part;116;30;0;0;0;1;2;0;0;0;0;0;15;http://172.21.0.90/I4.0/mes4/EN/mes4.php?content=manual&OpNo=116&program=#Parameter1
+9005;30;check part with camera;400;40;0;0;0;1;3;0;0;;0;0;2;
+9005;40;feed back cover from magazine;201;50;0;0;0;1;4;0;0;;1257000;180;3;
+9005;50;pressing with force regulation;111;60;0;0;0;1;5;0;0;;1837000;151;6;
+9005;60;store a part from stopper 1;210;0;0;0;0;1;1;0;0;/* update buffer table */
+UPDATE tblbufferpos 
+SET tblbufferpos.PNo = #Parameter3, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter2 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID;
+
+/* update buffer table when error */
+Error(UPDATE tblbufferpos SET tblbufferpos.PNo = 26, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0 
+WHERE tblbufferpos.BufPos = #Parameter2 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID);;0;0;20;
+9008;10;search for a box that have this part and book the order in this box position;1040;20;1;0;0;1;0;0;0;;0;0;0;
+9008;20;store box to target;215;30;0;0;0;1;7;0;0;/* Update PNo in position in box and remove ONo OPos */
+UPDATE tblboxpos 
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblboxpos.BoxPNo AND tblbufferpos.BoxID = tblboxpos.BoxId 
+SET tblboxpos.ONo = IF(#Parameter3, 0, tblboxpos.ONo), tblboxpos.OPos = IF(#Parameter3, 0, tblboxpos.OPos) 
+WHERE tblboxpos.ONo = #ONo AND 
+;tblboxpos.OPos = #OPos AND 
+;tblbufferpos.ResourceId = #ResourceID;;0;0;0;
+9008;30;release a defined part on stopper 2;213;40;0;0;0;1;1;0;0;/* update buffer table */
+UPDATE tblbufferpos SET tblbufferpos.PNo = 0, tblbufferpos.ONo = 0, tblbufferpos.OPos = 0, tblbufferpos.TimeStamp = Null, tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID;
+
+/*update buffer table when error */
+Error(UPDATE tblbufferpos SET tblbufferpos.PNo = 26, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo=1 AND tblbufferpos.ResourceId = #ResourceID);;0;0;20;
+9008;40;pick part;116;50;0;0;0;1;2;0;0;0;0;0;15;http://172.21.0.90/I4.0/mes4/EN/mes4.php?content=manual&OpNo=116&program=#Parameter1
+9008;50;check part with camera;400;60;0;40;0;1;3;0;0;;0;0;2;
+9008;60;feed back cover from magazine;201;70;0;0;0;1;4;0;0;;1257000;180;3;
+9008;70;pressing with force regulation;111;80;0;0;0;1;5;0;0;;1837000;151;6;
+9008;80;place part from carrier to box;310;0;0;0;0;1;7;0;0;/* Update PNo in position in box and remove ONo OPos */
+UPDATE tblboxpos 
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblboxpos.BoxPNo AND tblbufferpos.BoxID = tblboxpos.BoxId 
+SET tblboxpos.ONo = IF(#Parameter11, 0, tblboxpos.ONo), tblboxpos.OPos = IF(#Parameter11, 0, tblboxpos.OPos), tblBoxPos.PNo = #Parameter9
+WHERE tblbufferpos.ResourceId = #ResourceID AND 
+;tblBufferPos.BufNo = #Parameter2 AND 
+;tblBoxPos.BoxPos= #Parameter3;0;0;10;http://172.21.0.90/I4.0/mes4/EN/mes4.php?content=manual&OpNo=310&program=2000&text=The robot is placing the part into box
+9009;10;search for a box that have this part and book the order in this box position;1040;20;1;0;0;1;0;0;0;;0;0;0;
+9009;20;store box to target;215;30;0;0;0;1;7;0;0;/* Update PNo in position in box and remove ONo OPos */
+UPDATE tblboxpos 
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblboxpos.BoxPNo AND tblbufferpos.BoxID = tblboxpos.BoxId 
+SET tblboxpos.ONo = IF(#Parameter3, 0, tblboxpos.ONo), tblboxpos.OPos = IF(#Parameter3, 0, tblboxpos.OPos) 
+WHERE tblboxpos.ONo = #ONo AND 
+;tblboxpos.OPos = #OPos AND 
+;tblbufferpos.ResourceId = #ResourceID;;0;0;0;
+9009;30;release a defined part on stopper 2;213;40;0;0;0;1;1;0;0;/* update buffer table */
+UPDATE tblbufferpos SET tblbufferpos.PNo = 0, tblbufferpos.ONo = 0, tblbufferpos.OPos = 0, tblbufferpos.TimeStamp = Null, tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID;
+
+/*update buffer table when error */
+Error(UPDATE tblbufferpos SET tblbufferpos.PNo = 26, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo=1 AND tblbufferpos.ResourceId = #ResourceID);;0;0;20;
+9009;40;pick part;116;50;0;0;0;1;2;0;0;0;0;0;15;http://172.21.0.90/I4.0/mes4/EN/mes4.php?content=manual&OpNo=116&program=#Parameter1
+9009;50;check part with camera;400;60;0;40;0;1;3;0;0;;0;0;2;
+9009;60;feed back cover from magazine;201;70;0;0;0;1;4;0;0;;1257000;180;3;
+9009;70;pressing with force regulation;111;80;0;0;0;1;5;0;0;;1837000;151;6;
+9009;80;place part from carrier to box;310;0;0;0;0;1;7;0;0;/* Update PNo in position in box and remove ONo OPos */
+UPDATE tblboxpos 
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblboxpos.BoxPNo AND tblbufferpos.BoxID = tblboxpos.BoxId 
+SET tblboxpos.ONo = IF(#Parameter11, 0, tblboxpos.ONo), tblboxpos.OPos = IF(#Parameter11, 0, tblboxpos.OPos), tblBoxPos.PNo = #Parameter9
+WHERE tblbufferpos.ResourceId = #ResourceID AND 
+;tblBufferPos.BufNo = #Parameter2 AND 
+;tblBoxPos.BoxPos= #Parameter3;0;0;10;http://172.21.0.90/I4.0/mes4/EN/mes4.php?content=manual&OpNo=310&program=2000&text=The robot is placing the part into box
+9011;10;release a part on stopper 1;212;20;1;0;25;1;1;0;0;/* update buffer table */
+UPDATE tblbufferpos SET tblbufferpos.PNo = 0, tblbufferpos.ONo = 0, tblbufferpos.OPos = 0, tblbufferpos.TimeStamp = Null, tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID;
+
+/*update buffer table when error */
+Error(UPDATE tblbufferpos SET tblbufferpos.PNo = 26, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo=1 AND tblbufferpos.ResourceId = #ResourceID);;0;0;20;
+9011;20;pick part;116;30;0;0;510;1;2;0;0;0;0;0;15;http://172.21.0.90/I4.0/mes4/EN/mes4.php?content=manual&OpNo=116&program=#Parameter1
+9011;30;check part with camera;400;40;0;0;510;1;3;0;0;;0;0;2;
+9011;40;feed back cover from magazine;201;0;0;0;111;1;4;0;0;;1257000;180;3;
+9012;10;release a defined part on stopper 2;213;20;1;0;25;1;1;0;0;/* update buffer table */
+UPDATE tblbufferpos SET tblbufferpos.PNo = 0, tblbufferpos.ONo = 0, tblbufferpos.OPos = 0, tblbufferpos.TimeStamp = Null, tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID;
+
+/*update buffer table when error */
+Error(UPDATE tblbufferpos SET tblbufferpos.PNo = 26, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter1 AND tblbufferpos.BufNo=1 AND tblbufferpos.ResourceId = #ResourceID);;0;0;20;
+9012;20;pick part;116;30;0;0;414;1;2;0;0;0;0;0;15;http://172.21.0.90/I4.0/mes4/EN/mes4.php?content=manual&OpNo=116&program=#Parameter1
+9012;30;check part with camera;400;40;0;0;414;1;3;0;0;;0;0;2;
+9012;40;feed back cover from magazine;201;50;0;0;9012;1;4;0;0;;1257000;180;3;
+9012;50;pressing with force regulation;111;60;0;0;9012;1;5;0;0;;1837000;151;6;
+9012;60;store a part from stopper 1;210;0;0;0;9012;1;1;0;0;/* update buffer table */
+UPDATE tblbufferpos 
+SET tblbufferpos.PNo = #Parameter3, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0
+WHERE tblbufferpos.BufPos = #Parameter2 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID;
+
+/* update buffer table when error */
+Error(UPDATE tblbufferpos SET tblbufferpos.PNo = 26, tblbufferpos.TimeStamp = Now(), tblbufferpos.Booked = 0 
+WHERE tblbufferpos.BufPos = #Parameter2 AND tblbufferpos.BufNo = 1 AND tblbufferpos.ResourceId = #ResourceID);;0;0;20;

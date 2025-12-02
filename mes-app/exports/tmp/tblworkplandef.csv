@@ -1,0 +1,18 @@
+WPNo;Description;Type;Short;PictureNo;PNo
+0;no workplan;0;nothing;2;0
+210;Black front cover;1;Black front cover;2;0
+1214;Black cover both fuses;1;Black cover both fuses;2;0
+2000;Custom production;2;Custom production;2;0
+2200;LOG- MobileWS->ASRS20;2;LOG- MobileWS->ASRS20;2;0
+2210;LOG-FC ASRS20->ASRS32;2;LOG-FC ASRS20->ASRS32;2;0
+2300;Deliver ASRS32->Manual WS;2;Deliver ASRS32->Manual WS;2;0
+2310;Deliver product ASRS32->ASRS20;2;Deliver product ASRS32->ASRS20;2;0
+2320;Deliver ASRS20 -> Mobile WS;2;Deliver ASRS20 -> Mobile WS;2;0
+2555;Ligne complete;1;Test ligne ;2;0
+9000;maintenance;5;maintenance;2;0
+9001;un test IUT LUMIERE01;2;test01;2;0
+9005;Ligne sans Robotino;1;Apres Midi;2;0
+9008;une gamme complete;2;gamme complete;2;0
+9009;Gamme avec opérations en parallele;2;Gamme parallele;2;0
+9011;essai customer 24-11-25;2;essai-24-11-25;2;0
+9012;Essai le 17/11;2;Essai Matthieu;2;0

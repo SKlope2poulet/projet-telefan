@@ -1,0 +1,5 @@
+UserLevel;RoleName;Description;Password
+0;Guest;A guest can inspect the hole data but can't change anything.;NULL
+1;Operator;An operator can inspect the hole data and add orders.;Festo1
+2;Special Operator;An special operator, additionaly to the operator, can change the master data.;Festo2
+3;Administrator;The administrator can change everything;NULL

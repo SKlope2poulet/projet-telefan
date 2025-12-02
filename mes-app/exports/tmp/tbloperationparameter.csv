@@ -1,0 +1,1823 @@
+OpNo;ParameterNo;Description;DataType;LowLimit;HighLimit;ParameterType;Parameter;QuerryChooseParameter;ValueType;StringLength
+110;1;pressing time [s];2;0;120;1;5;;2;0
+111;1;pressure [N];2;5;100;2;80;;1;0
+111;2;pressing time [s];2;0;30;1;1;;2;0
+112;1;temperature;2;30;80;1;30;;1;0
+112;2;time [s];2;0;120;1;5;;2;0
+114;1;printer program;2;0;0;2;2;SELECT tbltextlist.ListPos AS ValueMember, CONCAT(tbltextlist.ListPos, ' | ', tbltextlist.Description) AS DisplayMember 
+FROM tbltextlist 
+WHERE tbltextlist.ListID = 7 ORDER BY tbltextlist.ListPos;;1;0
+114;2;parameter 1;3;0;0;1;0;;1;0
+114;3;parameter 2;3;0;0;1;0;;1;0
+115;1;default difference [0,1mm];2;0;300;1;20;;1;0
+115;2;upper limit [0,1mm];2;0;300;2;22;;1;0
+115;3;lower limit [0,1mm;2;0;300;2;16;;1;0
+115;4;meassured [0,1mm];2;0;0;4;0;;1;0
+116;1;program number;2;0;0;4;0;SELECT if( #Parameter2 =0 AND #Parameter3 = 0 AND #Parameter4 >0, 1, if( #Parameter2 > 0 AND #Parameter3 = 0 AND #Parameter4 > 0 AND #Parameter5 = 0 , 2, if( #Parameter2 = 0 AND #Parameter3 > 0 AND #Parameter4 > 0 AND #Parameter5 = 0, 3, if( #Parameter2 > 0 AND #Parameter3 > 0 AND #Parameter4 > 0 AND #Parameter5 = 0, 4, if( #Parameter2 = 0 AND #Parameter3 = 0 AND #Parameter4 = 0 AND #Parameter5 > 0, #Parameter5 , 5000) ) ) ) ) as Parameter;;1;0
+116;2;front fuse;2;0;0;2;130;SELECT tblparts.PNo AS ValueMember, CONCAT(tblparts.PNo, " | ", tblparts.Description) AS DisplayMember
+FROM tblparts INNER JOIN tblpnogroup ON tblparts.PNo = tblpnogroup.PNo
+WHERE tblpnogroup.Id=6
+ORDER BY tblParts.PNo;
+;3;0
+116;3;rear fuse;2;0;0;2;130;SELECT tblparts.PNo AS ValueMember, CONCAT(tblparts.PNo, " | ", tblparts.Description) AS DisplayMember
+FROM tblparts INNER JOIN tblpnogroup ON tblparts.PNo = tblpnogroup.PNo
+WHERE tblpnogroup.Id=6
+ORDER BY tblParts.PNo;
+;3;0
+116;4;PCB;2;0;0;2;120;SELECT tblparts.PNo AS ValueMember, CONCAT(tblparts.PNo, " | ", tblparts.Description) AS DisplayMember
+FROM tblparts INNER JOIN tblpnogroup ON tblparts.PNo = tblpnogroup.PNo
+WHERE tblpnogroup.Id=5
+ORDER BY tblParts.PNo;
+;3;0
+116;5;other part;2;0;0;2;0;SELECT tblparts.PNo AS ValueMember, CONCAT(tblparts.PNo, " | ", tblparts.Description) AS DisplayMember
+FROM tblparts INNER JOIN tblpnogroup ON tblparts.PNo = tblpnogroup.PNo
+WHERE tblpnogroup.Id=10
+ORDER BY tblParts.PNo;
+;3;0
+117;1;front red;2;0;5;2;0;;1;0
+117;2;front green;2;0;5;2;0;NULL;1;0
+117;3;front blue;2;0;5;2;0;NULL;1;0
+117;4;middle red;2;0;5;2;0;NULL;1;0
+117;5;middle green;2;0;5;2;0;NULL;1;0
+117;6;middle blue;2;0;5;2;0;NULL;1;0
+117;7;back red;2;0;5;2;0;NULL;1;0
+117;8;back green;2;0;5;2;0;NULL;1;0
+117;9;back blue;2;0;5;2;0;NULL;1;0
+120;1;drilling position;2;1;3;4;2;;1;0
+121;1;drilling position;2;1;3;4;1;;1;0
+122;1;drilling parameter;2;1;3;4;3;;1;0
+123;1;drill program;2;1;3;2;1;SELECT tblTextList.ListPos AS ValueMember, CONCAT(tblTextList.ListPos , ' | ' , tblTextList.Description) AS DisplayMember FROM tblTextList WHERE tblTextList.ListID = 3 ORDER BY tblTextList.ListPos;1;0
+193;1;pos in box;2;0;8;4;0;SELECT tblboxpos.BoxPos AS Parameter
+FROM tblboxpos
+WHERE tblboxpos.ONo = #ONo AND tblboxpos.OPos = #OPos;;1;0
+193;2;pos in CNC;2;0;1;1;1;;1;0
+193;3;robot program load;2;0;0;1;1;;1;0
+193;4;load offset X;2;-9;9;1;7;;1;0
+193;5;load offset Y;2;-19;19;1;0;;1;0
+193;6;load offset Z;2;0;20;1;7;;1;0
+193;7;load offset C;2;-3;3;1;0;;1;0
+193;8;milling program;2;0;0;2;10;;1;0
+193;9;robot program unload;2;0;0;1;2;;1;0
+193;10;unload offset X;2;-9;9;1;7;;1;0
+193;11;unload offset Y;2;-19;19;1;0;;1;0
+193;12;unload offset Z;2;0;20;1;7;;1;0
+193;13;unload offset C;2;-3;3;1;0;;1;0
+194;1;robot program load;2;0;0;1;1;;1;0
+194;2;milling program;2;0;0;2;10;;1;0
+194;3;robot program unload;2;0;0;1;2;;1;0
+194;4;working time (CIROS);2;0;0;1;15;;1;0
+194;5;R1;3;0;0;2;0;;1;0
+194;6;R2;3;0;0;1;0;;1;0
+194;7;R3;3;0;0;1;0;;1;0
+194;8;R4;3;0;0;1;0;;1;0
+194;9;_TXT[1];3;0;0;1;0;;1;0
+194;10;_TXT[2];3;0;0;1;0;;1;0
+195;1;program;3;0;0;2;Festo logo;SELECT tbltextlist.Description AS ValueMember, tbltextlist.Description AS DisplayMember 
+FROM tbltextlist 
+WHERE tbltextlist.ListID = 6
+ORDER BY tbltextlist.ListPos;;1;0
+195;2;filament;3;0;0;2;grey;SELECT tbltextlist.Description AS ValueMember, tbltextlist.Description AS DisplayMember 
+FROM tbltextlist 
+WHERE tbltextlist.ListID = 8 ORDER BY tbltextlist.ListPos;;1;0
+200;1;part;2;0;0;2;110;SELECT tblparts.PNo AS ValueMember, CONCAT(tblparts.PNo, " | ", tblparts.Description) AS DisplayMember
+FROM tblparts INNER JOIN tblpnogroup ON tblparts.PNo = tblpnogroup.PNo
+WHERE tblpnogroup.Id=2
+ORDER BY tblParts.PNo;;3;0
+201;1;part;2;0;0;2;111;SELECT tblparts.PNo AS ValueMember, CONCAT(tblparts.PNo, " | ", tblparts.Description) AS DisplayMember
+FROM tblparts INNER JOIN tblpnogroup ON tblparts.PNo = tblpnogroup.PNo
+WHERE tblpnogroup.Id=3
+ORDER BY tblParts.PNo;;3;0
+202;1;source;2;0;0;1;90;;1;0
+202;2;target;2;0;2;4;0;/* select buffer pos */
+SELECT tblBufferPos.BufPos AS Parameter, tblBufferPos.Booked, tblBufferPos.ONo, tblBufferPos.OPos 
+FROM tblBufferPos 
+LEFT JOIN tblPNoGroup ON tblBufferPos.Zone = tblPNoGroup.Id 
+WHERE (((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=0) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblPNoGroup.PNo)=#Parameter3) AND 
+;((tblBufferPos.Zone)>0) AND 
+;((tblBufferPos.Booked)=True) AND 
+;((tblBufferPos.ONo)=#ONo) AND 
+;((tblBufferPos.OPos)=#OPos)) 
+;OR 
+;(((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=0) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblBufferPos.Zone)=0) AND 
+;((tblBufferPos.Booked)=True) AND 
+;((tblBufferPos.ONo)=#ONo) AND 
+;((tblBufferPos.OPos)=#OPos)) 
+;OR 
+;(((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=0) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblPNoGroup.PNo)=#Parameter3) AND 
+;((tblBufferPos.Zone)>0) AND 
+;((tblBufferPos.Booked)=False) AND 
+;((tblBufferPos.ONo)=0) AND 
+;((tblBufferPos.OPos)=0)) 
+;OR 
+;(((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=0) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblBufferPos.Zone)=0) AND 
+;((tblBufferPos.Booked)=False) AND 
+;((tblBufferPos.ONo)=0) AND 
+;((tblBufferPos.OPos)=0)); 
+
+/* update tblbufpos */;
+UPDATE tblBufferPos 
+SET tblBufferPos.Booked = True, tblBufferPos.ONo = #ONo, tblBufferPos.OPos = #OPos 
+WHERE (((tblBufferPos.ResourceId)=#ResourceID) AND ((tblBufferPos.BufNo)=1) AND ((tblBufferPos.BufPos=#Parameter2)) AND #ResourceID = #RequestID );
+;1;0
+202;3;part;2;0;0;2;110;SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember FROM tblParts INNER JOIN tblPNoGroup ON tblParts.PNo = tblPNoGroup.PNo WHERE tblPNoGroup.Id = 2 ORDER BY tblParts.PNo;;1;0
+202;4;Z-offset belt;2;0;0;2;0;;1;0
+202;5;Z-offset storage;2;0;0;2;0;;1;0
+203;1;source;2;0;0;4;0;/* select buffer pos */
+SELECT tblBufferPos.BufPos AS Parameter, tblBufferPos.Booked, tblBufferPos.ONo, tblBufferPos.OPos 
+FROM tblBufferPos 
+LEFT JOIN tblPNoGroup ON tblBufferPos.Zone = tblPNoGroup.Id 
+WHERE (((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=#Parameter3) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblPNoGroup.PNo)=#Parameter3) AND 
+;((tblBufferPos.Zone)>0) AND 
+;((tblBufferPos.Booked)=True)) 
+;OR
+;(((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=#Parameter3) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblBufferPos.Zone)=0) AND 
+;((tblBufferPos.Booked)=True)) 
+;OR 
+;(((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=#Parameter3) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblPNoGroup.PNo)=#Parameter3) AND 
+;((tblBufferPos.Zone)>0) AND 
+;((tblBufferPos.Booked)=False)) 
+;OR
+;(((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=#Parameter3) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblBufferPos.Zone)=0) AND 
+;((tblBufferPos.Booked)=False)); 
+
+/* update tblbufpos */
+UPDATE tblBufferPos 
+SET tblBufferPos.Booked = True, tblBufferPos.ONo = #ONo, tblBufferPos.OPos = #OPos 
+WHERE (((tblBufferPos.ResourceId)=#ResourceID) AND ((tblBufferPos.BufNo)=1) AND ((tblBufferPos.BufPos=#Parameter1)) AND #ResourceID = #RequestID );
+;3;0
+203;2;target;2;0;2;1;90;;1;0
+203;3;part;2;0;0;2;25;SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember FROM tblParts INNER JOIN tblPNoGroup ON tblParts.PNo = tblPNoGroup.PNo WHERE tblPNoGroup.Id = 1 ORDER BY tblParts.PNo;;3;0
+203;4;Z-offset belt;2;0;0;2;140;;1;0
+203;5;Z-offset storage;2;0;0;2;50;;1;0
+205;1;slide;2;0;2;2;0;SELECT tblTextList.ListPos AS ValueMember, CONCAT(tblTextList.ListPos , ' | ' , tblTextList.Description) AS DisplayMember FROM tblTextList WHERE tblTextList.ListID = 5 ORDER BY tblTextList.ListPos;1;0
+210;1;source;2;0;0;1;90;;1;0
+210;2;target;2;0;0;4;0;/* find buffer pos */
+SELECT tblBufferPos.BufPos AS Parameter, tblBufferPos.Booked, tblBufferPos.ONo, tblBufferPos.OPos 
+FROM tblBufferPos 
+LEFT JOIN tblPNoGroup ON tblBufferPos.Zone = tblPNoGroup.Id 
+WHERE (((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=0) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblPNoGroup.PNo)=#Parameter3) AND 
+;((tblBufferPos.Zone)>0) AND 
+;((tblBufferPos.Booked)=True) AND 
+;((tblBufferPos.ONo)=#ONo) AND 
+;((tblBufferPos.OPos)=#OPos)) 
+;OR 
+;(((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=0) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblBufferPos.Zone)=0) AND 
+;((tblBufferPos.Booked)=True) AND 
+;((tblBufferPos.ONo)=#ONo) AND 
+;((tblBufferPos.OPos)=#OPos)) 
+;OR 
+;(((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=0) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblPNoGroup.PNo)=#Parameter3) AND 
+;((tblBufferPos.Zone)>0) AND 
+;((tblBufferPos.Booked)=False) AND 
+;((tblBufferPos.ONo)=0) AND 
+;((tblBufferPos.OPos)=0)) 
+;OR 
+;(((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=0) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblBufferPos.Zone)=0) AND 
+;((tblBufferPos.Booked)=False) AND 
+;((tblBufferPos.ONo)=0) AND 
+;((tblBufferPos.OPos)=0)); 
+
+/* update tblbufpos */;
+UPDATE tblBufferPos 
+SET tblBufferPos.Booked = True, tblBufferPos.ONo = #ONo, tblBufferPos.OPos = #OPos 
+WHERE (((tblBufferPos.ResourceId)=#ResourceID) AND ((tblBufferPos.BufNo)=1) AND ((tblBufferPos.BufPos=#Parameter2)) AND #ResourceID = #RequestID );
+;1;0
+210;3;part number;2;0;0;2;25;SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember FROM tblParts INNER JOIN tblPNoGroup ON tblParts.PNo = tblPNoGroup.PNo WHERE tblPNoGroup.Id = 1 ORDER BY tblParts.PNo;;1;0
+211;1;source;2;0;0;1;91;;1;0
+211;2;target;2;0;0;4;0;/* find buffer pos */
+SELECT tblBufferPos.BufPos AS Parameter, tblBufferPos.Booked, tblBufferPos.ONo, tblBufferPos.OPos 
+FROM tblBufferPos 
+LEFT JOIN tblPNoGroup ON tblBufferPos.Zone = tblPNoGroup.Id 
+WHERE (((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=0) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblPNoGroup.PNo)=#Parameter3) AND 
+;((tblBufferPos.Zone)>0) AND 
+;((tblBufferPos.Booked)=True) AND 
+;((tblBufferPos.ONo)=#ONo) AND 
+;((tblBufferPos.OPos)=#OPos)) 
+;OR 
+;(((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=0) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblBufferPos.Zone)=0) AND 
+;((tblBufferPos.Booked)=True) AND 
+;((tblBufferPos.ONo)=#ONo) AND 
+;((tblBufferPos.OPos)=#OPos)) 
+;OR 
+;(((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=0) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblPNoGroup.PNo)=#Parameter3) AND 
+;((tblBufferPos.Zone)>0) AND 
+;((tblBufferPos.Booked)=False) AND 
+;((tblBufferPos.ONo)=0) AND 
+;((tblBufferPos.OPos)=0)) 
+;OR 
+;(((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=0) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblBufferPos.Zone)=0) AND 
+;((tblBufferPos.Booked)=False) AND 
+;((tblBufferPos.ONo)=0) AND 
+;((tblBufferPos.OPos)=0)); 
+
+/* update tblbufpos */;
+UPDATE tblBufferPos 
+SET tblBufferPos.Booked = True, tblBufferPos.ONo = #ONo, tblBufferPos.OPos = #OPos 
+WHERE (((tblBufferPos.ResourceId)=#ResourceID) AND ((tblBufferPos.BufNo)=1) AND ((tblBufferPos.BufPos=#Parameter2)) AND #ResourceID = #RequestID );
+;1;0
+211;3;part number;2;0;0;2;25;SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember FROM tblParts INNER JOIN tblPNoGroup ON tblParts.PNo = tblPNoGroup.PNo WHERE tblPNoGroup.Id = 1 ORDER BY tblParts.PNo;;1;0
+212;1;source;2;0;0;4;0;/* find buffer pos */
+SELECT tblBufferPos.BufPos AS Parameter, tblBufferPos.Booked, tblBufferPos.ONo, tblBufferPos.OPos 
+FROM tblBufferPos 
+LEFT JOIN tblPNoGroup ON tblBufferPos.Zone = tblPNoGroup.Id 
+WHERE (((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=#Parameter3) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblPNoGroup.PNo)=#Parameter3) AND 
+;((tblBufferPos.Zone)>0) AND 
+;((tblBufferPos.Booked)=True)) 
+;OR
+;(((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=#Parameter3) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblBufferPos.Zone)=0) AND 
+;((tblBufferPos.Booked)=True)) 
+;OR 
+;(((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=#Parameter3) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblPNoGroup.PNo)=#Parameter3) AND 
+;((tblBufferPos.Zone)>0) AND 
+;((tblBufferPos.Booked)=False)) 
+;OR
+;(((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=#Parameter3) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblBufferPos.Zone)=0) AND 
+;((tblBufferPos.Booked)=False)); 
+
+/* update tblbufpos */
+UPDATE tblBufferPos 
+SET tblBufferPos.Booked = True, tblBufferPos.ONo = #ONo, tblBufferPos.OPos = #OPos 
+WHERE (((tblBufferPos.ResourceId)=#ResourceID) AND ((tblBufferPos.BufNo)=1) AND ((tblBufferPos.BufPos=#Parameter1)) AND #ResourceID = #RequestID );;1;0
+212;2;target;2;0;0;1;90;;1;0
+212;3;part number;2;0;0;2;25;SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember FROM tblParts INNER JOIN tblPNoGroup ON tblParts.PNo = tblPNoGroup.PNo WHERE tblPNoGroup.Id = 1 ORDER BY tblParts.PNo;;3;0
+213;1;source;2;0;0;4;0;/* find buffer pos */
+SELECT tblBufferPos.BufPos AS Parameter, tblBufferPos.Booked, tblBufferPos.ONo, tblBufferPos.OPos 
+FROM tblBufferPos 
+LEFT JOIN tblPNoGroup ON tblBufferPos.Zone = tblPNoGroup.Id 
+WHERE (((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=#Parameter3) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblPNoGroup.PNo)=#Parameter3) AND 
+;((tblBufferPos.Zone)>0) AND 
+;((tblBufferPos.Booked)=True)) 
+;OR
+;(((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=#Parameter3) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblBufferPos.Zone)=0) AND 
+;((tblBufferPos.Booked)=True)) 
+;OR 
+;(((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=#Parameter3) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblPNoGroup.PNo)=#Parameter3) AND 
+;((tblBufferPos.Zone)>0) AND 
+;((tblBufferPos.Booked)=False)) 
+;OR
+;(((tblBufferPos.BufPos)>0) AND 
+;((tblBufferPos.PNo)=#Parameter3) AND 
+;((tblBufferPos.ResourceId)=#ResourceID) AND 
+;((tblBufferPos.BufNo)=1) AND 
+;((tblBufferPos.Zone)=0) AND 
+;((tblBufferPos.Booked)=False)); 
+
+/* update tblbufpos */
+UPDATE tblBufferPos 
+SET tblBufferPos.Booked = True, tblBufferPos.ONo = #ONo, tblBufferPos.OPos = #OPos 
+WHERE (((tblBufferPos.ResourceId)=#ResourceID) AND ((tblBufferPos.BufNo)=1) AND ((tblBufferPos.BufPos=#Parameter1)) AND #ResourceID = #RequestID );;1;0
+213;2;target;2;0;0;1;91;;1;0
+213;3;part number;2;0;0;2;25;SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember FROM tblParts INNER JOIN tblPNoGroup ON tblParts.PNo = tblPNoGroup.PNo WHERE tblPNoGroup.Id = 1 ORDER BY tblParts.PNo;;3;0
+215;1;source;2;0;0;1;91;;1;0
+215;2;target;2;0;0;4;0;SELECT tblBufferPos.BufPos AS Parameter
+FROM tblBufferPos LEFT JOIN tblPNoGroup ON tblBufferPos.Zone = tblPNoGroup.Id
+WHERE
+tblBufferPos.BufPos>0 AND
+tblBufferPos.PNo=0 AND
+tblBufferPos.ResourceId=#ResourceID AND
+tblBufferPos.BufNo=1 AND
+tblPNoGroup.PNo=tblBufferPos.PNo AND
+tblBufferPos.Zone>0
+
+OR
+
+tblBufferPos.BufPos>0 AND
+tblBufferPos.PNo=0 AND
+tblBufferPos.ResourceId=#ResourceID AND
+tblBufferPos.BufNo=1 AND
+tblBufferPos.Zone=0;
+
+;1;0
+215;3;Delete order in box at store ;2;0;0;2;0;SELECT 0 as ValueMember, 'No' as DisplayMember
+UNION ALL
+SELECT 1 as ValueMember, 'Yes' as DisplayMember
+;1;0
+217;1;source;2;0;0;4;0;SELECT tblBoxPos.BoxPos AS Parameter
+FROM tblBoxPos
+WHERE tblBoxPos.ONo = #ONo AND tblBoxPos.OPos = #OPos;;1;0
+217;2;target;2;0;0;1;1;;1;0
+217;3;robot program;2;0;0;1;1;;1;0
+217;4;offset X;2;-9;9;2;7;;1;0
+217;5;offset Y;2;-19;19;2;0;;1;0
+217;6;offset Z;2;0;20;2;7;;1;0
+217;7;offset C;2;-3;3;2;0;;1;0
+218;1;source;2;0;0;1;1;;1;0
+218;2;target;2;0;0;4;0;SELECT tblBoxPos.BoxPos AS Parameter
+FROM tblBoxPos
+WHERE tblBoxPos.ONo = #ONo AND tblBoxPos.OPos = #OPos;;1;0
+218;3;robot program;2;0;0;1;2;;1;0
+218;4;offset X;2;-9;9;2;7;;1;0
+218;5;offset Y;2;-19;19;2;0;;1;0
+218;6;offset Z;2;0;20;2;7;;1;0
+218;7;offset C;2;-3;3;2;0;;1;0
+300;1;robot program;2;0;0;4;0;SELECT if( #Parameter5 =0 AND #Parameter6 = 0 AND #Parameter7 >0, 1, if( #Parameter5 > 0 AND #Parameter6 = 0 AND #Parameter7 > 0, 2, if( #Parameter5 = 0 AND #Parameter6 > 0 AND #Parameter7 > 0, 3, if( #Parameter5 > 0 AND #Parameter6 > 0 AND #Parameter7 > 0, 4, 0) ) ) ) as Parameter;;1;0
+300;2;Pos Fuse 1;2;0;0;4;0;SELECT tblBufferPos.BufPos as Parameter FROM tblBufferPos WHERE (((tblBufferPos.PNo)=(SELECT tblStepParameter.Parameter FROM tblStepParameter WHERE (((tblStepParameter.StepNo)=#StepNo) AND ((tblStepParameter.ONo)=#ONo) AND ((tblStepParameter.OPos)=#OPos) AND ((tblStepParameter.ParameterNo)=5)))) AND ((tblBufferPos.ResourceId)=#ResourceID) AND ((tblBufferPos.BufNo)=1));;1;0
+300;3;Pos Fuse 2;2;0;0;4;0;SELECT tblBufferPos.BufPos as Parameter FROM tblBufferPos WHERE (((tblBufferPos.PNo)=(SELECT tblStepParameter.Parameter FROM tblStepParameter WHERE (((tblStepParameter.StepNo)=#StepNo) AND ((tblStepParameter.ONo)=#ONo) AND ((tblStepParameter.OPos)=#OPos) AND ((tblStepParameter.ParameterNo)=6)))) AND ((tblBufferPos.ResourceId)=#ResourceID) AND ((tblBufferPos.BufNo)=1));;1;0
+300;4;Pos PCB;2;0;0;4;0;SELECT tblBoxPos.BoxPos as Parameter 
+FROM tblBufferPos INNER JOIN tblBoxPos ON (tblBufferPos.BoxID = tblBoxPos.BoxId) AND (tblBufferPos.PNo = tblBoxPos.BoxPNo)
+WHERE (((tblBufferPos.ResourceId)=#ResourceID) AND ((tblBufferPos.BufNo)=1) AND ((tblBoxPos.PNo)=( SELECT tblStepParameter.Parameter 
+FROM tblStepParameter
+WHERE (((tblStepParameter.StepNo)=#StepNo) AND ((tblStepParameter.ONo)=#ONo) AND ((tblStepParameter.OPos)=#OPos) AND ((tblStepParameter.ParameterNo)=7)))) AND ((tblBufferPos.BufPos)=2));;1;0
+300;5;front fue;2;0;0;2;130;SELECT 0 As ValueMember, '0 | Nothing ' As DisplayMember FROM tblParts UNION SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description)AS DisplayMember FROM tblParts WHERE tblParts.PNo = 130 OR tblParts.PNo = 0;;3;0
+300;6;rear fuse;2;0;0;2;130;SELECT 0 As ValueMember, '0 | Nothing ' As DisplayMember FROM tblParts UNION SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember FROM tblParts WHERE tblParts.PNo = 130 OR tblParts.PNo = 0;;3;0
+300;7;PCB;2;0;0;2;120;SELECT 0 As ValueMember, '0 | Nothing ' As DisplayMember FROM tblParts UNION SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember FROM tblParts WHERE tblParts.PNo = 120 OR tblParts.PNo = 0;;3;0
+301;1;program number;2;0;0;1;1;;1;0
+301;2;Pos Fuse 1;2;0;0;4;0;SELECT tblBufferPos.BufPos as Parameter FROM tblBufferPos WHERE (((tblBufferPos.PNo)=(SELECT tblStepParameter.Parameter FROM tblStepParameter WHERE (((tblStepParameter.StepNo)=#StepNo) AND ((tblStepParameter.ONo)=#ONo) AND ((tblStepParameter.OPos)=#OPos) AND ((tblStepParameter.ParameterNo)=5)))) AND ((tblBufferPos.ResourceId)=#ResourceID) AND ((tblBufferPos.BufNo)=1));;1;0
+301;3;Pos Fuse 2;2;0;0;4;0;SELECT tblBufferPos.BufPos as Parameter FROM tblBufferPos WHERE (((tblBufferPos.PNo)=(SELECT tblStepParameter.Parameter FROM tblStepParameter WHERE (((tblStepParameter.StepNo)=#StepNo) AND ((tblStepParameter.ONo)=#ONo) AND ((tblStepParameter.OPos)=#OPos) AND ((tblStepParameter.ParameterNo)=6)))) AND ((tblBufferPos.ResourceId)=#ResourceID) AND ((tblBufferPos.BufNo)=1));;1;0
+301;4;Pos PCB;2;0;0;4;0;SELECT tblBoxPos.BoxPos as Parameter 
+FROM tblBufferPos INNER JOIN tblBoxPos ON (tblBufferPos.BoxID = tblBoxPos.BoxId) AND (tblBufferPos.PNo = tblBoxPos.BoxPNo)
+WHERE (((tblBufferPos.ResourceId)=#ResourceID) AND ((tblBufferPos.BufNo)=1) AND ((tblBoxPos.PNo)=( SELECT tblStepParameter.Parameter 
+FROM tblStepParameter
+WHERE (((tblStepParameter.StepNo)=#StepNo) AND ((tblStepParameter.ONo)=#ONo) AND ((tblStepParameter.OPos)=#OPos) AND ((tblStepParameter.ParameterNo)=7)))) AND ((tblBufferPos.BufPos)=2));
+;1;0
+301;5;PNo Fuse 1;2;0;0;1;0;;3;0
+301;6;PNo Fuse 2;2;0;0;1;0;;3;0
+301;7;PNo PCB;2;0;0;1;120;;3;0
+302;1;program number;2;0;0;1;2;;1;0
+302;2;Pos Fuse 1;2;0;0;4;0;SELECT tblBufferPos.BufPos as Parameter FROM tblBufferPos WHERE (((tblBufferPos.PNo)=(SELECT tblStepParameter.Parameter FROM tblStepParameter WHERE (((tblStepParameter.StepNo)=#StepNo) AND ((tblStepParameter.ONo)=#ONo) AND ((tblStepParameter.OPos)=#OPos) AND ((tblStepParameter.ParameterNo)=6)))) AND ((tblBufferPos.ResourceId)=#ResourceID) AND ((tblBufferPos.BufNo)=1));;1;0
+302;3;Pos Fuse 2;2;0;0;4;0;SELECT tblBufferPos.BufPos as Parameter FROM tblBufferPos WHERE (((tblBufferPos.PNo)=(SELECT tblStepParameter.Parameter FROM tblStepParameter WHERE (((tblStepParameter.StepNo)=#StepNo) AND ((tblStepParameter.ONo)=#ONo) AND ((tblStepParameter.OPos)=#OPos) AND ((tblStepParameter.ParameterNo)=6)))) AND ((tblBufferPos.ResourceId)=#ResourceID) AND ((tblBufferPos.BufNo)=1));;1;0
+302;4;Pos PCB;2;0;0;4;0;SELECT tblBoxPos.BoxPos as Parameter 
+FROM tblBufferPos INNER JOIN tblBoxPos ON (tblBufferPos.BoxID = tblBoxPos.BoxId) AND (tblBufferPos.PNo = tblBoxPos.BoxPNo)
+WHERE (((tblBufferPos.ResourceId)=#ResourceID) AND ((tblBufferPos.BufNo)=1) AND ((tblBoxPos.PNo)=( SELECT tblStepParameter.Parameter 
+FROM tblStepParameter
+WHERE (((tblStepParameter.StepNo)=#StepNo) AND ((tblStepParameter.ONo)=#ONo) AND ((tblStepParameter.OPos)=#OPos) AND ((tblStepParameter.ParameterNo)=7)))) AND ((tblBufferPos.BufPos)=2));;1;0
+302;5;PNo Fuse 1;2;0;0;1;130;;3;0
+302;6;PNo Fuse 2;2;0;0;1;0;;3;0
+302;7;PNo PCB;2;0;0;1;120;;3;0
+303;1;program number;2;0;0;1;3;;1;0
+303;2;Pos Fuse 1;2;0;0;4;0;SELECT tblBufferPos.BufPos as Parameter FROM tblBufferPos WHERE (((tblBufferPos.PNo)=(SELECT tblStepParameter.Parameter FROM tblStepParameter WHERE (((tblStepParameter.StepNo)=#StepNo) AND ((tblStepParameter.ONo)=#ONo) AND ((tblStepParameter.OPos)=#OPos) AND ((tblStepParameter.ParameterNo)=6)))) AND ((tblBufferPos.ResourceId)=#ResourceID) AND ((tblBufferPos.BufNo)=1));;1;0
+303;3;Pos Fuse 2;2;0;0;4;0;SELECT tblBufferPos.BufPos as Parameter FROM tblBufferPos WHERE (((tblBufferPos.PNo)=(SELECT tblStepParameter.Parameter FROM tblStepParameter WHERE (((tblStepParameter.StepNo)=#StepNo) AND ((tblStepParameter.ONo)=#ONo) AND ((tblStepParameter.OPos)=#OPos) AND ((tblStepParameter.ParameterNo)=6)))) AND ((tblBufferPos.ResourceId)=#ResourceID) AND ((tblBufferPos.BufNo)=1));;1;0
+303;4;Pos PCB;2;0;0;4;0;SELECT tblBoxPos.BoxPos as Parameter 
+FROM tblBufferPos INNER JOIN tblBoxPos ON (tblBufferPos.BoxID = tblBoxPos.BoxId) AND (tblBufferPos.PNo = tblBoxPos.BoxPNo)
+WHERE (((tblBufferPos.ResourceId)=#ResourceID) AND ((tblBufferPos.BufNo)=1) AND ((tblBoxPos.PNo)=( SELECT tblStepParameter.Parameter 
+FROM tblStepParameter
+WHERE (((tblStepParameter.StepNo)=#StepNo) AND ((tblStepParameter.ONo)=#ONo) AND ((tblStepParameter.OPos)=#OPos) AND ((tblStepParameter.ParameterNo)=7)))) AND ((tblBufferPos.BufPos)=2));;1;0
+303;5;PNo Fuse 1;2;0;0;1;0;;3;0
+303;6;PNo Fuse 2;2;0;0;1;130;;3;0
+303;7;PNo PCB;2;0;0;1;120;;3;0
+304;1;program number;2;0;0;1;4;;1;0
+304;2;Pos Fuse 1;2;0;0;4;0;SELECT tblBufferPos.BufPos as Parameter FROM tblBufferPos WHERE (((tblBufferPos.PNo)=(SELECT tblStepParameter.Parameter FROM tblStepParameter WHERE (((tblStepParameter.StepNo)=#StepNo) AND ((tblStepParameter.ONo)=#ONo) AND ((tblStepParameter.OPos)=#OPos) AND ((tblStepParameter.ParameterNo)=6)))) AND ((tblBufferPos.ResourceId)=#ResourceID) AND ((tblBufferPos.BufNo)=1));;1;0
+304;3;Pos Fuse 2;2;0;0;4;0;SELECT tblBufferPos.BufPos as Parameter FROM tblBufferPos WHERE (((tblBufferPos.PNo)=(SELECT tblStepParameter.Parameter FROM tblStepParameter WHERE (((tblStepParameter.StepNo)=#StepNo) AND ((tblStepParameter.ONo)=#ONo) AND ((tblStepParameter.OPos)=#OPos) AND ((tblStepParameter.ParameterNo)=6)))) AND ((tblBufferPos.ResourceId)=#ResourceID) AND ((tblBufferPos.BufNo)=1));;1;0
+304;4;Pos PCB;2;0;0;4;0;SELECT tblBoxPos.BoxPos as Parameter 
+FROM tblBufferPos INNER JOIN tblBoxPos ON (tblBufferPos.BoxID = tblBoxPos.BoxId) AND (tblBufferPos.PNo = tblBoxPos.BoxPNo)
+WHERE (((tblBufferPos.ResourceId)=#ResourceID) AND ((tblBufferPos.BufNo)=1) AND ((tblBoxPos.PNo)=( SELECT tblStepParameter.Parameter 
+FROM tblStepParameter
+WHERE (((tblStepParameter.StepNo)=#StepNo) AND ((tblStepParameter.ONo)=#ONo) AND ((tblStepParameter.OPos)=#OPos) AND ((tblStepParameter.ParameterNo)=7)))) AND ((tblBufferPos.BufPos)=2));;1;0
+304;5;PNo Fuse 1;2;0;0;1;130;;3;0
+304;6;PNo Fuse 2;2;0;0;1;130;;3;0
+304;7;PNo PCB;2;0;0;1;120;;3;0
+310;1;robot program;2;0;0;1;2;;1;0
+310;2;box buffer;2;0;2;4;0;SELECT if(#Parameter10, 0, tblbufferpos.BufNo) AS Parameter
+FROM tblbufferpos
+INNER JOIN 
+tblboxpos ON tblbufferpos.boxID = tblboxpos.BoxId AND 
+tblbufferpos.PNo = tblboxpos.BoxPNo
+WHERE 
+tblbufferpos.ResourceId = #ResourceID AND 
+if(#Parameter12, 1, tblboxpos.ONo = #ONo) AND 
+if(#Parameter12, 1, tblboxpos.OPos = #OPos) AND 
+tblboxpos.PNo = 0 
+LIMIT 1;;1;0
+310;3;pos in box;2;0;8;4;0;SELECT if(#Parameter10, 0, boxpos) AS Parameter
+FROM tblbufferpos
+INNER JOIN tblboxpos ON tblbufferpos.BoxID = tblboxpos.BoxId AND tblbufferpos.PNo = tblboxpos.BoxPNo
+WHERE 
+tblbufferpos.ResourceId = #ResourceID AND 
+tblbufferpos.BufNo = #Parameter2 AND 
+tblboxpos.PNo = 0 AND 
+if(#Parameter12, 1, tblboxpos.ONo = #ONo) AND 
+if(#Parameter12, 1, tblboxpos.OPos = #OPos)
+LIMIT 1;;1;0
+310;4;offset X;2;-20;20;2;0;;1;0
+310;5;offset Y;2;-20;20;2;0;;1;0
+310;6;offset Z;2;-30;30;2;0;;1;0
+310;7;standard part (16=customized);2;0;0;2;0;SELECT tblTextList.ListPos AS ValueMember, CONCAT(tblTextList.ListPos , ' | ' , tblTextList.Description) AS DisplayMember FROM tblTextList WHERE tblTextList.ListID = 1 ORDER BY tblTextList.ListPos;1;0
+310;8;action;2;0;0;1;0;SELECT tblTextList.ListPos AS ValueMember, CONCAT(tblTextList.ListPos , ' | ' , tblTextList.Description) AS DisplayMember FROM tblTextList WHERE tblTextList.ListID = 2 ORDER BY tblTextList.ListPos;1;0
+310;9;part (to box);2;0;0;2;2000;SELECT tblparts.PNo AS ValueMember, CONCAT(tblparts.PNo, " | ", tblparts.Description) AS DisplayMember
+FROM tblparts INNER JOIN tblpnogroup ON tblparts.PNo = tblpnogroup.PNo
+WHERE tblpnogroup.Id=12
+ORDER BY tblParts.PNo;;1;0
+310;10;take it by the camera;2;0;0;2;1;SELECT 0 as ValueMember, 'No' as DisplayMember
+UNION ALL
+SELECT 1 as ValueMember, 'Yes' as DisplayMember;1;0
+310;11;Delete order in box after placing;2;0;0;2;1;SELECT 0 as ValueMember, 'No' as DisplayMember
+UNION ALL
+SELECT 1 as ValueMember, 'Yes' as DisplayMember;1;0
+310;12;Search position by order or part;2;0;0;2;0;/* Search position*/
+SELECT 0 as ValueMember, 'by order' as DisplayMember
+UNION ALL
+SELECT 1 as ValueMember, 'only by part number' as DisplayMember;1;0
+311;1;robot program;2;0;0;1;1;;1;0
+311;2;box buffer;2;0;2;4;0;SELECT if(#Parameter10, 0, tblbufferpos.BufNo) AS Parameter
+FROM tblbufferpos
+INNER JOIN 
+tblboxpos ON tblbufferpos.boxID = tblboxpos.BoxId AND 
+tblbufferpos.PNo = tblboxpos.BoxPNo
+WHERE 
+tblbufferpos.ResourceId = #ResourceID AND 
+tblboxpos.PNo <> 0 AND
+if(#Parameter12, 1, tblboxpos.ONo = #ONo) AND 
+if(#Parameter12, 1, tblboxpos.OPos = #OPos) 
+LIMIT 1;
+;1;0
+311;3;pos in box;2;0;8;4;0;SELECT if(#Parameter10, 0, boxpos) AS Parameter
+FROM tblbufferpos
+INNER JOIN tblboxpos ON tblbufferpos.BoxID = tblboxpos.BoxId AND tblbufferpos.PNo = tblboxpos.BoxPNo
+WHERE 
+tblbufferpos.ResourceId = #ResourceID AND 
+tblbufferpos.BufNo = #Parameter2 AND 
+tblboxpos.PNo = #Parameter9 AND 
+if(#Parameter12, 1, tblboxpos.ONo = #ONo) AND 
+if(#Parameter12, 1, tblboxpos.OPos = #OPos)
+LIMIT 1;
+;1;0
+311;4;offset X;2;-20;20;2;0;;1;0
+311;5;offset Y;2;-20;20;2;-10;;1;0
+311;6;offset Z;2;-30;30;2;-17;;1;0
+311;7;standard part (16=customized);2;0;0;1;0;SELECT tblTextList.ListPos AS ValueMember, CONCAT(tblTextList.ListPos , ' | ' , tblTextList.Description) AS DisplayMember FROM tblTextList WHERE tblTextList.ListID = 1 ORDER BY tblTextList.ListPos;1;0
+311;8;action;2;0;0;1;0;SELECT tblTextList.ListPos AS ValueMember, CONCAT(tblTextList.ListPos , ' | ' , tblTextList.Description) AS DisplayMember FROM tblTextList WHERE tblTextList.ListID = 2 ORDER BY tblTextList.ListPos;1;0
+311;9;part (BOM);2;0;0;2;0;SELECT tblparts.PNo AS ValueMember, CONCAT(tblparts.PNo, " | ", tblparts.Description) AS DisplayMember
+FROM tblparts INNER JOIN tblpnogroup ON tblparts.PNo = tblpnogroup.PNo
+WHERE tblpnogroup.Id=1
+ORDER BY tblParts.PNo;;3;0
+311;10;take it by the camera;2;0;0;2;1;SELECT 0 as ValueMember, 'No' as DisplayMember
+UNION ALL
+SELECT 1 as ValueMember, 'Yes' as DisplayMember
+;1;0
+311;11;Delete order in box after picking;2;0;0;2;1;SELECT 0 as ValueMember, 'No' as DisplayMember
+UNION ALL
+SELECT 1 as ValueMember, 'Yes' as DisplayMember;1;0
+311;12;Search position by order or part;2;0;0;2;0;/* Search position*/
+SELECT 0 as ValueMember, 'by order' as DisplayMember
+UNION ALL
+SELECT 1 as ValueMember, 'only by part number' as DisplayMember
+;1;0
+312;1;robot program;2;0;0;1;3;;1;0
+312;2;BufNo;2;0;0;1;3;;1;0
+312;3;reserved;2;0;0;1;0;;1;0
+312;4;offset X;2;-20;20;2;0;;1;0
+312;5;offset Y;2;-7;7;2;0;;1;0
+312;6;offset Z;2;-20;20;2;0;;1;0
+312;7;standard part (16=customized);2;0;0;1;0;;1;0
+312;8;action;2;0;0;1;0;;1;0
+312;9;part (BOM);2;0;0;1;0;SELECT tblparts.PNo AS ValueMember, CONCAT(tblparts.PNo, " | ", tblparts.Description) AS DisplayMember
+FROM tblparts INNER JOIN tblpnogroup ON tblparts.PNo = tblpnogroup.PNo
+WHERE tblpnogroup.Id=4
+ORDER BY tblParts.PNo;;1;0
+400;1;camera program;2;0;0;2;1;SELECT tbltextlist.ListPos AS ValueMember, CONCAT(tbltextlist.ListPos, ' | ', tbltextlist.Description) AS DisplayMember
+FROM tbltextlist
+WHERE tbltextlist.ListID = 4 ORDER BY tbltextlist.ListPos;
+;1;0
+400;2;return value;2;0;0;4;0;;1;0
+401;1;camera program;2;1;6;4;1;;1;0
+401;2;return value;2;0;0;4;0;;1;0
+402;1;camera program;2;1;6;4;2;;1;0
+402;2;return value;2;0;0;4;0;;1;0
+403;1;camera program;2;1;6;4;3;;1;0
+403;2;return value;2;0;0;4;0;;1;0
+404;1;camera program;2;1;6;4;4;;1;0
+404;2;return value;2;0;0;4;0;;1;0
+405;1;camera program;2;1;6;4;5;;1;0
+405;2;return value;2;0;0;4;0;;1;0
+502;1;box type;2;0;0;2;28;SELECT tblParts.PNo AS ValueMember,CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember FROM tblParts INNER JOIN tblPNoGroup ON tblParts.PNo = tblPNoGroup.PNo WHERE tblPNoGroup.Id = 9 ORDER BY tblParts.PNo;1;0
+502;2;part;2;0;0;2;0;SELECT tblparts.PNo AS ValueMember, CONCAT(tblparts.PNo, " | ", tblparts.Description) AS DisplayMember
+FROM tblparts INNER JOIN tblpnogroup ON tblparts.PNo = tblpnogroup.PNo
+WHERE tblpnogroup.Id=10
+ORDER BY tblParts.PNo;;3;0
+510;1;workpiece;2;0;0;2;0;SELECT tblTextList.ListPos AS ValueMember, CONCAT(tblTextList.ListPos , ' | ' , tblTextList.Description) AS DisplayMember FROM tblTextList WHERE tblTextList.ListID = 1 ORDER BY tblTextList.ListPos;1;0
+510;2;action;2;0;0;2;0;SELECT tblTextList.ListPos AS ValueMember, CONCAT(tblTextList.ListPos , ' | ' , tblTextList.Description) AS DisplayMember FROM tblTextList WHERE tblTextList.ListID = 2 ORDER BY tblTextList.ListPos;1;0
+510;3;part;2;0;0;2;0;SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember FROM tblParts ORDER BY tblParts.PNo;;3;0
+510;4;reserved;2;0;0;1;0;;1;0
+510;5;reserved;2;0;0;1;0;;1;0
+510;6;reserved;2;0;0;1;0;;1;0
+510;7;next part number (CIROS);2;0;0;1;0;SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember FROM tblParts ORDER BY tblParts.PNo;;1;0
+610;1;ONo;2;0;0;2;0;;1;0
+610;2;OPos;2;0;0;2;0;;1;0
+610;3;StepNo;2;0;0;2;0;;1;0
+610;4;BoxID;2;0;0;2;0;;1;0
+904;1;Param1;2;0;0;1;0;NULL;1;0
+904;2;Param2;2;0;0;1;0;NULL;1;0
+904;3;Param3;2;0;0;1;0;NULL;1;0
+904;4;Param4;2;0;0;1;0;NULL;1;0
+1010;1;workplan (WPNo);2;0;0;2;0;SELECT WPNo AS ValueMember, CONCAT(WPNo , ' | ' , Short) AS DisplayMember FROM tblWorkPlanDef WHERE Type=3 OR Type = 4 OR Type = 0 ORDER BY WPNo;4;0
+1010;2;part (PNo);2;0;0;2;0;SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember 
+FROM tblParts LEFT JOIN tblWorkPlanDef ON tblParts.WPNo = tblWorkPlanDef.WPNo 
+WHERE (((tblParts.Type)=3 Or (tblParts.Type)=0) AND ((tblWorkPlanDef.Type)=3 OR (tblWorkPlanDef.Type)=4)) OR (((tblParts.PNo)=0)) 
+ORDER BY tblParts.PNo;;3;0
+1010;3;sub position;2;0;0;2;0;;1;0
+1020;1;sub position;2;0;0;2;0;NULL;1;0
+1030;1;resource id;1;0;0;2;0;SELECT Distinct tblResource.ResourceID AS ValueMember, CONCAT(tblResource.ResourceID , ' | ' , tblResource.ResourceName) AS DisplayMember FROM tblParts, tblResource WHERE (((tblResource.ResourceID)>0)) ORDER BY tblResource.ResourceID;;1;0
+1030;2;error number;2;0;0;2;0;;1;0
+1030;3;error index;3;0;0;2;0;;1;0
+1030;4;priority;2;0;0;2;0;;1;0
+1030;5;solution number;2;0;0;2;0;;1;0
+1030;6;fault reporter;3;0;0;2;0;;1;0
+1030;7;maintainer;3;0;0;2;0;;1;0
+1030;8;maintenance id;2;0;0;2;0;;1;0
+1040;1;resource id;2;0;0;2;0;SELECT tblResource.ResourceID AS ValueMember, CONCAT(tblResource.ResourceID , ' | ' , tblResource.ResourceName) AS DisplayMember 
+FROM tblResource ORDER BY tblResource.ResourceID;1;0
+1040;2;BufNo;2;0;0;2;1;;1;0
+1040;3;part number;2;0;0;2;0;SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember FROM tblParts ORDER BY tblParts.PNo;;3;0
+1040;4;BoxPNo;2;0;0;2;0;SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember FROM tblParts WHERE (((tblParts.Type)=9)) ORDER BY tblParts.PNo;;3;0
+1100;1;Active SubOrders;2;0;0;4;0;SELECT COUNT(*) AS Parameter
+FROM tblorderpos
+WHERE ONo = #ONo AND MainOPos = #OPos AND State < 99
+;1;0
+1101;1;Box PNo;2;0;0;2;28;SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember 
+
+FROM tblParts 
+
+
+WHERE tblParts.Type=9 
+
+
+ORDER BY tblParts.PNo;
+;3;0
+1101;2;Requested Box ID;2;0;0;2;0;;1;0
+1101;3;Found Box ID;2;0;0;4;0;SELECT 
+tblboxpos.BoxId as Parameter
+FROM 
+tblbufferpos
+INNER JOIN tblboxpos ON 
+tblbufferpos.PNo = tblboxpos.BoxPNo AND
+tblbufferpos.BoxID = tblboxpos.BoxId
+INNER JOIN tblbox ON 
+tblbox.BoxPNo = tblboxpos.BoxPNo AND
+tblbox.BoxID = tblboxpos.BoxId
+WHERE 
+(tblbufferpos.ResourceID IN (#Parameter4) OR '#Parameter4' = '' OR '#Parameter4' = '0, 0, 0') AND
+(tblboxpos.BoxPNo = #Parameter1 OR #Parameter1 = 0) AND 
+tblboxpos.ONo = 0 AND 
+tblboxpos.OPos = 0 AND 
+tblboxpos.PNo = 0 AND 
+tblbox.ONo = 0 AND 
+(tblboxpos.BoxID = #Parameter2 OR #Parameter2 = 0)
+GROUP BY 
+tblboxpos.BoxId,
+tblbufferpos.BufNo,
+tblbufferpos.BufPos
+HAVING 
+Count(tblboxpos.BoxPos) = 8
+ORDER BY 
+FIELD(ResourceID, #Parameter4),
+tblbufferpos.BufPos
+
+
+;1;0
+1101;4;ResourceIDs with priority;3;0;0;2;9, 0, 0;;1;0
+1102;1;Box PNo;2;0;0;2;28;SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember 
+
+FROM tblParts 
+
+
+WHERE tblParts.Type=9 
+
+
+ORDER BY tblParts.PNo;
+;3;0
+1102;2;Requested Box ID;2;0;0;2;0;/* Products available in storage */
+SELECT ValueMember, IF(ValueMember = '0' OR Quantity = -1, DisplayMember, CAST(CONCAT( DisplayMember, SUM(Quantity)) AS CHAR CHARACTER SET UTF8) ) as DisplayMember
+FROM (
+
+
+(
+
+SELECT
+tblboxpos.BoxId AS ValueMember, CONCAT('ID ', tblboxpos.BoxId , ' | ' , 'Num of parts: ') AS DisplayMember, COUNT(tblboxpos.PNo) AS Quantity, tblbufferpos.BufPos AS BufPos
+FROM
+tblbufferpos
+INNER JOIN tblboxpos ON
+tblbufferpos.PNo = tblboxpos.BoxPNo AND
+tblbufferpos.BoxID = tblboxpos.BoxId
+INNER JOIN tblbox ON
+tblbox.BoxPNo = tblboxpos.BoxPNo AND
+tblbox.BoxID = tblboxpos.BoxId
+
+WHERE
+tblbufferpos.ResourceID = 9 AND
+(tblboxpos.BoxPNo = 28 OR tblboxpos.BoxPNo = 27 ) AND
+tblboxpos.ONo = 0 AND
+tblboxpos.OPos = 0 AND
+tblboxpos.PNo <> 0 AND
+tblbox.ONo = 0
+GROUP BY
+tblboxpos.BoxId,
+tblbufferpos.BufNo,
+tblbufferpos.BufPos
+ORDER BY
+tblbufferpos.ResourceId,
+tblbufferpos.BufPos
+
+
+)
+
+
+UNION ALL
+
+
+
+(
+
+SELECT
+tblboxpos.BoxId AS ValueMember, CONCAT('ID ', tblboxpos.BoxId , ' | ' , 'Order ', tblboxpos.ONo , ' | ' ) AS DisplayMember, COUNT(tblboxpos.PNo) AS Quantity, tblbufferpos.BufPos AS BufPos
+FROM
+tblbufferpos
+INNER JOIN tblboxpos ON
+tblbufferpos.PNo = tblboxpos.BoxPNo AND
+tblbufferpos.BoxID = tblboxpos.BoxId
+INNER JOIN tblbox ON
+tblbox.BoxPNo = tblboxpos.BoxPNo AND
+tblbox.BoxID = tblboxpos.BoxId
+INNER JOIN tblfinorder ON
+tblfinorder.ONo = tblboxpos.ONo
+WHERE
+tblbufferpos.ResourceID = 9 AND
+(tblboxpos.BoxPNo = 28 OR tblboxpos.BoxPNo = 27) AND
+(
+tblboxpos.ONo <> 0 OR
+tblboxpos.OPos <> 0 OR
+tblboxpos.PNo <> 0
+) AND
+tblbox.ONo = 0
+GROUP BY
+tblboxpos.BoxId,
+tblbufferpos.BufNo,
+tblbufferpos.BufPos
+ORDER BY
+tblbufferpos.ResourceId,
+tblbufferpos.BufPos
+
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember,
+-1 AS Quantity, 0 AS BufPos )
+
+
+) AS result
+GROUP BY result.ValueMember
+ORDER BY BufPos DESC
+
+
+;1;0
+1102;3;Found Box ID;2;0;0;4;0;SELECT IF(#Parameter2<>0, #Parameter2, result.selectedBox) AS Parameter
+FROM (
+
+(
+SELECT
+tblboxpos.BoxId as selectedBox
+FROM
+tblbufferpos
+INNER JOIN tblboxpos ON
+tblbufferpos.PNo = tblboxpos.BoxPNo AND
+tblbufferpos.BoxID = tblboxpos.BoxId
+INNER JOIN tblbox ON
+tblbox.BoxPNo = tblboxpos.BoxPNo AND
+tblbox.BoxID = tblboxpos.BoxId
+WHERE
+(tblbufferpos.ResourceID IN (#Parameter4) OR '#Parameter4' = '' OR '#Parameter4' = '0, 0, 0') AND
+(tblboxpos.BoxPNo = #Parameter1 OR #Parameter1 = 0) AND
+tblboxpos.ONo = 0 AND
+tblboxpos.OPos = 0 AND
+tblboxpos.PNo <> 0
+GROUP BY
+tblboxpos.BoxId,
+tblbufferpos.BufNo,
+tblbufferpos.BufPos
+ORDER BY
+FIELD(ResourceID, #Parameter4),
+tblbufferpos.BufPos
+)
+
+UNION ALL
+
+(
+SELECT
+tblboxpos.BoxId as selectedBox
+FROM
+tblbufferpos
+INNER JOIN tblboxpos ON
+tblbufferpos.PNo = tblboxpos.BoxPNo AND
+tblbufferpos.BoxID = tblboxpos.BoxId
+INNER JOIN tblbox ON
+tblbox.BoxPNo = tblboxpos.BoxPNo AND
+tblbox.BoxID = tblboxpos.BoxId
+INNER JOIN tblfinorder ON
+tblfinorder.ONo = tblboxpos.ONo
+WHERE
+(tblbufferpos.ResourceID IN (#Parameter4) OR '#Parameter4' = '' OR '#Parameter4' = '0, 0, 0') AND
+(tblboxpos.BoxPNo = #Parameter1 OR #Parameter1 = 0) AND
+(
+tblboxpos.ONo <> 0 OR
+tblboxpos.OPos <> 0 OR
+tblboxpos.PNo <> 0
+)
+GROUP BY
+tblboxpos.BoxId,
+tblbufferpos.BufNo,
+tblbufferpos.BufPos
+ORDER BY
+FIELD(ResourceID, #Parameter4),
+tblbufferpos.BufPos
+)
+
+) AS result
+GROUP BY Parameter DESC
+
+;1;0
+1102;4;ResourceIDs with priority;3;0;0;2;9, 0, 0;;1;0
+1103;1;Select part in box;2;0;0;2;0;/* Products available in storage */
+SELECT ValueMember, IF(ValueMember = '0' OR Quantity = -1, DisplayMember, CONCAT(SUM(Quantity) , ' | ', DisplayMember)) as DisplayMember, BufPos
+FROM (
+
+
+(
+;SELECT tblboxpos.PNo AS ValueMember, CONCAT(tblboxpos.PNo , ' | ', tblParts.Description ) AS DisplayMember, COUNT(tblboxpos.PNo) AS Quantity, tblbufferpos.BufPos AS BufPos
+;
+;FROM tblboxpos
+;
+;INNER JOIN tblbufferpos ON tblboxpos.BoxId = tblbufferpos.BoxId 
+;
+;INNER JOIN tblParts ON tblboxpos.PNo = tblParts.PNo
+;
+;WHERE 
+;
+;tblbufferpos.ResourceId = 9 AND 
+;tblboxpos.PNo <> 0 AND 
+;tblboxpos.ONo = 0 AND tblboxpos.OPos = 0 AND 
+;tblbufferpos.BufNo = 1 AND 
+;(tblboxpos.BoxPNo = 28 OR tblboxpos.BoxPNo = 27) 
+
+;
+;GROUP BY tblboxpos.PNo
+)
+
+
+UNION ALL
+
+/* Orders available in storage */
+(
+;SELECT
+;CONCAT(tblboxpos.ONo , '.' , tblboxpos.OPos) AS ValueMember,
+;CONCAT('order: ', tblboxpos.ONo , '.' , tblboxpos.OPos, ' | ' , tblParts.Description) AS DisplayMember,
+;-1 AS Quantity, tblbufferpos.BufPos AS BufPos
+;
+;FROM tblboxpos
+;
+;INNER JOIN tblbufferpos ON tblboxpos.BoxId = tblbufferpos.BoxId 
+;
+;INNER JOIN tblParts ON tblboxpos.PNo = tblParts.PNo
+;
+;INNER JOIN tblfinorder ON tblfinorder.ONo = tblboxpos.ONo
+;
+;WHERE 
+;
+;tblbufferpos.ResourceId = 9 AND 
+;tblboxpos.ONo > 0 AND tblboxpos.OPos > 0 AND 
+;tblbufferpos.BufNo = 1 AND 
+;(tblboxpos.BoxPNo = 28 OR tblboxpos.BoxPNo = 27) 
+
+)
+
+UNION ALL
+
+/* nothing */
+(
+;SELECT
+;0 AS ValueMember,
+;CONCAT('nothing' ) AS DisplayMember,
+;-1 AS Quantity, 0 AS BufPos 
+)
+
+
+) AS result
+GROUP BY result.ValueMember
+ORDER BY BufPos ASC
+;1;0
+1103;2;Box Id;2;0;0;4;0;SELECT IFNULL((
+;if(#Parameter1 = 0, 
+;(
+;;SELECT tblboxpos.BoxId AS Parameter
+;;FROM tblboxpos
+;;INNER JOIN tblbufferpos ON tblboxpos.BoxId = tblbufferpos.BoxId
+;;WHERE tblboxpos.ONo = #ONo AND tblboxpos.OPos = #OPos
+;;AND tblBufferPos.ResourceId=#Parameter5 
+;;AND tblBufferPos.BufNo = 1 
+;;LIMIT 1
+;), 
+;;if(#Parameter1 LIKE '%.%',
+;;(
+;;;SELECT tblboxpos.BoxId AS Parameter
+;;;FROM tblboxpos
+;;;INNER JOIN tblbufferpos ON tblboxpos.BoxId = tblbufferpos.BoxId 
+;;;WHERE 
+;;;tblboxpos.ONo=CONVERT(SUBSTRING_INDEX(#Parameter1, '.', 1), UNSIGNED)
+;;;AND tblboxpos.OPos=CONVERT(SUBSTRING_INDEX(#Parameter1 , '.', -1), UNSIGNED)
+;;;AND tblBufferPos.ResourceId=#Parameter5 
+;;;AND tblBufferPos.BufNo = 1 
+;;;LIMIT 1
+;;),
+;;(
+;;;SELECT tblboxpos.BoxId AS Parameter
+;;;FROM tblboxpos
+;;;INNER JOIN tblbufferpos ON tblboxpos.BoxId = tblbufferpos.BoxId 
+;;;WHERE tblboxpos.PNo=#Parameter1
+;;;AND tblboxpos.ONo=0
+;;;AND tblboxpos.OPos=0
+;;;AND tblBufferPos.ResourceId=#Parameter5 
+;;;AND tblBufferPos.BufNo = 1 
+;;;LIMIT 1
+;;))
+;)
+),0) as Parameter;;1;0
+1103;3;Box Position;2;0;0;4;0;SELECT IFNULL((
+if(#Parameter1 = 0,
+(
+SELECT tblboxpos.BoxPos AS Parameter
+FROM tblboxpos
+INNER JOIN tblbufferpos ON tblboxpos.BoxId = tblbufferpos.BoxId
+WHERE tblboxpos.ONo = #ONo AND tblboxpos.OPos = #OPos
+AND tblBufferPos.ResourceId=#Parameter5 
+AND tblBufferPos.BufNo = 1
+LIMIT 1
+),
+if(#Parameter1 LIKE '%.%',
+(
+SELECT tblboxpos.BoxPos AS Parameter
+FROM tblboxpos
+INNER JOIN tblbufferpos ON tblboxpos.BoxId = tblbufferpos.BoxId
+WHERE
+tblboxpos.ONo=CONVERT(SUBSTRING_INDEX(#Parameter1, '.', 1), UNSIGNED)
+AND tblboxpos.OPos=CONVERT(SUBSTRING_INDEX(#Parameter1 , '.', -1), UNSIGNED)
+AND tblBufferPos.ResourceId=#Parameter5 
+AND tblBufferPos.BufNo = 1
+LIMIT 1
+),
+(
+SELECT tblboxpos.BoxPos AS Parameter
+FROM tblboxpos
+INNER JOIN tblbufferpos ON tblboxpos.BoxId = tblbufferpos.BoxId
+WHERE tblboxpos.PNo=#Parameter1
+AND tblboxpos.ONo=0
+AND tblboxpos.OPos=0
+AND tblBufferPos.ResourceId=#Parameter5 
+AND tblBufferPos.BufNo = 1
+LIMIT 1
+))
+)
+),0) as Parameter;
+;1;0
+1103;4;Part number;2;0;0;4;0;SELECT IFNULL((
+;if(#Parameter1 = 0, 
+;(
+;;SELECT tblboxpos.PNo AS Parameter
+;;FROM tblboxpos
+;;INNER JOIN tblbufferpos ON tblboxpos.BoxId = tblbufferpos.BoxId
+;;WHERE tblboxpos.ONo = #ONo AND tblboxpos.OPos = #OPos
+;;AND tblBufferPos.ResourceId=#Parameter5 
+;;AND tblBufferPos.BufNo = 1 
+;;LIMIT 1
+;), 
+;;if(#Parameter1 LIKE '%.%',
+;;(
+;;;SELECT tblboxpos.PNo AS Parameter
+;;;FROM tblboxpos
+;;;INNER JOIN tblbufferpos ON tblboxpos.BoxId = tblbufferpos.BoxId 
+;;;WHERE 
+;;;tblboxpos.ONo=CONVERT(SUBSTRING_INDEX(#Parameter1, '.', 1), UNSIGNED)
+;;;AND tblboxpos.OPos=CONVERT(SUBSTRING_INDEX(#Parameter1 , '.', -1), UNSIGNED)
+;;;AND tblBufferPos.ResourceId=#Parameter5 
+;;;AND tblBufferPos.BufNo = 1 
+;;;LIMIT 1
+;;),
+;;(
+;;;SELECT tblboxpos.PNo AS Parameter
+;;;FROM tblboxpos
+;;;INNER JOIN tblbufferpos ON tblboxpos.BoxId = tblbufferpos.BoxId 
+;;;WHERE tblboxpos.PNo=#Parameter1
+;;;AND tblboxpos.ONo=0
+;;;AND tblboxpos.OPos=0
+;;;AND tblBufferPos.ResourceId=#Parameter5 
+;;;AND tblBufferPos.BufNo = 1 
+;;;LIMIT 1
+;;))
+;)
+),0) as Parameter;;1;0
+1103;5;Select resource;2;0;0;2;9;SELECT tblResource.ResourceID AS ValueMember, CONCAT(tblResource.ResourceID , ' | ' , tblResource.ResourceName) AS DisplayMember 
+FROM tblResource ORDER BY tblResource.ResourceID;1;0
+1104;1;Box position 1 part;3;0;0;2;0;SELECT *
+FROM (
+
+/* Orders available with specific Operation number */
+(SELECT
+CONCAT(tblstep.ONo , '.' , tblstep.OPos) AS ValueMember,
+CONCAT('order: ', tblstep.ONo , '.' , tblstep.OPos, ' | ' , 'part: ', tblstepparameter.Parameter) AS DisplayMember
+
+FROM tblstep
+
+INNER JOIN tblParts ON tblstep.WPNo = tblParts.WPNo
+INNER JOIN tblstepparameter ON tblstep.StepNo = tblstepparameter.StepNo AND tblstep.ONo = tblstepparameter.ONo AND tblstep.OPos = tblstepparameter.OPos
+
+WHERE tblstep.OpNo = 310 AND tblstepparameter.ParameterNo = 9
+GROUP BY tblstep.ONo, tblstep.OPos
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember )
+
+
+) AS result
+
+
+;1;0
+1104;2;Box position 2 part;3;0;0;2;0;SELECT *
+FROM (
+
+/* Orders available with specific Operation number */
+(SELECT
+CONCAT(tblstep.ONo , '.' , tblstep.OPos) AS ValueMember,
+CONCAT('order: ', tblstep.ONo , '.' , tblstep.OPos, ' | ' , 'part: ', tblstepparameter.Parameter) AS DisplayMember
+
+FROM tblstep
+
+INNER JOIN tblParts ON tblstep.WPNo = tblParts.WPNo
+INNER JOIN tblstepparameter ON tblstep.StepNo = tblstepparameter.StepNo AND tblstep.ONo = tblstepparameter.ONo AND tblstep.OPos = tblstepparameter.OPos
+
+WHERE tblstep.OpNo = 310 AND tblstepparameter.ParameterNo = 9
+GROUP BY tblstep.ONo, tblstep.OPos
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember )
+
+
+) AS result
+;1;0
+1104;3;Box position 3 part;3;0;0;2;0;SELECT *
+FROM (
+
+/* Orders available with specific Operation number */
+(SELECT
+CONCAT(tblstep.ONo , '.' , tblstep.OPos) AS ValueMember,
+CONCAT('order: ', tblstep.ONo , '.' , tblstep.OPos, ' | ' , 'part: ', tblstepparameter.Parameter) AS DisplayMember
+
+FROM tblstep
+
+INNER JOIN tblParts ON tblstep.WPNo = tblParts.WPNo
+INNER JOIN tblstepparameter ON tblstep.StepNo = tblstepparameter.StepNo AND tblstep.ONo = tblstepparameter.ONo AND tblstep.OPos = tblstepparameter.OPos
+
+WHERE tblstep.OpNo = 310 AND tblstepparameter.ParameterNo = 9
+GROUP BY tblstep.ONo, tblstep.OPos
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember )
+
+
+) AS result
+;1;0
+1104;4;Box position 4 part;3;0;0;2;0;SELECT *
+FROM (
+
+/* Orders available with specific Operation number */
+(SELECT
+CONCAT(tblstep.ONo , '.' , tblstep.OPos) AS ValueMember,
+CONCAT('order: ', tblstep.ONo , '.' , tblstep.OPos, ' | ' , 'part: ', tblstepparameter.Parameter) AS DisplayMember
+
+FROM tblstep
+
+INNER JOIN tblParts ON tblstep.WPNo = tblParts.WPNo
+INNER JOIN tblstepparameter ON tblstep.StepNo = tblstepparameter.StepNo AND tblstep.ONo = tblstepparameter.ONo AND tblstep.OPos = tblstepparameter.OPos
+
+WHERE tblstep.OpNo = 310 AND tblstepparameter.ParameterNo = 9
+GROUP BY tblstep.ONo, tblstep.OPos
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember )
+
+) AS result
+;1;0
+1104;5;Box position 5 part;3;0;0;2;0;SELECT *
+FROM (
+
+/* Orders available with specific Operation number */
+(SELECT
+CONCAT(tblstep.ONo , '.' , tblstep.OPos) AS ValueMember,
+CONCAT('order: ', tblstep.ONo , '.' , tblstep.OPos, ' | ' , 'part: ', tblstepparameter.Parameter) AS DisplayMember
+
+FROM tblstep
+
+INNER JOIN tblParts ON tblstep.WPNo = tblParts.WPNo
+INNER JOIN tblstepparameter ON tblstep.StepNo = tblstepparameter.StepNo AND tblstep.ONo = tblstepparameter.ONo AND tblstep.OPos = tblstepparameter.OPos
+
+WHERE tblstep.OpNo = 310 AND tblstepparameter.ParameterNo = 9
+GROUP BY tblstep.ONo, tblstep.OPos
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember )
+
+) AS result
+;1;0
+1104;6;Box position 6 part;3;0;0;2;0;SELECT *
+FROM (
+
+/* Orders available with specific Operation number */
+(SELECT
+CONCAT(tblstep.ONo , '.' , tblstep.OPos) AS ValueMember,
+CONCAT('order: ', tblstep.ONo , '.' , tblstep.OPos, ' | ' , 'part: ', tblstepparameter.Parameter) AS DisplayMember
+
+FROM tblstep
+
+INNER JOIN tblParts ON tblstep.WPNo = tblParts.WPNo
+INNER JOIN tblstepparameter ON tblstep.StepNo = tblstepparameter.StepNo AND tblstep.ONo = tblstepparameter.ONo AND tblstep.OPos = tblstepparameter.OPos
+
+WHERE tblstep.OpNo = 310 AND tblstepparameter.ParameterNo = 9
+GROUP BY tblstep.ONo, tblstep.OPos
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember )
+
+) AS result
+;1;0
+1104;7;Box position 7 part;3;0;0;2;0;SELECT *
+FROM (
+
+/* Orders available with specific Operation number */
+(SELECT
+CONCAT(tblstep.ONo , '.' , tblstep.OPos) AS ValueMember,
+CONCAT('order: ', tblstep.ONo , '.' , tblstep.OPos, ' | ' , 'part: ', tblstepparameter.Parameter) AS DisplayMember
+
+FROM tblstep
+
+INNER JOIN tblParts ON tblstep.WPNo = tblParts.WPNo
+INNER JOIN tblstepparameter ON tblstep.StepNo = tblstepparameter.StepNo AND tblstep.ONo = tblstepparameter.ONo AND tblstep.OPos = tblstepparameter.OPos
+
+WHERE tblstep.OpNo = 310 AND tblstepparameter.ParameterNo = 9
+GROUP BY tblstep.ONo, tblstep.OPos
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember )
+
+) AS result
+;1;0
+1104;8;Box position 8 part;3;0;0;2;0;SELECT *
+FROM (
+
+/* Orders available with specific Operation number */
+(SELECT
+CONCAT(tblstep.ONo , '.' , tblstep.OPos) AS ValueMember,
+CONCAT('order: ', tblstep.ONo , '.' , tblstep.OPos, ' | ' , 'part: ', tblstepparameter.Parameter) AS DisplayMember
+
+FROM tblstep
+
+INNER JOIN tblParts ON tblstep.WPNo = tblParts.WPNo
+INNER JOIN tblstepparameter ON tblstep.StepNo = tblstepparameter.StepNo AND tblstep.ONo = tblstepparameter.ONo AND tblstep.OPos = tblstepparameter.OPos
+
+WHERE tblstep.OpNo = 310 AND tblstepparameter.ParameterNo = 9
+GROUP BY tblstep.ONo, tblstep.OPos
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember )
+
+) AS result
+;1;0
+1105;1;Box position 1 part;3;0;0;2;0;SELECT *
+FROM (
+
+/* Orders available with specific Operation number */
+(SELECT
+CONCAT(tblstep.ONo , '.' , tblstep.OPos) AS ValueMember,
+CONCAT('order: ', tblstep.ONo , '.' , tblstep.OPos, ' | ' , 'part: ', tblstepparameter.Parameter) AS DisplayMember
+
+FROM tblstep
+
+INNER JOIN tblParts ON tblstep.WPNo = tblParts.WPNo
+INNER JOIN tblstepparameter ON tblstep.StepNo = tblstepparameter.StepNo AND tblstep.ONo = tblstepparameter.ONo AND tblstep.OPos = tblstepparameter.OPos
+
+WHERE tblstep.OpNo = 311 AND tblstepparameter.ParameterNo = 9
+GROUP BY tblstep.ONo, tblstep.OPos
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember )
+
+) AS result
+;1;0
+1105;2;Box position 2 part;3;0;0;2;0;SELECT *
+FROM (
+
+/* Orders available with specific Operation number */
+(SELECT
+CONCAT(tblstep.ONo , '.' , tblstep.OPos) AS ValueMember,
+CONCAT('order: ', tblstep.ONo , '.' , tblstep.OPos, ' | ' , 'part: ', tblstepparameter.Parameter) AS DisplayMember
+
+FROM tblstep
+
+INNER JOIN tblParts ON tblstep.WPNo = tblParts.WPNo
+INNER JOIN tblstepparameter ON tblstep.StepNo = tblstepparameter.StepNo AND tblstep.ONo = tblstepparameter.ONo AND tblstep.OPos = tblstepparameter.OPos
+
+WHERE tblstep.OpNo = 311 AND tblstepparameter.ParameterNo = 9
+GROUP BY tblstep.ONo, tblstep.OPos
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember )
+
+) AS result
+;1;0
+1105;3;Box position 3 part;3;0;0;2;0;SELECT *
+FROM (
+
+/* Orders available with specific Operation number */
+(SELECT
+CONCAT(tblstep.ONo , '.' , tblstep.OPos) AS ValueMember,
+CONCAT('order: ', tblstep.ONo , '.' , tblstep.OPos, ' | ' , 'part: ', tblstepparameter.Parameter) AS DisplayMember
+
+FROM tblstep
+
+INNER JOIN tblParts ON tblstep.WPNo = tblParts.WPNo
+INNER JOIN tblstepparameter ON tblstep.StepNo = tblstepparameter.StepNo AND tblstep.ONo = tblstepparameter.ONo AND tblstep.OPos = tblstepparameter.OPos
+
+WHERE tblstep.OpNo = 311 AND tblstepparameter.ParameterNo = 9
+GROUP BY tblstep.ONo, tblstep.OPos
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember )
+
+) AS result
+;1;0
+1105;4;Box position 4 part;3;0;0;2;0;SELECT *
+FROM (
+
+/* Orders available with specific Operation number */
+(SELECT
+CONCAT(tblstep.ONo , '.' , tblstep.OPos) AS ValueMember,
+CONCAT('order: ', tblstep.ONo , '.' , tblstep.OPos, ' | ' , 'part: ', tblstepparameter.Parameter) AS DisplayMember
+
+FROM tblstep
+
+INNER JOIN tblParts ON tblstep.WPNo = tblParts.WPNo
+INNER JOIN tblstepparameter ON tblstep.StepNo = tblstepparameter.StepNo AND tblstep.ONo = tblstepparameter.ONo AND tblstep.OPos = tblstepparameter.OPos
+
+WHERE tblstep.OpNo = 311 AND tblstepparameter.ParameterNo = 9
+GROUP BY tblstep.ONo, tblstep.OPos
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember )
+
+) AS result
+;1;0
+1105;5;Box position 5 part;3;0;0;2;0;SELECT *
+FROM (
+
+/* Orders available with specific Operation number */
+(SELECT
+CONCAT(tblstep.ONo , '.' , tblstep.OPos) AS ValueMember,
+CONCAT('order: ', tblstep.ONo , '.' , tblstep.OPos, ' | ' , 'part: ', tblstepparameter.Parameter) AS DisplayMember
+
+FROM tblstep
+
+INNER JOIN tblParts ON tblstep.WPNo = tblParts.WPNo
+INNER JOIN tblstepparameter ON tblstep.StepNo = tblstepparameter.StepNo AND tblstep.ONo = tblstepparameter.ONo AND tblstep.OPos = tblstepparameter.OPos
+
+WHERE tblstep.OpNo = 311 AND tblstepparameter.ParameterNo = 9
+GROUP BY tblstep.ONo, tblstep.OPos
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember )
+
+) AS result
+;1;0
+1105;6;Box position 6 part;3;0;0;2;0;SELECT *
+FROM (
+
+/* Orders available with specific Operation number */
+(SELECT
+CONCAT(tblstep.ONo , '.' , tblstep.OPos) AS ValueMember,
+CONCAT('order: ', tblstep.ONo , '.' , tblstep.OPos, ' | ' , 'part: ', tblstepparameter.Parameter) AS DisplayMember
+
+FROM tblstep
+
+INNER JOIN tblParts ON tblstep.WPNo = tblParts.WPNo
+INNER JOIN tblstepparameter ON tblstep.StepNo = tblstepparameter.StepNo AND tblstep.ONo = tblstepparameter.ONo AND tblstep.OPos = tblstepparameter.OPos
+
+WHERE tblstep.OpNo = 311 AND tblstepparameter.ParameterNo = 9
+GROUP BY tblstep.ONo, tblstep.OPos
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember )
+
+) AS result
+;1;0
+1105;7;Box position 7 part;3;0;0;2;0;SELECT *
+FROM (
+
+/* Orders available with specific Operation number */
+(SELECT
+CONCAT(tblstep.ONo , '.' , tblstep.OPos) AS ValueMember,
+CONCAT('order: ', tblstep.ONo , '.' , tblstep.OPos, ' | ' , 'part: ', tblstepparameter.Parameter) AS DisplayMember
+
+FROM tblstep
+
+INNER JOIN tblParts ON tblstep.WPNo = tblParts.WPNo
+INNER JOIN tblstepparameter ON tblstep.StepNo = tblstepparameter.StepNo AND tblstep.ONo = tblstepparameter.ONo AND tblstep.OPos = tblstepparameter.OPos
+
+WHERE tblstep.OpNo = 311 AND tblstepparameter.ParameterNo = 9
+GROUP BY tblstep.ONo, tblstep.OPos
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember )
+
+) AS result
+;1;0
+1105;8;Box position 8 part;3;0;0;2;0;SELECT *
+FROM (
+
+/* Orders available with specific Operation number */
+(SELECT
+CONCAT(tblstep.ONo , '.' , tblstep.OPos) AS ValueMember,
+CONCAT('order: ', tblstep.ONo , '.' , tblstep.OPos, ' | ' , 'part: ', tblstepparameter.Parameter) AS DisplayMember
+
+FROM tblstep
+
+INNER JOIN tblParts ON tblstep.WPNo = tblParts.WPNo
+INNER JOIN tblstepparameter ON tblstep.StepNo = tblstepparameter.StepNo AND tblstep.ONo = tblstepparameter.ONo AND tblstep.OPos = tblstepparameter.OPos
+
+WHERE tblstep.OpNo = 311 AND tblstepparameter.ParameterNo = 9
+GROUP BY tblstep.ONo, tblstep.OPos
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember )
+
+) AS result
+;1;0
+1106;1;Box position 1 part;2;0;0;2;0;/* Products available in storage */
+SELECT ValueMember, IF(ValueMember = '0' OR Quantity = -1, DisplayMember, CONCAT(SUM(Quantity) , ' | ', DisplayMember)) as DisplayMember, BufPos
+FROM (
+
+
+(SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember, COUNT(tblParts.PNo) AS Quantity, tblbufferpos.BufPos AS BufPos
+
+
+FROM tblParts
+
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblParts.PNo
+
+WHERE tblbufferpos.ResourceId = 1 AND
+tblbufferpos.BufNo = 1 AND tblbufferpos.ONo = 0 AND tblbufferpos.OPos = 0 AND tblbufferpos.PNo <> 0 AND tblparts.PNo != 25
+GROUP BY tblParts.PNo
+)
+
+
+UNION ALL
+
+/* Orders available in storage */
+(SELECT
+CONCAT(tblbufferpos.ONo , '.' , tblbufferpos.OPos) AS ValueMember,
+CONCAT('order: ', tblbufferpos.ONo , '.' , tblbufferpos.OPos, ' | ' , tblParts.Description) AS DisplayMember,
+-1 AS Quantity, tblbufferpos.BufPos AS BufPos
+
+FROM tblParts
+
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblParts.PNo
+INNER JOIN tblfinorder ON tblfinorder.ONo = tblbufferpos.ONo
+
+WHERE tblbufferpos.ResourceId = 1 AND tblbufferpos.ONo > 0 AND tblbufferpos.OPos > 0 AND
+tblbufferpos.BufNo = 1 AND tblparts.PNo != 25
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember,
+-1 AS Quantity, 0 AS BufPos )
+
+
+) AS result
+GROUP BY result.ValueMember
+ORDER BY BufPos DESC
+;1;0
+1106;2;Box position 2 part;2;0;0;2;0;/* Products available in storage */
+SELECT ValueMember, IF(ValueMember = '0' OR Quantity = -1, DisplayMember, CONCAT(SUM(Quantity) , ' | ', DisplayMember)) as DisplayMember, BufPos
+FROM (
+
+
+(SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember, COUNT(tblParts.PNo) AS Quantity, tblbufferpos.BufPos AS BufPos
+
+
+FROM tblParts
+
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblParts.PNo
+
+WHERE tblbufferpos.ResourceId = 1 AND
+tblbufferpos.BufNo = 1 AND tblbufferpos.ONo = 0 AND tblbufferpos.OPos = 0 AND tblbufferpos.PNo <> 0 AND tblparts.PNo != 25
+GROUP BY tblParts.PNo
+)
+
+
+UNION ALL
+
+/* Orders available in storage */
+(SELECT
+CONCAT(tblbufferpos.ONo , '.' , tblbufferpos.OPos) AS ValueMember,
+CONCAT('order: ', tblbufferpos.ONo , '.' , tblbufferpos.OPos, ' | ' , tblParts.Description) AS DisplayMember,
+-1 AS Quantity, tblbufferpos.BufPos AS BufPos
+
+FROM tblParts
+
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblParts.PNo
+INNER JOIN tblfinorder ON tblfinorder.ONo = tblbufferpos.ONo
+
+WHERE tblbufferpos.ResourceId = 1 AND tblbufferpos.ONo > 0 AND tblbufferpos.OPos > 0 AND
+tblbufferpos.BufNo = 1 AND tblparts.PNo != 25
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember,
+-1 AS Quantity, 0 AS BufPos )
+
+
+) AS result
+GROUP BY result.ValueMember
+ORDER BY BufPos DESC
+;1;0
+1106;3;Box position 3 part;2;0;0;2;0;/* Products available in storage */
+SELECT ValueMember, IF(ValueMember = '0' OR Quantity = -1, DisplayMember, CONCAT(SUM(Quantity) , ' | ', DisplayMember)) as DisplayMember, BufPos
+FROM (
+
+
+(SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember, COUNT(tblParts.PNo) AS Quantity, tblbufferpos.BufPos AS BufPos
+
+
+FROM tblParts
+
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblParts.PNo
+
+WHERE tblbufferpos.ResourceId = 1 AND
+tblbufferpos.BufNo = 1 AND tblbufferpos.ONo = 0 AND tblbufferpos.OPos = 0 AND tblbufferpos.PNo <> 0 AND tblparts.PNo != 25
+GROUP BY tblParts.PNo
+)
+
+
+UNION ALL
+
+/* Orders available in storage */
+(SELECT
+CONCAT(tblbufferpos.ONo , '.' , tblbufferpos.OPos) AS ValueMember,
+CONCAT('order: ', tblbufferpos.ONo , '.' , tblbufferpos.OPos, ' | ' , tblParts.Description) AS DisplayMember,
+-1 AS Quantity, tblbufferpos.BufPos AS BufPos
+
+FROM tblParts
+
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblParts.PNo
+INNER JOIN tblfinorder ON tblfinorder.ONo = tblbufferpos.ONo
+
+WHERE tblbufferpos.ResourceId = 1 AND tblbufferpos.ONo > 0 AND tblbufferpos.OPos > 0 AND
+tblbufferpos.BufNo = 1 AND tblparts.PNo != 25
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember,
+-1 AS Quantity, 0 AS BufPos )
+
+
+) AS result
+GROUP BY result.ValueMember
+ORDER BY BufPos DESC
+;1;0
+1106;4;Box position 4 part;2;0;0;2;0;/* Products available in storage */
+SELECT ValueMember, IF(ValueMember = '0' OR Quantity = -1, DisplayMember, CONCAT(SUM(Quantity) , ' | ', DisplayMember)) as DisplayMember, BufPos
+FROM (
+
+
+(SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember, COUNT(tblParts.PNo) AS Quantity, tblbufferpos.BufPos AS BufPos
+
+
+FROM tblParts
+
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblParts.PNo
+
+WHERE tblbufferpos.ResourceId = 1 AND
+tblbufferpos.BufNo = 1 AND tblbufferpos.ONo = 0 AND tblbufferpos.OPos = 0 AND tblbufferpos.PNo <> 0 AND tblparts.PNo != 25
+GROUP BY tblParts.PNo
+)
+
+
+UNION ALL
+
+/* Orders available in storage */
+(SELECT
+CONCAT(tblbufferpos.ONo , '.' , tblbufferpos.OPos) AS ValueMember,
+CONCAT('order: ', tblbufferpos.ONo , '.' , tblbufferpos.OPos, ' | ' , tblParts.Description) AS DisplayMember,
+-1 AS Quantity, tblbufferpos.BufPos AS BufPos
+
+FROM tblParts
+
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblParts.PNo
+INNER JOIN tblfinorder ON tblfinorder.ONo = tblbufferpos.ONo
+
+WHERE tblbufferpos.ResourceId = 1 AND tblbufferpos.ONo > 0 AND tblbufferpos.OPos > 0 AND
+tblbufferpos.BufNo = 1 AND tblparts.PNo != 25
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember,
+-1 AS Quantity, 0 AS BufPos )
+
+
+) AS result
+GROUP BY result.ValueMember
+ORDER BY BufPos DESC
+;1;0
+1106;5;Box position 5 part;2;0;0;2;0;/* Products available in storage */
+SELECT ValueMember, IF(ValueMember = '0' OR Quantity = -1, DisplayMember, CONCAT(SUM(Quantity) , ' | ', DisplayMember)) as DisplayMember, BufPos
+FROM (
+
+
+(SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember, COUNT(tblParts.PNo) AS Quantity, tblbufferpos.BufPos AS BufPos
+
+
+FROM tblParts
+
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblParts.PNo
+
+WHERE tblbufferpos.ResourceId = 1 AND
+tblbufferpos.BufNo = 1 AND tblbufferpos.ONo = 0 AND tblbufferpos.OPos = 0 AND tblbufferpos.PNo <> 0 AND tblparts.PNo != 25
+GROUP BY tblParts.PNo
+)
+
+
+UNION ALL
+
+/* Orders available in storage */
+(SELECT
+CONCAT(tblbufferpos.ONo , '.' , tblbufferpos.OPos) AS ValueMember,
+CONCAT('order: ', tblbufferpos.ONo , '.' , tblbufferpos.OPos, ' | ' , tblParts.Description) AS DisplayMember,
+-1 AS Quantity, tblbufferpos.BufPos AS BufPos
+
+FROM tblParts
+
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblParts.PNo
+INNER JOIN tblfinorder ON tblfinorder.ONo = tblbufferpos.ONo
+
+WHERE tblbufferpos.ResourceId = 1 AND tblbufferpos.ONo > 0 AND tblbufferpos.OPos > 0 AND
+tblbufferpos.BufNo = 1 AND tblparts.PNo != 25
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember,
+-1 AS Quantity, 0 AS BufPos )
+
+
+) AS result
+GROUP BY result.ValueMember
+ORDER BY BufPos DESC
+;1;0
+1106;6;Box position 6 part;2;0;0;2;0;/* Products available in storage */
+SELECT ValueMember, IF(ValueMember = '0' OR Quantity = -1, DisplayMember, CONCAT(SUM(Quantity) , ' | ', DisplayMember)) as DisplayMember, BufPos
+FROM (
+
+
+(SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember, COUNT(tblParts.PNo) AS Quantity, tblbufferpos.BufPos AS BufPos
+
+
+FROM tblParts
+
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblParts.PNo
+
+WHERE tblbufferpos.ResourceId = 1 AND
+tblbufferpos.BufNo = 1 AND tblbufferpos.ONo = 0 AND tblbufferpos.OPos = 0 AND tblbufferpos.PNo <> 0 AND tblparts.PNo != 25
+GROUP BY tblParts.PNo
+)
+
+
+UNION ALL
+
+/* Orders available in storage */
+(SELECT
+CONCAT(tblbufferpos.ONo , '.' , tblbufferpos.OPos) AS ValueMember,
+CONCAT('order: ', tblbufferpos.ONo , '.' , tblbufferpos.OPos, ' | ' , tblParts.Description) AS DisplayMember,
+-1 AS Quantity, tblbufferpos.BufPos AS BufPos
+
+FROM tblParts
+
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblParts.PNo
+INNER JOIN tblfinorder ON tblfinorder.ONo = tblbufferpos.ONo
+
+WHERE tblbufferpos.ResourceId = 1 AND tblbufferpos.ONo > 0 AND tblbufferpos.OPos > 0 AND
+tblbufferpos.BufNo = 1 AND tblparts.PNo != 25
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember,
+-1 AS Quantity, 0 AS BufPos )
+
+
+) AS result
+GROUP BY result.ValueMember
+ORDER BY BufPos DESC
+;1;0
+1106;7;Box position 7 part;2;0;0;2;0;/* Products available in storage */
+SELECT ValueMember, IF(ValueMember = '0' OR Quantity = -1, DisplayMember, CONCAT(SUM(Quantity) , ' | ', DisplayMember)) as DisplayMember, BufPos
+FROM (
+
+
+(SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember, COUNT(tblParts.PNo) AS Quantity, tblbufferpos.BufPos AS BufPos
+
+
+FROM tblParts
+
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblParts.PNo
+
+WHERE tblbufferpos.ResourceId = 1 AND
+tblbufferpos.BufNo = 1 AND tblbufferpos.ONo = 0 AND tblbufferpos.OPos = 0 AND tblbufferpos.PNo <> 0 AND tblparts.PNo != 25
+GROUP BY tblParts.PNo
+)
+
+
+UNION ALL
+
+/* Orders available in storage */
+(SELECT
+CONCAT(tblbufferpos.ONo , '.' , tblbufferpos.OPos) AS ValueMember,
+CONCAT('order: ', tblbufferpos.ONo , '.' , tblbufferpos.OPos, ' | ' , tblParts.Description) AS DisplayMember,
+-1 AS Quantity, tblbufferpos.BufPos AS BufPos
+
+FROM tblParts
+
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblParts.PNo
+INNER JOIN tblfinorder ON tblfinorder.ONo = tblbufferpos.ONo
+
+WHERE tblbufferpos.ResourceId = 1 AND tblbufferpos.ONo > 0 AND tblbufferpos.OPos > 0 AND
+tblbufferpos.BufNo = 1 AND tblparts.PNo != 25
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember,
+-1 AS Quantity, 0 AS BufPos )
+
+
+) AS result
+GROUP BY result.ValueMember
+ORDER BY BufPos DESC
+;1;0
+1106;8;Box position 8 part;2;0;0;2;0;/* Products available in storage */
+SELECT ValueMember, IF(ValueMember = '0' OR Quantity = -1, DisplayMember, CONCAT(SUM(Quantity) , ' | ', DisplayMember)) as DisplayMember, BufPos
+FROM (
+
+
+(SELECT tblParts.PNo AS ValueMember, CONCAT(tblParts.PNo , ' | ' , tblParts.Description) AS DisplayMember, COUNT(tblParts.PNo) AS Quantity, tblbufferpos.BufPos AS BufPos
+
+
+FROM tblParts
+
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblParts.PNo
+
+WHERE tblbufferpos.ResourceId = 1 AND
+tblbufferpos.BufNo = 1 AND tblbufferpos.ONo = 0 AND tblbufferpos.OPos = 0 AND tblbufferpos.PNo <> 0 AND tblparts.PNo != 25
+GROUP BY tblParts.PNo
+)
+
+
+UNION ALL
+
+/* Orders available in storage */
+(SELECT
+CONCAT(tblbufferpos.ONo , '.' , tblbufferpos.OPos) AS ValueMember,
+CONCAT('order: ', tblbufferpos.ONo , '.' , tblbufferpos.OPos, ' | ' , tblParts.Description) AS DisplayMember,
+-1 AS Quantity, tblbufferpos.BufPos AS BufPos
+
+FROM tblParts
+
+INNER JOIN tblbufferpos ON tblbufferpos.PNo = tblParts.PNo
+INNER JOIN tblfinorder ON tblfinorder.ONo = tblbufferpos.ONo
+
+WHERE tblbufferpos.ResourceId = 1 AND tblbufferpos.ONo > 0 AND tblbufferpos.OPos > 0 AND
+tblbufferpos.BufNo = 1 AND tblparts.PNo != 25
+)
+
+UNION ALL
+
+/* nothing */
+(SELECT
+0 AS ValueMember,
+CONCAT('nothing' ) AS DisplayMember,
+-1 AS Quantity, 0 AS BufPos )
+
+
+) AS result
+GROUP BY result.ValueMember
+ORDER BY BufPos DESC
+;1;0
+1108;1;destination;2;0;0;2;0;SELECT 0 as ValueMember, 'Storage' as DisplayMember
+UNION ALL
+SELECT 1 as ValueMember, 'Delivery' as DisplayMember;;1;0
+1109;1;Not empty buffers;2;0;0;4;0;SELECT COUNT(tblbufferpos.BufPos) AS Parameter
+FROM tblbufferpos
+WHERE tblbufferpos.ResourceId = 8 AND tblbufferpos.PNo <> 0;
+;1;0
+1109;2;Available logistic orders;2;0;0;4;0;SELECT COUNT(tblorderpos.WPNo) AS Parameter
+FROM tblorderpos
+WHERE 
+tblorderpos.WPNo = 1 OR tblorderpos.WPNo = 2 OR tblorderpos.WPNo = 3;1;0
+1110;1;delay [s];2;0;0;1;2;NULL;2;0
+2113;1;turn [yes/no];2;0;0;1;1;NULL;1;0
+2123;1;drilling position (1=left; 2=right; 3=both);2;1;3;1;1;SELECT tblTextList.ListPos AS ValueMember, CONCAT(tblTextList.ListPos , ' | ' , tblTextList.Description) AS DisplayMember FROM tblTextList WHERE tblTextList.ListID = 3 ORDER BY tblTextList.ListPos;1;0
+2123;2;drilling duration [s];2;0;120;1;5;NULL;2;0

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Connexion MES</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <div class="login-container">
+    <div class="login-card">
+      <h1>MES 4.0</h1>
+      <p>Accès dashboard Telefan</p>
+
+      <form method="POST">
+        <input type="text" name="username" placeholder="Utilisateur" required>
+        <input type="password" name="password" placeholder="Mot de passe" required>
+        <button type="submit">Connexion</button>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Test</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <div class="home-container">
+    <h1>Dashboard MES - Test</h1>
+    <div>
+      {{ graph | safe }}
+    </div>
+  </div>
+
+</body>
+</html>
