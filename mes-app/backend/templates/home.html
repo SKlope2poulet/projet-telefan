@@ -2,16 +2,63 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Dashboard Test</title>
+  <title>Dashboard MES - Indicateurs Clés</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
   <div class="home-container">
-    <h1>Dashboard MES - Test</h1>
-    <div>
-      {{ graph | safe }}
+    <h1>Tableau de bord - Les 10 Indicateurs de Production</h1>
+    
+    <div class="filter-section">
+        <form method="get" action="/home">
+            <label for="start_date">Date de début (Plage min: {{ full_min_date }}):</label>
+            <input type="date" id="start_date" name="start_date" value="{{ start_date }}" min="{{ full_min_date }}" max="{{ full_max_date }}">
+            
+            <label for="end_date">Date de fin (Plage max: {{ full_max_date }}):</label>
+            <input type="date" id="end_date" name="end_date" value="{{ end_date }}" min="{{ full_min_date }}" max="{{ full_max_date }}">
+            
+            <button type="submit" class="filter-button">Appliquer le filtre</button>
+            <a href="/home" class="reset-button">Réinitialiser</a>
+        </form>
     </div>
+    <hr>
+    {% if error_note %}
+    <div class="error-banner">
+        <h2>Erreur Critique de Données</h2>
+        <p>{{ error_note }}</p>
+        <p>Les indicateurs ci-dessous affichent des valeurs par défaut pour éviter le crash du serveur. Veuillez vérifier l'intégrité de votre base de données (schéma et données).</p>
+    </div>
+
+    <div class="diagnostic-section">
+        <h3>Diagnostic des Champs Clés Filtrés</h3>
+        <div class="diagnostic-grid">
+            {% for key, value in diagnostics.items() %}
+            <div class="diagnostic-item">
+                <span class="diagnostic-key">{{ key }} :</span>
+                <span class="diagnostic-value">{{ value }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        <p class="diagnostic-tip">
+            Les valeurs **0** ou **0.0** dans cette section sont la cause la plus probable des indicateurs en "N/A" ou de ratios incorrects. Le problème **le plus critique** est la valeur **{{ diagnostics['Temps théorique moyen (tblresourceoperation)'] }}**.
+        </p>
+    </div>
+    <hr>
+    {% endif %}
+
+    <div class="kpi-grid">
+      {% for kpi in kpis %}
+      <div class="kpi-card">
+        <div class="kpi-name">{{ kpi.name }}</div>
+        <div class="kpi-value">{{ kpi.value }} <span>{{ kpi.unit }}</span></div>
+        {% if kpi.note %}
+          <div class="kpi-note">{{ kpi.note }}</div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+
   </div>
 
 </body>

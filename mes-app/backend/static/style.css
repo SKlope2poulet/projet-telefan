@@ -65,3 +65,250 @@ body {
 .home-container {
   padding: 60px;
 }
+/* Design Professionnel et Moderne */
+
+/* 1. Général & Typographie */
+body {
+    font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
+    background-color: #f4f6f9; /* Fond très clair */
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.home-container {
+    width: 95%;
+    max-width: 1400px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Ombre douce */
+    padding: 20px;
+    transition: all 0.2s ease-in-out;
+}
+
+.dashboard-header {
+    margin-bottom: 30px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.dashboard-header h1 {
+    color: #1e3a8a; /* Bleu foncé corporate */
+    font-size: 2.2em;
+    font-weight: 700;
+    margin: 0;
+}
+
+.subtitle {
+    color: #6b7280;
+    font-size: 1em;
+    margin-top: 5px;
+}
+
+/* 2. Filtre Temporel */
+.filter-section {
+    padding: 15px 20px;
+    margin-bottom: 30px;
+    border: 1px solid #e5e7eb;
+}
+
+.filter-section form {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-section label {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+
+.filter-section input[type="date"] {
+    padding: 8px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 1em;
+    min-width: 150px;
+}
+
+.filter-button {
+    text-decoration: none;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, box-shadow 0.2s;
+    font-size: 0.95em;
+}
+
+.filter-button.primary {
+    background-color: #10b981; /* Vert clean pour l'action principale */
+    color: white;
+}
+
+.filter-button.secondary {
+    background-color: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+
+.filter-button.primary:hover {
+    background-color: #059669;
+}
+
+.filter-button.secondary:hover {
+    background-color: #e5e7eb;
+}
+
+/* 3. KPI Grid */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.kpi-card {
+    padding: 20px;
+    border-left: 4px solid #10b981; /* Accent vert */
+}
+
+.kpi-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.kpi-name {
+    font-size: 1em;
+    font-weight: 600;
+    color: #374151;
+}
+
+.kpi-value {
+    display: flex;
+    align-items: baseline;
+    margin-top: 5px;
+}
+
+.kpi-value .value {
+    font-size: 2.5em;
+    font-weight: 800;
+    color: #1e3a8a; /* Bleu foncé pour la valeur principale */
+    line-height: 1;
+}
+
+.kpi-value .unit {
+    font-size: 1em;
+    color: #6b7280;
+    margin-left: 8px;
+    font-weight: 500;
+}
+
+.kpi-note {
+    font-size: 0.8em;
+    color: #9ca3af;
+    margin-top: 10px;
+    font-style: italic;
+    border-top: 1px dashed #f3f4f6;
+    padding-top: 5px;
+}
+
+
+/* 4. Erreur et Diagnostic */
+.diagnostic-area {
+    margin-top: 30px;
+}
+
+.error-banner {
+    background-color: #fee2e2; /* Rouge très pâle */
+    border: 1px solid #f87171;
+    color: #b91c1c; /* Rouge intense */
+    padding: 18px;
+    margin-bottom: 20px;
+}
+
+.error-banner h2 {
+    color: #b91c1c;
+    font-size: 1.5em;
+    margin-top: 0;
+}
+
+.diagnostic-section {
+    padding: 15px;
+    background-color: #f9fafb; /* Très clair pour le fond de table */
+    border: 1px solid #e5e7eb;
+}
+
+.diagnostic-section h3 {
+    color: #374151;
+    font-size: 1.1em;
+    margin-bottom: 15px;
+}
+
+.diagnostic-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95em;
+}
+
+.diagnostic-table th, .diagnostic-table td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.diagnostic-table th {
+    background-color: #eef2ff; /* Couleur d'en-tête subtile */
+    color: #4f46e5; /* Violet doux */
+    font-weight: 600;
+}
+
+.diagnostic-table td {
+    color: #374151;
+}
+
+.diagnostic-value {
+    font-weight: 700;
+    color: #1e3a8a; /* Bleu foncé */
+}
+
+.status-ok {
+    font-weight: 600;
+    color: #059669; /* Vert pour OK */
+}
+
+.status-error {
+    font-weight: 600;
+    color: #b91c1c; /* Rouge pour CRITIQUE */
+    background-color: #fecaca;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.status-warning {
+    font-weight: 600;
+    color: #d97706; /* Orange pour Alerte */
+}
+
+.diagnostic-tip {
+    font-size: 0.85em;
+    color: #6b7280;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #e5e7eb;
+    font-style: italic;
+}
