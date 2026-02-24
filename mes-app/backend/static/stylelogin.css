@@ -1,0 +1,139 @@
+/* Reset & Base */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f3f6f9; /* Gris très clair bleuté du fond */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #334155;
+}
+
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+/* Card Style */
+.login-card {
+    background: white;
+    width: 100%;
+    max-width: 420px;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    margin-bottom: 25px;
+}
+
+.card-header-stripe {
+    height: 12px;
+    background: linear-gradient(90deg, #3b61d1 0%, #7a9cf5 100%);
+}
+
+.card-content {
+    padding: 40px 45px;
+}
+
+/* Header & Brand */
+.brand-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 35px;
+}
+
+.brand-header h1 {
+    font-size: 22px;
+    color: #1e3a8a; /* Bleu foncé */
+    font-weight: 700;
+}
+
+.brand-header .sub-title {
+    font-weight: 400;
+    color: #64748b;
+    margin-left: 5px;
+}
+
+.logo-img {
+    height: 32px;
+    margin-right: 12px;
+}
+
+/* Form Fields */
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e3a8a;
+    margin-bottom: 8px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background-color: #f8fafc;
+    font-size: 15px;
+    transition: border 0.2s;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    background-color: #fff;
+}
+
+/* Button */
+.btn-login {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #214cd3 0%, #4a7cf0 100%);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-login:hover {
+    opacity: 0.9;
+}
+
+/* Footer & Extras */
+.security-notice {
+    text-align: center;
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 25px;
+}
+
+.external-footer {
+    display: flex;
+    align-items: center;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.footer-logo {
+    height: 20px;
+    margin-right: 8px;
+    filter: grayscale(1);
+    opacity: 0.6;
+}

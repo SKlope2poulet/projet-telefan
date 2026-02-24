@@ -1,9 +1,22 @@
-ID;TopologyName;Description;Picture;Branch
-0;No Topology;No Topology;Pictures\Default\empty.png;1
-1;1 P; 1 Out;regular station;Pictures\Default\Topology\1S_1Out.png;1
-2;2 x (1 P; 1 Out);ASRS, Robot, ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦;Pictures\Default\Topology\2x_1S_1Out.png;1
-3;(1 P; 1 Out) + (1 P; 2 Out);Shunt, ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦;Pictures\Default\Topology\1S_1Out_+_1S_2Out.png;2
-4;1 P; x Out (AGV);Robotino, ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦;Pictures\Default\Topology\1S_XOut.png;1
-5;1 P; 2 Out;Shunt 2;Pictures\Default\Topology\1S_2Out.png;2
-6;1 P; 3 Out;Shunt 3;Pictures\Default\Topology\1S_3Out.png;3
-7;(1 P; 2 Out) + (1 P; 3 Out);Shunt 2, Shunt 3;Pictures\Default\Topology\1S_2Out_+_1S_3Out.png;4
+
+services:
+  db:
+    image: mariadb:10.6
+    container_name: mes_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: motdepasserootrobuste1234
+      MYSQL_DATABASE: mes4
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  web:
+    build: ./backend
+    container_name: mes_web
+    restart: always
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
