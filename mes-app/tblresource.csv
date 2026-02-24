@@ -1,0 +1,77 @@
+PNo;Description;Type;WPNo;Picture;BasePallet;MrpType;SafetyStock;LotSize;DefResourceId;Short
+0;nothing;0;0;Pictures\Default\empty.png;0;1;0;1;0;NULL
+1;essai;1;0;Pictures\Default\NoPicture.png;25;1;0;0;0;NULL
+21;undefined box;99;0;Pictures\TransferFactory\Box_170_undefined.png;0;1;0;0;0;NULL
+25;pallet;11;0;Pictures\TransferFactory\TF_Palette.png;0;1;0;0;7;NULL
+26;undefined part;99;0;Pictures\TransferFactory\UndefinedPallet.png;25;1;0;0;1;NULL
+27;PCB box;9;0;Pictures\TransferFactory\Universalkiste_PCB.png;0;1;0;0;8;NULL
+28;cover box;9;0;Pictures\TransferFactory\Universalkiste_4Full_4Frontcover1.png;0;1;0;0;8;NULL
+31;carrier;10;0;Pictures\TransferFactory\Carrier.png;0;1;0;0;7;NULL
+101;black plastic block;1;0;Pictures\TransferFactory\Parts\raw_black.png;0;1;0;1;0;Black plastic block
+102;gray plastic block;1;0;Pictures\TransferFactory\Parts\raw_gray.png;0;1;0;1;0;Gray plastic block
+103;blue plastic block;1;0;Pictures\TransferFactory\Parts\raw_blue.png;0;1;0;1;0;Blue plastic block
+104;red plastic block;1;0;Pictures\TransferFactory\Parts\raw_red.png;0;1;0;1;0;Red plastic block
+107;red front cover no holes;1;0;Pictures\TransferFactory\Parts\raw_front_cover_red.png;0;1;0;1;0;Red CP front cover - raw
+108;blue front cover no holes;1;0;Pictures\TransferFactory\Parts\raw_front_cover_blue.png;0;1;0;1;0;Blue CP front cover - raw
+109;gray front cover no holes;1;0;Pictures\TransferFactory\Parts\raw_front_cover_gray.png;0;1;0;1;0;Gray CP front cover - raw
+110;black front cover no holes;1;0;Pictures\TransferFactory\Parts\raw_front_cover_black.png;0;1;0;1;0;Black CP front cover - raw
+111;black back cover;1;0;Pictures\TransferFactory\Parts\back_cover_black.png;0;1;0;1;0;Black CP back cover
+112;gray back cover;1;0;Pictures\TransferFactory\Parts\back_cover_gray.png;0;1;0;1;0;Gray CP back cover
+113;blue back cover;1;0;Pictures\TransferFactory\Parts\back_cover_blue.png;0;1;0;1;0;Blue CP back cover
+114;red back cover;1;0;Pictures\TransferFactory\Parts\back_cover_red.png;0;1;0;1;0;Red CP back cover
+120;green PCB;1;0;Pictures\TransferFactory\Parts\pcb_green.png;0;1;0;1;0;Green PCB
+130;fuse;1;0;Pictures\TransferFactory\Parts\fuse.png;0;1;0;1;0;Fuse
+140;blank tag;1;0;Pictures\TransferFactory\Parts\tag_empty.png;0;1;0;0;0;NULL
+141;Festo tag;1;0;Pictures\TransferFactory\Parts\tag_festo.png;0;1;0;0;0;NULL
+142;i4.0 tag;1;0;Pictures\TransferFactory\Parts\tag_i40.png;0;1;0;0;0;NULL
+200;Custom front cover;3;200;Pictures\TransferFactory\Parts\front_cover_blue.png;0;1;0;0;0;NULL
+210;black front cover;3;210;Pictures\TransferFactory\Parts\front_cover_black.png;0;1;0;1;0;Black CP front cover
+211;black front, PCB;1;0;Pictures\TransferFactory\Parts\front_cover_black_no_fuse.png;0;1;0;0;0;NULL
+212;black front, PCB, front fuse;1;0;Pictures\TransferFactory\Parts\front_cover_black_front_fuse.png;0;1;0;0;0;NULL
+213;black front, PCB, rear fuse;1;0;Pictures\TransferFactory\Parts\front_cover_black_rear_fuse.png;0;1;0;0;0;NULL
+214;black front, PCB, both fuses;1;0;Pictures\TransferFactory\Parts\front_cover_black_both_fuses.png;0;1;0;0;0;NULL
+310;gray front cover;1;0;Pictures\TransferFactory\Parts\front_cover_gray.png;0;1;0;1;0;Gray CP front cover
+311;gray front, PCB;1;0;Pictures\TransferFactory\Parts\front_cover_gray_no_fuse.png;0;1;0;0;0;NULL
+312;gray front, PCB, front fuse;1;0;Pictures\TransferFactory\Parts\front_cover_gray_front_fuse.png;0;1;0;0;0;NULL
+313;gray front, PCB, rear fuse;1;0;Pictures\TransferFactory\Parts\front_cover_gray_rear_fuse.png;0;1;0;0;0;NULL
+314;gray front, PCB, two fuses;1;0;Pictures\TransferFactory\Parts\front_cover_gray_both_fuses.png;0;1;0;0;0;NULL
+410;blue front cover;1;0;Pictures\TransferFactory\Parts\front_cover_blue.png;0;1;0;1;0;Blue CP front cover
+411;blue front, PCB;1;0;Pictures\TransferFactory\Parts\front_cover_blue_no_fuse.png;0;1;0;0;0;NULL
+412;blue front, PCB, front fuse;1;0;Pictures\TransferFactory\Parts\front_cover_blue_front_fuse.png;0;1;0;0;0;NULL
+413;blue front, PCB, rear fuse;1;0;Pictures\TransferFactory\Parts\front_cover_blue_rear_fuse.png;0;1;0;0;0;NULL
+414;blue front, PCB, two fuses;1;0;Pictures\TransferFactory\Parts\front_cover_blue_both_fuses.png;0;1;0;0;0;NULL
+510;red front cover;1;0;Pictures\TransferFactory\Parts\front_cover_red.png;0;1;0;1;0;Red CP front cover
+511;red front, PCB;1;0;Pictures\TransferFactory\Parts\front_cover_red_no_fuse.png;0;1;0;0;0;NULL
+512;red front, PCB, front fuse;1;0;Pictures\TransferFactory\Parts\front_cover_red_front_fuse.png;0;1;0;0;0;NULL
+513;red front, PCB, rear fuse;1;0;Pictures\TransferFactory\Parts\front_cover_red_rear_fuse.png;0;1;0;0;0;NULL
+514;red front, PCB, two fuses;1;0;Pictures\TransferFactory\Parts\front_cover_red_both_fuses.png;0;1;0;0;0;NULL
+1214;Product with both fuses;3;1214;Pictures\TransferFactory\Parts\product_black_both_fuses.png;0;1;0;0;1;NULL
+2000;Custom production;3;2000;Pictures\TransferFactory\Parts\product_custom.png;0;1;0;0;1;NULL
+2200;MANLOG- MobileWS->ASRS20;3;2200;Pictures\TransferFactory\Universalkiste_Frontcover.png;0;1;0;0;0;NULL
+2210;LOG-FC ASRS20->ASRS32;3;2210;Pictures\TransferFactory\Universalkiste_Frontcover.png;0;1;0;0;0;NULL
+2300;Deliver ASRS32->Manual WS;3;2300;Pictures\TransferFactory\Parts\product_custom.png;0;1;0;0;0;NULL
+2310;Deliver product ASRS32->ASRS20;3;2310;Pictures\TransferFactory\Universalkiste_Frontcover.png;0;1;0;0;0;NULL
+2320;MANDeliver ASRS20 -> Mobile WS;3;2320;Pictures\TransferFactory\Parts\product_custom.png;0;1;0;0;0;NULL
+2555;compl;3;2555;Pictures\Default\NoPicture.png;0;1;0;0;0;NULL
+9001;test part;3;9001;Pictures\Default\NoPicture.png;25;1;0;0;0;NULL
+9005;Test sans robotino Matthieu;3;9005;Pictures\Default\NoPicture.png;25;1;0;0;0;NULL
+9006;part2;3;9006;Pictures\Default\NoPicture.png;25;1;0;0;0;NULL
+9008;gamme complete;3;9008;Pictures\Default\NoPicture.png;25;1;0;0;0;NULL
+9011;essai tel rouge;1;0;Pictures\Default\NoPicture.png;0;1;0;0;0;NULL
+9012;Essai Matthieu 17/11;1;0;Pictures\Default\NoPicture.png;0;1;0;0;0;NULL
+90111;essai jj;1;0;Pictures\Default\NoPicture.png;25;1;0;0;0;NULL
+150395;Proximity sensor;90;0;Pictures\SpareParts\150395.png;0;1;0;1;0;NULL
+152583;Plastic tubing PUN-3X0,5;90;0;Pictures\SpareParts\152583.png;0;1;0;1;0;NULL
+152584;Plastic tubing PUN-4X0,75;90;0;Pictures\SpareParts\152584.png;0;1;0;1;0;NULL
+152586;Plastic tubing PUN-6X1;90;0;Pictures\SpareParts\152586.png;0;1;0;1;0;NULL
+153366;Push-in T-connector 4 mm;90;0;Pictures\SpareParts\153366.png;0;1;0;1;0;NULL
+153367;Push-in T-connector 6 mm;90;0;Pictures\SpareParts\153367.png;0;1;0;1;0;NULL
+153475;Shut-off valve;90;0;Pictures\SpareParts\153475.png;0;1;0;1;0;NULL
+157212;Compact cylinder;90;0;Pictures\SpareParts\157212.png;0;1;0;1;0;NULL
+158962;Connecting cable;90;0;Pictures\SpareParts\158962.png;0;1;0;1;0;NULL
+175041;One-way flow control valve;90;0;Pictures\SpareParts\175041.png;0;1;0;0;0;NULL
+547304;Solenoid valve K;90;0;Pictures\SpareParts\547304.png;0;1;0;1;0;NULL
+547307;Solenoid valve J;90;0;Pictures\SpareParts\547307.png;0;1;0;1;0;NULL
+552812;Fibre-optic cable;90;0;Pictures\SpareParts\552812.png;0;1;0;1;0;NULL
+8039304;Handwheel;90;0;Pictures\SpareParts\8039304.png;0;1;0;1;0;NULL
+8161467;Fibre-optic unit;90;0;Pictures\SpareParts\552812.png;0;1;0;1;0;NULL

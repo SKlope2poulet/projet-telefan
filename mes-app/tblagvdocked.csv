@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion T'EleFan MES</title>
+    <link rel="stylesheet" href="../static/stylelogin.css">
+</head>
+<body>
+
+    <div class="page-wrapper">
+        <main class="login-card">
+            <div class="card-header-stripe"></div>
+            
+            <div class="card-content">
+                <header class="brand-header">
+                    <img src="logo.png" alt="Logo" class="logo-img"> <h1>T'EleFan <span class="sub-title">MES 4.0</span></h1>
+                </header>
+
+                <form method="POST">
+                    <div class="input-group">
+                        <label for="username">Identifiant</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password">Mot de passe</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+
+                    <button type="submit" class="btn-login">Se connecter</button>
+                </form>
+
+                <p class="security-notice">Accès sécurisé — mot de passe haché</p>
+            </div>
+        </main>
+
+        <footer class="external-footer">
+            <img src="logo-small.png" alt="" class="footer-logo">
+            <span>T'EleFan Systems</span>
+        </footer>
+    </div>
+
+</body>
+</html>

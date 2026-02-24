@@ -1,0 +1,9 @@
+ErrorNo;LinkType;LinkDesc;Link
+11;1;Link to Error Picture;../Images/Error_Pictures/RASS_Errors/RassErrorNo11_Pic1_1.jpg
+11;3;Link to pdf error description;../SensorDataSheets/RASS/SIEN-M5B-PS-S-L_2007-05b_719235D4.pdf
+11;2;Link to error video;../Videos/Err90Sol5_capturedvideo.MOV
+23;1;Gripper Error;../Images/Error_Pictures/RASS_Errors/RassErrorNo11_Pic1_1.jpg
+23;3;PDF Manual;../SensorDataSheets/RASS/SIEN-M5B-PS-S-L_2007-05b_719235D4.pdf
+23;2;Video showing error behaviour;../Videos/Err90Sol5_capturedvideo.MOV
+23;1;Gripper Error 2;../Images/Error_Pictures/RASS_Errors/RassErrorNo11_Pic1_1.jpg
+20046;1;NULL;../Images/Error_Pictures/Err20045Err20045cnc_tool_01.png

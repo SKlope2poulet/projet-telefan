@@ -1,0 +1,7 @@
+Type;Description
+1;storage
+2;fifo
+3;stack
+10;to AGV
+11;from AGV
+12;from to AGV

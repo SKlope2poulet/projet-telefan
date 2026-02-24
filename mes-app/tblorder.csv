@@ -1,0 +1,80 @@
+ErrorNo;SolutionNo;ModuleType;CauseDesc;SolutionDesc;Rating
+0;1;NULL;NULL;clean the belts;0
+0;2;NULL;NULL;replace the hoses;0
+11;1;RASS_V1.0.0.0;No tool gripped and gripper missing from storage position;Verify if a gripper is physically gripped by the robot flange and the gripper is physically present at the storage position;1
+11;2;RASS_V1.0.0.0;Tool storage sensor (H1-BG18/H1-BG19/H1-BG20) gives false signal;Adjust the sensor position, if it's still not working verify all the cables and connection between the sensor and robot controller;5
+11;3;RASS_V1.0.0.0;Tool gripped sensor (K6-BG6) gives false signal;Verify if the gripper is gripped completely at the robot flange and adjust the sensor position, if it's still not working verify all the cables and connection between the sensor and robot controller;3
+12;1;RASS_V1.0.0.0;This parameter is not transmitted by the PLC;Verify the PLC program;2
+12;2;RASS_V1.0.0.0;This program is not existing on the robot controller;Verify the program names on the robot controller;2
+23;1;RASS_V1.0.0.0;The front cover is missing on the pallet to start the robot;Check the cause for the missing front cover and place a front cover on the pallet;1
+23;2;RASS_V1.0.0.0;The sensor (G1-BG50/G1-BG51) at the stopper position gives false signal;Adjust the sensor position/settings, if it's still not working verify all the cables and connection between the sensor and PLC;2
+31;1;RASS_V1.0.0.0;The front cover is missing at the vision field;Check the cause for the missing front cover and place a front cover on the vision field;1
+31;2;RASS_V1.0.0.0;Too much external light or image out of focus at the vision field;Adjust the camera aperture and focus to suite the external light conditions;5
+31;3;RASS_V1.0.0.0;The LED light bed at vision field is turned off;Turn on the LED light bed / verify all the cables and connections between the light bed and power supply;4
+41;1;RASS_V1.0.0.0;The assembly position is occupied by a workpiece, hence blocking the robot from starting;Remove the workpiece from the assembly position;1
+41;2;RASS_V1.0.0.0;The sensor (H1-BG10/H1-BG11/H1-BG12) at the assembly position gives false signal;Adjust the sensor position/settings, if it's still not working verify all the cables and connection between the sensor and robot controller;2
+42;1;RASS_V1.0.0.0;The front cover is missing at the assembly position;Check the cause for the missing front cover and place a front cover at the assembly position;1
+42;2;RASS_V1.0.0.0;The sensor (H1-BG10) at the assembly position gives false signal;Adjust the sensor position/settings, if it's still not working verify all the cables and connection between the sensor and robot controller;4
+43;1;RASS_V1.0.0.0;The front cover is placed upside down at the assembly position;Verify the front cover orientation and place the pocket side facing up;1
+43;2;RASS_V1.0.0.0;The sensor (H1-BG11) at the assembly position gives false signal;Adjust the sensor position/settings, if it's still not working verify all the cables and connection between the sensor and robot controller;2
+44;1;RASS_V1.0.0.0;The front cover is placed with the hole on the left side;Verify the front cover orientation and place the hole side on the right side;1
+44;2;RASS_V1.0.0.0;The sensor (H1-BG12) at the assembly position gives false signal;Adjust the sensor position/settings, if it's still not working verify all the cables and connection between the sensor and robot controller;2
+45;1;RASS_V1.0.0.0;No air supply to the clamp unit at assembly position;Check the air connection to the clamp unit;1
+45;2;RASS_V1.0.0.0;The actuator (H1-MB9) output is not turned on;Turn the output signal to true, if it's still not working verify all the cables and the connection between the sensor and the robot controller;2
+45;3;RASS_V1.0.0.0;The sensor (H1-BG9) at the assembly position gives false signal;Adjust the sensor position/settings, if it's still not working verify all the cables and connection between the sensor and robot controller;3
+52;1;RASS_V1.0.0.0;This parameter is not transmitted by the PLC;Verify the PLC program;1
+52;2;RASS_V1.0.0.0;The range of the PCB pallet no. is 0 > PCB Number > 10;Verify the PLC program;2
+63;1;RASS_V1.0.0.0;The number of fuses in all the fuse magazines are less than 2;Check the number of fuses and fill the fuse magazines;1
+63;2;RASS_V1.0.0.0;The sensor (H1-BG14/H1-BG15/H1-BG16) of the fuse magazine gives false signal;Adjust the sensor position/settings, if it's still not working verify all the cables and connection between the sensor and robot controller;2
+20001;1;NULL;Failure on the main power supply;Fuse changed;0
+20002;1;NULL;Failure in the production order;production order edited wright;0
+20003;1;NULL;tube turns down;Tube changed;0
+20004;1;NULL;Image is dirty;Imaged cleaned, gripper tested;0
+20005;1;NULL;data connection on the ceiling turns down;Date connection changed;0
+20006;1;NULL;Conveyer belt is torn;Conveyer belt replaced;0
+20007;1;NULL;Motor protection switch was triggered;Reset of the machine and new start;0
+20008;1;NULL;Fuse defect;Fuse changed;0
+20009;1;NULL;Conveyer belt is torn;Belt replaced;0
+20010;1;NULL;Failure during the adjusting of CNC milling;Door glass changed;0
+20011;1;NULL;Tool is broken;Tool changed;0
+20012;1;NULL;Wrong CNC mode;CNC working restarted;0
+20013;1;NULL;Tray inserted wrong ;Tray turned;0
+20014;1;NULL;Throttle valve is too wide turned up;Throttle valve adjusted;0
+20015;1;NULL;Tube turns down;Tube changed;0
+20016;1;NULL;Gripper doesn't close correctly;Gripper adjusted;0
+20017;1;NULL;Camera objective is dirty;Objective cleaned;0
+20018;1;NULL;ED200 output board failed;Board changed;0
+20019;1;NULL;Mechanical blocking of the gripper arm;Mechanical blocking replaced;0
+20020;1;NULL;Necessary pressure will not reached;Pressure sensor changed;0
+20021;1;NULL;Push out cylinder is jammed;Push out cylinder adjusted;0
+20021;2;NULL;Silencer is dirty;Silencer changed;0
+20022;1;NULL;Vacuum sucker are worn out;Sucker changed;0
+20023;1;NULL;Application is in default mode;Application switched;0
+20024;1;NULL;Parameters of heating are misadjusted;Parameter adjusted;0
+20025;1;NULL;Machine without pressure air;Valve for pressure air opened;0
+20026;1;NULL;Stopper cylinder wears mechanical;Stopper changed;0
+20027;1;NULL;PLC failure, short;Short on output removed;0
+20028;1;NULL;Lower part in wrong position;Reset of the machine and new start;0
+20029;1;NULL;Swivel cylinder is blocked mechanically;Swivel cylinder changed;0
+20030;1;NULL;Sensor misadjusted;Sensor adjusted;0
+20031;1;NULL;Silencer is dirty;Silencer changed;0
+20032;1;NULL;Valve doesn't switch;Valve changed;0
+20033;1;NULL;Throttle valve is misadjusted;Throttle valve adjusted;0
+20034;1;NULL;Drill is broken;Drill changed;0
+20035;1;NULL;Heater is defect;Heater changed;0
+20036;1;NULL;Sensor doesn't detect Tray;Sensor adjusted;0
+20037;1;NULL;No enable of the application quality control, application is in default mode;Application switched;0
+20038;1;NULL;Cable is broken;New cable installed;0
+20038;2;NULL;Fuse on heater fails;Fuse changed;0
+20039;1;NULL;Failure on inductive sensor;Sensor exchanged;0
+20039;2;NULL;Stopper cylinder is blocked;Stopper cylinder changed;0
+20040;1;NULL;Mechanical blocking of stopper cylinder;Stopper cylinder changed;0
+20041;1;NULL;Wire break;New cable installed;0
+20042;1;NULL;Shut-off valve broken;Replace shut-off valve;0
+20043;1;;Pressure is too high;Adjust pressure regulator ;0
+20044;1;;Pneumatic cylinder is moving too slow;Adjust throttle;0
+20045;1;NULL;Part cannot be found in MES4 buffer.
+- Buffer is not correctly booked in MES4.
+- Part is not available.;Book MES4 buffer correctly. Refil the part in storage.;0
+20046;1;NULL;CNC end of tool life.;Please replace CNC tool;0
+20047;1;NULL;Pressure is too low;Adjust pressure regulator ;0
