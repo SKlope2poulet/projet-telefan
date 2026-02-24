@@ -1,6 +1,6 @@
 # projet-telefan
 
 Projet Telefan Groupe 4 :
-- Bastian
-- Andrew
-- Jade
+- Bastian FONTAINE-TRANCAHNT
+- Andrew DESVALCY
+- Jade WOUTERS
