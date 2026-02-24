@@ -1,5 +1,0 @@
-ErrorId;Description;Short
-0;no error;IDLE
-1;general error;ERR
-101;Wrong Color;ERR_COL
-102;Wrong Height;ERR_HGT
