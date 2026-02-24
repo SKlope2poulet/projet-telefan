@@ -1,7 +1,0 @@
-State;Description;Short
-0; not started yet;IDLE
-1;started and pending;PEND
-10;working;BUSY
-15;moving;MOV
-99;Error;ERR
-100;finished;RDY
