@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% set active_page = "production" %}
+
+{% block title %}Production — Performance & Flux{% endblock %}
+
+{% block content %}
+        <div class="kpi-card">
+            <h3>TRG (Taux de rendement global)</h3>
+            <div>{{ graph_trg | safe }}</div>
+        </div>
+
+        <div class="kpi-card">
+            <h3>Capacité de production inutilisée (%)</h3>
+            <div>{{ graph_capa | safe }}</div>
+        </div>
+
+        <div class="kpi-card">
+            <h3>Durée du cycle de production par poste</h3>
+            <div style="display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap;">
+                <div style="background:#f8fafc;border-radius:8px;padding:10px 16px;text-align:center;flex:1;min-width:90px;">
+                    <div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">Cycle moyen</div>
+                    <div style="font-size:24px;font-weight:700;color:#0A3A82;">{{ cycle_reel_s }} s</div>
+                </div>
+                <div style="background:#f8fafc;border-radius:8px;padding:10px 16px;text-align:center;flex:1;min-width:90px;">
+                    <div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">Min</div>
+                    <div style="font-size:24px;font-weight:700;color:#22c55e;">{{ cycle_min_s }} s</div>
+                </div>
+                <div style="background:#f8fafc;border-radius:8px;padding:10px 16px;text-align:center;flex:1;min-width:90px;">
+                    <div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">Max</div>
+                    <div style="font-size:24px;font-weight:700;color:#ef4444;">{{ cycle_max_s }} s</div>
+                </div>
+            </div>
+            <div>{{ graph_cycle | safe }}</div>
+        </div>
+
+        <div class="kpi-card">
+            <h3>Temps d'attente moyen entre opérations</h3>
+            <div style="display:flex;align-items:center;justify-content:center;flex-direction:column;padding:30px 0;">
+                <div style="font-size:52px;font-weight:800;color:{% if avg_wait_s > 20 %}#ef4444{% elif avg_wait_s > 10 %}#f97316{% else %}#22c55e{% endif %};">
+                    {{ avg_wait_s }} s
+                </div>
+                <div style="font-size:13px;color:#64748b;margin-top:8px;">
+                    Seuil alerte : &gt; 10 s &nbsp;|&nbsp; Critique : &gt; 20 s
+                </div>
+                <div style="margin-top:16px;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;
+                    {% if avg_wait_s > 20 %}background:#fca5a5;color:#7f1d1d;
+                    {% elif avg_wait_s > 10 %}background:#fed7aa;color:#7c2d12;
+                    {% else %}background:#bbf7d0;color:#14532d;{% endif %}">
+                    {% if avg_wait_s > 20 %}Critique
+                    {% elif avg_wait_s > 10 %}Alerte
+                    {% else %}Normal{% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="kpi-card full-width">
+            <h3>Productivité par poste (ResourceID)</h3>
+            <div>{{ graph_prod | safe }}</div>
+        </div>
+
+        <div class="kpi-card full-width">
+            <h3>Suivi des OF</h3>
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #e2e8f0; color: #1e3a8a;">
+                        <th style="padding: 10px;">N° OF</th>
+                        <th style="padding: 10px;">Début Prévu</th>
+                        <th style="padding: 10px;">Fin Prévue</th>
+                        <th style="padding: 10px;">Début Réel</th>
+                        <th style="padding: 10px;">Fin Réelle</th>
+                        <th style="padding: 10px;">Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for of in ordres %}
+                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 10px; font-weight: bold;">{{ of.OrderID }}</td>
+                        <td style="padding: 10px;">{{ of.PlannedStart }}</td>
+                        <td style="padding: 10px;">{{ of.PlannedEnd }}</td>
+                        <td style="padding: 10px;">{{ of.Start }}</td>
+                        <td style="padding: 10px;">{{ of.End }}</td>
+                        <td style="padding: 10px;">
+                            {% if of.retard %}
+                                <span style="color: #ef4444; font-weight: bold;">⚠ En retard</span>
+                            {% elif of.Status == 'Terminé' %}
+                                <span style="color: #22c55e; font-weight: bold;">✓ Terminé</span>
+                            {% else %}
+                                <span style="color: #1355B8; font-weight: bold;">▶ {{ of.Status }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="6" style="padding: 20px; text-align: center; color: #94a3b8;">Aucun OF trouvé.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+{% endblock %}

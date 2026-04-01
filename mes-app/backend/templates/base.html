@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard T'EleFan MES 4.0</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="dashboard-body">
+
+    <header class="main-header">
+        <div class="header-left">
+            <h1>T'EleFan <span class="thin">MES 4.0</span></h1>
+            <span class="page-title">{% block title %}Production — Performance & Flux{% endblock %}</span>
+        </div>
+        <div class="header-right">
+            <div class="user-profile">
+                <img src="https://ui-avatars.com/api/?name={{ session['user'] }}&background=random&color=fff" alt="Avatar" class="avatar">
+                <span>{{ session['user'] }} | <strong>Administrateur</strong></span>
+            </div>
+            <a href="{{ url_for('logout') }}" class="btn-logout">Déconnexion</a>
+        </div>
+    </header>
+
+    <nav class="sub-nav">
+        <ul>
+            <li class="{% if active_page == 'production' %}active{% endif %}"><a href="{{ url_for('production') }}">Production</a></li>
+            <li class="{% if active_page == 'qualite' %}active{% endif %}"><a href="{{ url_for('qualite') }}">Qualité</a></li>
+            <li class="{% if active_page == 'stock' %}active{% endif %}"><a href="{{ url_for('stock') }}">Stock</a></li>
+            <li class="{% if active_page == 'maintenance' %}active{% endif %}"><a href="{{ url_for('maintenance') }}">Maintenance</a></li>
+            <li class="{% if active_page == 'alertes' %}active{% endif %}"><a href="{{ url_for('alertes') }}">Alertes</a></li>
+        </ul>
+    </nav>
+
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <form method="GET" action="">
+                <div class="filter-group">
+                    <label>Date début :</label>
+                    <input type="date" name="date_debut" value="{{ date_debut | default('') }}">
+                </div>
+                <div class="filter-group">
+                    <label>Date fin :</label>
+                    <input type="date" name="date_fin" value="{{ date_fin | default('') }}">
+                </div>
+                <div class="filter-group">
+                    <label>Machine / Poste :</label>
+                    <div class="checkbox-list">
+                        {% if resources is defined and resources %}
+                            {% for r in resources %}
+                            <label>
+                                <input type="checkbox" name="resource_id" value="{{ r.ResourceID }}"
+                                    {% if r.ResourceID | string in (selected_resources | default([])) %}checked{% endif %}>
+                                {{ r.ResourceName or ('Poste ' ~ r.ResourceID) }}
+                            </label>
+                            {% endfor %}
+                        {% else %}
+                            <span style="font-size:12px;color:#94a3b8;">Aucune machine</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <button type="submit" style="width:100%;padding:8px;background:#1355B8;color:white;border:none;border-radius:4px;font-weight:600;cursor:pointer;font-size:13px;">
+                        Appliquer
+                    </button>
+                    <a href="?" style="display:block;text-align:center;margin-top:8px;font-size:12px;color:#64748b;text-decoration:underline;">
+                        Réinitialiser
+                    </a>
+                </div>
+            </form>
+        </aside>
+
+        <main class="dashboard-grid">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+</body>
+</html>

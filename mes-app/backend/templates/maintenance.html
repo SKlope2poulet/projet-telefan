@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% set active_page = "maintenance" %}
+
+{% block title %}Maintenance — Performance & Flux{% endblock %}
+
+{% block content %}
+
+
+        <div class="kpi-card">
+            <h3>MTBF — Temps moyen entre pannes</h3>
+            <div style="display:flex;align-items:center;justify-content:center;flex-direction:column;padding:30px 0;">
+                <div style="font-size:52px;font-weight:800;color:{{ couleur_mtbf }};">
+                    {{ mtbf_min }} min
+                </div>
+                <div style="font-size:13px;color:#64748b;margin-top:8px;">
+                    Objectif : &gt; 60 min &nbsp;|&nbsp; Alerte : &lt; 30 min
+                </div>
+                <div style="margin-top:16px;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;
+                    {% if mtbf_min < 10 %}background:#fca5a5;color:#7f1d1d;
+                    {% elif mtbf_min < 30 %}background:#fed7aa;color:#7c2d12;
+                    {% else %}background:#bbf7d0;color:#14532d;{% endif %}">
+                    {% if mtbf_min < 10 %}Critique
+                    {% elif mtbf_min < 30 %}Alerte
+                    {% else %}Normal{% endif %}
+                </div>
+            </div>
+            {% if mtbf_by_res %}
+            <table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;">
+                <thead>
+                    <tr style="background:#f1f5f9;border-bottom:1px solid #e2e8f0;">
+                        <th style="padding:6px 8px;text-align:left;">ResourceID</th>
+                        <th style="padding:6px 8px;text-align:center;">MTBF (min)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in mtbf_by_res %}
+                    <tr style="border-bottom:1px solid #f1f5f9;">
+                        <td style="padding:6px 8px;color:#0A3A82;font-weight:600;">Poste {{ r.ResourceID }}</td>
+                        <td style="padding:6px 8px;text-align:center;font-weight:700;
+                            color:{% if (r.mtbf_min or 0) < 30 %}#ef4444{% elif (r.mtbf_min or 0) < 60 %}#f97316{% else %}#22c55e{% endif %};">
+                            {{ "%.1f"|format(r.mtbf_min or 0) }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+
+        <div class="kpi-card">
+            <h3>MTTR — Temps moyen de réparation</h3>
+            <div>{{ graph_mttr | safe }}</div>
+            <div style="text-align:center;margin-top:8px;">
+                <span style="font-size:13px;color:#64748b;">MTTR réel : </span>
+                <span style="font-size:20px;font-weight:700;color:{% if mttr_min > 30 %}#ef4444{% elif mttr_min > 15 %}#f97316{% else %}#22c55e{% endif %};">
+                    {{ mttr_min }} min
+                </span>
+                <span style="font-size:13px;color:#94a3b8;margin-left:8px;">(Objectif : &lt; 5 min)</span>
+            </div>
+        </div>
+
+        <div class="kpi-card full-width">
+            <h3>Nombre de pannes par machine et niveau</h3>
+            <div>{{ graph_pannes | safe }}</div>
+            {% if pannes_data %}
+            <table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:12px;text-align:center;">
+                <thead>
+                    <tr style="border-bottom:2px solid #e2e8f0;color:#1e3a8a;">
+                        <th style="padding:8px;text-align:left;">Machine</th>
+                        <th style="padding:8px;">Niveau 0</th>
+                        <th style="padding:8px;">Niveau 1</th>
+                        <th style="padding:8px;">Niveau 2</th>
+                        <th style="padding:8px;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in pannes_data %}
+                    <tr style="border-bottom:1px solid #f1f5f9;">
+                        <td style="padding:8px;text-align:left;font-weight:600;color:#0A3A82;">{{ row.ResourceName }}</td>
+                        <td style="padding:8px;color:#b45309;font-weight:600;">{{ row.l0 }}</td>
+                        <td style="padding:8px;color:#ea580c;font-weight:600;">{{ row.l1 }}</td>
+                        <td style="padding:8px;color:#ef4444;font-weight:600;">{{ row.l2 }}</td>
+                        <td style="padding:8px;font-weight:700;color:#0A3A82;">{{ row.l0 + row.l1 + row.l2 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+
+{% endblock %}

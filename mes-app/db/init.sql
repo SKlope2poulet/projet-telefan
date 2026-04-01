@@ -24162,5 +24162,5 @@ CREATE TABLE IF NOT EXISTS users (
 INSERT INTO users (username, password_hash)
 VALUES (
   'admin',
-  '$2a$12$k67S4tDMHj6h90EWWdEUJOwTTG1Z/rQSLeIaKvinwTzwbWdbEdaIa'
+  '$2y$10$zDVb3pJuUEhoRxvZsQvhAe2ZBB0blVgDFIQn7cS4LCsraEi.3vLaa'
 );

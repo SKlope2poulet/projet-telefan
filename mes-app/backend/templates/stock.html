@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% set active_page = "stock" %}
+
+{% block title %}Stock — Performance & Flux{% endblock %}
+
+{% block content %}
+
+
+        <div class="kpi-card">
+            <h3>Niveau des en-cours — OF en cours (WIP)</h3>
+            <div>{{ graph_wip | safe }}</div>
+            <div style="text-align:center;font-size:12px;color:#64748b;margin-top:4px;">
+                {{ wip_count }} OF en cours / {{ wip_pct }} % du total
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <h3>Répartition des Ordres de Fabrication</h3>
+            <div style="display:flex;gap:12px;margin-bottom:10px;flex-wrap:wrap;justify-content:space-around;">
+                <div style="text-align:center;">
+                    <div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">Planifiés (MP)</div>
+                    <div style="font-size:26px;font-weight:700;color:#1355B8;">{{ mp_count }}</div>
+                    <div style="font-size:12px;color:#94a3b8;">{{ mp_pct }} %</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">En cours (WIP)</div>
+                    <div style="font-size:26px;font-weight:700;color:#F59E0B;">{{ wip_count }}</div>
+                    <div style="font-size:12px;color:#94a3b8;">{{ wip_pct }} %</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">Terminés (PF)</div>
+                    <div style="font-size:26px;font-weight:700;color:#22c55e;">{{ pf_count }}</div>
+                    <div style="font-size:12px;color:#94a3b8;">{{ pf_pct }} %</div>
+                </div>
+            </div>
+            <div>{{ graph_mp | safe }}</div>
+        </div>
+
+        <div class="kpi-card full-width">
+            <h3>Évolution des Produits Finis (OF terminés par jour)</h3>
+            <div>{{ graph_pf | safe }}</div>
+        </div>
+
+{% endblock %}

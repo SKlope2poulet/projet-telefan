@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% set active_page = "alertes" %}
+
+{% block title %}Alertes — Performance & Flux{% endblock %}
+
+{% block content %}
+
+
+        <div class="kpi-card full-width">
+            <h3>Tableau de bord des alertes</h3>
+
+            <div style="display:flex;gap:20px;margin-bottom:24px;flex-wrap:wrap;">
+                <div style="flex:1;min-width:160px;background:{% if nb_alertes > 0 %}#fff7ed{% else %}#f0fdf4{% endif %};border:2px solid {% if nb_alertes > 0 %}#f97316{% else %}#22c55e{% endif %};border-radius:12px;padding:20px;text-align:center;">
+                    <div style="font-size:13px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Total alertes</div>
+                    <div style="font-size:44px;font-weight:800;color:{% if nb_alertes > 0 %}#f97316{% else %}#22c55e{% endif %};">{{ nb_alertes }}</div>
+                    <div style="font-size:12px;color:#94a3b8;margin-top:4px;">KPI hors seuil</div>
+                </div>
+                <div style="flex:1;min-width:160px;background:{% if nb_critiques > 0 %}#fef2f2{% else %}#f0fdf4{% endif %};border:2px solid {% if nb_critiques > 0 %}#ef4444{% else %}#22c55e{% endif %};border-radius:12px;padding:20px;text-align:center;">
+                    <div style="font-size:13px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Critiques</div>
+                    <div style="font-size:44px;font-weight:800;color:{% if nb_critiques > 0 %}#ef4444{% else %}#22c55e{% endif %};">{{ nb_critiques }}</div>
+                    <div style="font-size:12px;color:#94a3b8;margin-top:4px;">Action immédiate requise</div>
+                </div>
+                <div style="flex:2;min-width:200px;background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:20px;display:flex;align-items:center;justify-content:center;">
+                    {% if nb_critiques > 0 %}
+                    <div style="text-align:center;">
+                        <div style="font-size:32px;margin-bottom:4px;">🔴</div>
+                        <div style="font-size:15px;font-weight:700;color:#7f1d1d;">{{ nb_critiques }} KPI critique(s) — intervention requise</div>
+                    </div>
+                    {% elif nb_alertes > 0 %}
+                    <div style="text-align:center;">
+                        <div style="font-size:32px;margin-bottom:4px;">🟡</div>
+                        <div style="font-size:15px;font-weight:700;color:#7c2d12;">{{ nb_alertes }} KPI en alerte — surveillance recommandée</div>
+                    </div>
+                    {% else %}
+                    <div style="text-align:center;">
+                        <div style="font-size:32px;margin-bottom:4px;">🟢</div>
+                        <div style="font-size:15px;font-weight:700;color:#14532d;">Tous les KPI sont dans les seuils</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <table style="width:100%;border-collapse:collapse;font-size:13px;text-align:left;">
+                <thead>
+                    <tr style="border-bottom:2px solid #e2e8f0;color:#1e3a8a;background:#f8fafc;">
+                        <th style="padding:10px;">Domaine</th>
+                        <th style="padding:10px;">KPI</th>
+                        <th style="padding:10px;text-align:center;">Valeur</th>
+                        <th style="padding:10px;text-align:center;">Seuil</th>
+                        <th style="padding:10px;text-align:center;">Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in alertes_list %}
+                    <tr style="border-bottom:1px solid #f1f5f9;background:{% if a.critique %}#fef2f2{% elif a.alerte %}#fff7ed{% else %}white{% endif %};">
+                        <td style="padding:10px;">
+                            <span style="padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;
+                                {% if a.domaine == 'Production' %}background:#dbeafe;color:#1e40af;
+                                {% elif a.domaine == 'Qualité' %}background:#fce7f3;color:#9d174d;
+                                {% elif a.domaine == 'Stock' %}background:#dcfce7;color:#14532d;
+                                {% elif a.domaine == 'Maintenance' %}background:#fef3c7;color:#78350f;
+                                {% else %}background:#f1f5f9;color:#475569;{% endif %}">
+                                {{ a.domaine }}
+                            </span>
+                        </td>
+                        <td style="padding:10px;font-weight:500;">{{ a.kpi }}</td>
+                        <td style="padding:10px;text-align:center;font-weight:700;
+                            color:{% if a.critique %}#ef4444{% elif a.alerte %}#f97316{% else %}#22c55e{% endif %};">
+                            {{ a.valeur }}
+                        </td>
+                        <td style="padding:10px;text-align:center;color:#64748b;font-size:12px;">{{ a.seuil }}</td>
+                        <td style="padding:10px;text-align:center;">
+                            {% if a.critique %}
+                            <span style="background:#fca5a5;color:#7f1d1d;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;">CRITIQUE</span>
+                            {% elif a.alerte %}
+                            <span style="background:#fed7aa;color:#7c2d12;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;">ALERTE</span>
+                            {% else %}
+                            <span style="background:#bbf7d0;color:#14532d;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;">OK</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="5" style="padding:20px;text-align:center;color:#94a3b8;">Aucune donnée disponible.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+{% endblock %}

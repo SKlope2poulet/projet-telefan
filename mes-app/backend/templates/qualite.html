@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% set active_page = "qualite" %}
+
+{% block title %}Qualité — Performance & Flux{% endblock %}
+
+{% block content %}
+
+
+        <div class="kpi-card">
+            <h3>Taux de produits Non-Conformes</h3>
+            <div style="display:flex;gap:20px;margin-bottom:12px;flex-wrap:wrap;">
+                <div style="background:#f8fafc;border-radius:8px;padding:12px 20px;text-align:center;flex:1;min-width:100px;">
+                    <div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">Pièces NC</div>
+                    <div style="font-size:28px;font-weight:700;color:#ef4444;">{{ nc_count }}</div>
+                </div>
+                <div style="background:#f8fafc;border-radius:8px;padding:12px 20px;text-align:center;flex:1;min-width:100px;">
+                    <div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">Total pièces</div>
+                    <div style="font-size:28px;font-weight:700;color:#0A3A82;">{{ total_pieces }}</div>
+                </div>
+                <div style="background:#f8fafc;border-radius:8px;padding:12px 20px;text-align:center;flex:1;min-width:100px;">
+                    <div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;">Taux NC</div>
+                    <div style="font-size:28px;font-weight:700;color:{% if nc_rate > 5 %}#ef4444{% elif nc_rate > 0 %}#f97316{% else %}#22c55e{% endif %};">
+                        {{ nc_rate }} %
+                    </div>
+                </div>
+            </div>
+            <div>{{ graph_nc | safe }}</div>
+        </div>
+
+        <div class="kpi-card">
+            <h3>Fiabilité de l'IA de contrôle qualité</h3>
+            <div>{{ graph_ia | safe }}</div>
+            <div style="margin-top:10px;">
+                <table style="width:100%;border-collapse:collapse;font-size:12px;text-align:center;">
+                    <thead>
+                        <tr style="background:#f1f5f9;">
+                            <th style="padding:6px;border:1px solid #e2e8f0;"></th>
+                            <th style="padding:6px;border:1px solid #e2e8f0;">Prédit OK</th>
+                            <th style="padding:6px;border:1px solid #e2e8f0;">Prédit NC</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding:6px;border:1px solid #e2e8f0;font-weight:600;background:#f1f5f9;">Réel OK</td>
+                            <td style="padding:6px;border:1px solid #e2e8f0;background:#bbf7d0;color:#14532d;font-weight:700;">VN = {{ VN }}</td>
+                            <td style="padding:6px;border:1px solid #e2e8f0;background:#fca5a5;color:#7f1d1d;font-weight:700;">FP = {{ FP }}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:6px;border:1px solid #e2e8f0;font-weight:600;background:#f1f5f9;">Réel NC</td>
+                            <td style="padding:6px;border:1px solid #e2e8f0;background:#fca5a5;color:#7f1d1d;font-weight:700;">FN = {{ FN }}</td>
+                            <td style="padding:6px;border:1px solid #e2e8f0;background:#bbf7d0;color:#14532d;font-weight:700;">VP = {{ VP }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="font-size:11px;color:#94a3b8;margin-top:6px;text-align:center;">
+                    Fiabilité = (VP+VN)/(VP+VN+FP+FN) = {{ ia_fiabilite }} %
+                </p>
+            </div>
+        </div>
+
+        <div class="kpi-card full-width">
+            <h3>Pareto — Analyse des défauts</h3>
+            <div>{{ graph_pareto | safe }}</div>
+        </div>
+
+        <div class="kpi-card full-width">
+            <h3>Plan d'action — Top priorités (20% causes → 80% effets)</h3>
+            {% if pareto_top %}
+            <table style="width:100%;border-collapse:collapse;font-size:12px;text-align:left;">
+                <thead>
+                    <tr style="border-bottom:2px solid #e2e8f0;color:#1e3a8a;">
+                        <th style="padding:8px;">N° Erreur</th>
+                        <th style="padding:8px;">Description</th>
+                        <th style="padding:8px;">Occurrences</th>
+                        <th style="padding:8px;">Score priorité</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in pareto_top %}
+                    <tr style="border-bottom:1px solid #f1f5f9;background:{% if loop.index == 1 %}#fff7ed{% else %}white{% endif %};">
+                        <td style="padding:8px;font-weight:bold;color:#0A3A82;">E{{ p.ErrorNo }}</td>
+                        <td style="padding:8px;">{{ p.ErrorDesc }}</td>
+                        <td style="padding:8px;text-align:center;font-weight:600;color:#ef4444;">{{ p.nb_occurrences }}</td>
+                        <td style="padding:8px;text-align:center;">
+                            <span style="background:#fde047;color:#713f12;padding:2px 8px;border-radius:999px;font-weight:700;">{{ p.score }}</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p style="color:#94a3b8;text-align:center;padding:20px;">Aucun défaut enregistré.</p>
+            {% endif %}
+        </div>
+
+        <div class="kpi-card full-width">
+            <h3>Solutions recommandées</h3>
+            {% if plan_action %}
+            <table style="width:100%;border-collapse:collapse;font-size:12px;text-align:left;">
+                <thead>
+                    <tr style="border-bottom:2px solid #e2e8f0;color:#1e3a8a;">
+                        <th style="padding:8px;">N° Erreur</th>
+                        <th style="padding:8px;">Erreur</th>
+                        <th style="padding:8px;">Cause</th>
+                        <th style="padding:8px;">Solution</th>
+                        <th style="padding:8px;">Module</th>
+                        <th style="padding:8px;text-align:center;">Priorité</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in plan_action %}
+                    <tr style="border-bottom:1px solid #f1f5f9;">
+                        <td style="padding:8px;font-weight:bold;color:#0A3A82;">E{{ s.ErrorNo }}</td>
+                        <td style="padding:8px;">{{ s.ErrorDesc }}</td>
+                        <td style="padding:8px;color:#64748b;">{{ s.CauseDesc }}</td>
+                        <td style="padding:8px;">{{ s.SolutionDesc }}</td>
+                        <td style="padding:8px;color:#64748b;">{{ s.machine }}</td>
+                        <td style="padding:8px;text-align:center;">
+                            {% set r = s.Rating %}
+                            <span style="padding:2px 8px;border-radius:999px;font-weight:700;font-size:11px;
+                                {% if r >= 4 %}background:#fca5a5;color:#7f1d1d;
+                                {% elif r >= 2 %}background:#fed7aa;color:#7c2d12;
+                                {% else %}background:#bbf7d0;color:#14532d;{% endif %}">
+                                {{ r }}/5
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p style="color:#94a3b8;text-align:center;padding:20px;">Aucune solution disponible.</p>
+            {% endif %}
+        </div>
+
+{% endblock %}
