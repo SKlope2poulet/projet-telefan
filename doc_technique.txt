@@ -3,6 +3,14 @@ Documentation technique de l'application, suivez les étapes avec précision.
 - Installer Docker Desktop: https://www.docker.com/products/docker-desktop/ (selectionner "Download docker desktop" puis "Download fort Windows AMD64")
 - Lancer Docker Desktop et attendre que le docker engine ai fini de se lancer
 - dézipper le projet
+
+Méthode 1 :
+- Dans le fichier dézipper mes-app vous pouvez lancer l'application avec "Demarrer.bat"
+- Pour éteindre l'application et le Docker (recommander pour éviter de laisser le docker ouvert) vous pouvez executé le fichier "Arret.bat"
+
+⚠️ Si cette méthode ne fonctionne pas utiliser la méthode 2 ci-dessous
+
+Méthode 2 :
 - dans le projet il y a un dossier nommé mes-app, fait un clique droit dessus et cliquer copier en tant que chemin d'accès.
 - dans la barre de recherche Windows tapper cdm et ouvrir l'invité de commande.
 - tapez la commande suivante: cd remplacer_ce_texte_par_le_chemin_que_vous_venez_de_copier
