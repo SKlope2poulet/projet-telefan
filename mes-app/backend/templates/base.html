@@ -5,6 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard T'EleFan MES 4.0</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .nav-disabled {
+            opacity: 0.38;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        .nav-disabled a {
+            color: #94a3b8 !important;
+        }
+        .role-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+        }
+        .role-admin       { background: #dbeafe; color: #1e40af; }
+        .role-operateur   { background: #fce7f3; color: #9d174d; }
+        .role-utilisateur { background: #dcfce7; color: #14532d; }
+    </style>
 </head>
 <body class="dashboard-body">
 
@@ -16,7 +38,16 @@
         <div class="header-right">
             <div class="user-profile">
                 <img src="https://ui-avatars.com/api/?name={{ session['user'] }}&background=random&color=fff" alt="Avatar" class="avatar">
-                <span>{{ session['user'] }} | <strong>Administrateur</strong></span>
+                <span>
+                    {{ session['user'] }}
+                    {% if current_role == 'admin' %}
+                        <span class="role-badge role-admin">Admin</span>
+                    {% elif current_role == 'operateur' %}
+                        <span class="role-badge role-operateur">Opérateur</span>
+                    {% else %}
+                        <span class="role-badge role-utilisateur">Utilisateur</span>
+                    {% endif %}
+                </span>
             </div>
             <a href="{{ url_for('logout') }}" class="btn-logout">Déconnexion</a>
         </div>
@@ -24,11 +55,44 @@
 
     <nav class="sub-nav">
         <ul>
-            <li class="{% if active_page == 'production' %}active{% endif %}"><a href="{{ url_for('production') }}">Production</a></li>
-            <li class="{% if active_page == 'qualite' %}active{% endif %}"><a href="{{ url_for('qualite') }}">Qualité</a></li>
-            <li class="{% if active_page == 'stock' %}active{% endif %}"><a href="{{ url_for('stock') }}">Stock</a></li>
-            <li class="{% if active_page == 'maintenance' %}active{% endif %}"><a href="{{ url_for('maintenance') }}">Maintenance</a></li>
-            <li class="{% if active_page == 'alertes' %}active{% endif %}"><a href="{{ url_for('alertes') }}">Alertes</a></li>
+            {# Tableau de bord — accessible à tous #}
+            <li class="{% if active_page == 'production' %}active{% endif %}">
+                <a href="{{ url_for('production') }}">Production</a>
+            </li>
+            <li class="{% if active_page == 'qualite' %}active{% endif %}">
+                <a href="{{ url_for('qualite') }}">Qualité</a>
+            </li>
+            <li class="{% if active_page == 'stock' %}active{% endif %}">
+                <a href="{{ url_for('stock') }}">Stock</a>
+            </li>
+            <li class="{% if active_page == 'maintenance' %}active{% endif %}">
+                <a href="{{ url_for('maintenance') }}">Maintenance</a>
+            </li>
+            <li class="{% if active_page == 'alertes' %}active{% endif %}">
+                <a href="{{ url_for('alertes') }}">Alertes</a>
+            </li>
+
+            {# Suggestions — admin + opérateur, grisé pour utilisateur #}
+            {% if current_role in ('admin', 'operateur') %}
+            <li class="{% if active_page == 'suggestions' %}active{% endif %}">
+                <a href="{{ url_for('suggestions') }}">Suggestions</a>
+            </li>
+            {% else %}
+            <li class="nav-disabled" title="Accès non autorisé pour votre rôle">
+                <a>Suggestions</a>
+            </li>
+            {% endif %}
+
+            {# Données — admin uniquement, grisé pour les autres #}
+            {% if current_role == 'admin' %}
+            <li class="{% if active_page == 'donnees' %}active{% endif %}">
+                <a href="{{ url_for('donnees') }}">Données</a>
+            </li>
+            {% else %}
+            <li class="nav-disabled" title="Réservé aux administrateurs">
+                <a>Données</a>
+            </li>
+            {% endif %}
         </ul>
     </nav>
 

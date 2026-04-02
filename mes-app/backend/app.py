@@ -1,9 +1,11 @@
-from flask import Flask, render_template, request, redirect, session, url_for
+from flask import Flask, render_template, request, redirect, session, url_for, jsonify
 from flask_bcrypt import Bcrypt
 import pymysql
 import plotly.express as px
 import plotly.graph_objects as go
 from functools import wraps
+import re
+import io
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.secret_key = "secretvraimentsupersecret1234"
@@ -26,8 +28,21 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def role_required(*roles):
+    """Accès réservé aux rôles listés. Redirige vers /production avec un message si non autorisé."""
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if "user" not in session:
+                return redirect(url_for('login'))
+            if session.get("role") not in roles:
+                return render_template("acces_refuse.html", **get_sidebar_context()), 403
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
+
 def get_sidebar_context():
-    """Retourne les variables nécessaires à la sidebar (resources + filtres actifs)."""
+    """Retourne les variables nécessaires à la sidebar (resources + filtres actifs + rôle)."""
     db = get_db()
     try:
         with db.cursor() as cursor:
@@ -42,6 +57,7 @@ def get_sidebar_context():
         'date_debut': request.args.get('date_debut', ''),
         'date_fin':   request.args.get('date_fin', ''),
         'selected_resources': request.args.getlist('resource_id'),
+        'current_role': session.get('role', ''),
     }
 
 @app.route("/", methods=["GET", "POST"])
@@ -58,6 +74,7 @@ def login():
                 user = cursor.fetchone()
             if user and bcrypt.check_password_hash(user["password_hash"], password):
                 session["user"] = username
+                session["role"] = user["role"]
                 return redirect(url_for('production'))
             else:
                 return render_template("login.html", error="Identifiants incorrects")
@@ -107,28 +124,29 @@ def production():
             cursor.execute("SELECT ResourceID, ResourceName FROM tblresource WHERE ResourceID > 0 ORDER BY ResourceID;")
             resources = cursor.fetchall()
 
-            # ── TRG : temps_utile / temps_ouverture ────────────────────────
-            # On filtre les durées aberrantes (< 1s ou > 1h) pour exclure les
-            # dates parasites qui fausseraient le span MIN/MAX.
+            # ── TRG : moyenne des TRG journaliers ────────────────────────
+            # Les données couvrent 2016-2025 donc MIN/MAX global = ~10 ans.
+            # On calcule le TRG par jour de production (>= 5 étapes) puis moyenne.
             cursor.execute("""
-                SELECT
-                    SUM(TIMESTAMPDIFF(SECOND, Start, End))        AS temps_utile,
-                    TIMESTAMPDIFF(SECOND, MIN(Start), MAX(End))   AS temps_ouverture
-                FROM tblfinstep
-                WHERE Start IS NOT NULL AND End IS NOT NULL
-                  AND TIMESTAMPDIFF(SECOND, Start, End) BETWEEN 1 AND 3600
-            """ + date_filter() + resource_filter(table_alias=''), params)
-            temps_data = cursor.fetchone()
-
-            cursor.execute("SELECT COUNT(ID) AS nb_pieces FROM tblpartsreport WHERE ResourceID > 0" + resource_filter(), params)
-            pieces_data = cursor.fetchone()
-
-            temps_utile = temps_data['temps_utile'] or 0
-            temps_ouv   = temps_data['temps_ouverture'] or 1
-            nb_pieces   = pieces_data['nb_pieces'] or 0
-
-            trg = min((temps_utile / temps_ouv * 100) if temps_ouv > 0 else 0, 100)
+                SELECT COALESCE(AVG(daily_trg), 0) AS trg_moyen
+                FROM (
+                    SELECT DATE(Start) AS jour,
+                        SUM(TIMESTAMPDIFF(SECOND, Start, End)) /
+                        NULLIF(TIMESTAMPDIFF(SECOND, MIN(Start), MAX(End)), 0) * 100 AS daily_trg
+                    FROM tblfinstep
+                    WHERE Start IS NOT NULL AND End IS NOT NULL
+                      AND TIMESTAMPDIFF(SECOND, Start, End) BETWEEN 1 AND 3600
+                    GROUP BY DATE(Start)
+                    HAVING COUNT(*) >= 5
+                ) t
+            """)
+            trg_row = cursor.fetchone()
+            trg = min(round(trg_row['trg_moyen'] or 0, 1), 100)
             capa_inutilisee = max(0, 100 - trg)
+
+            cursor.execute("SELECT COUNT(ID) AS nb_pieces FROM tblpartsreport WHERE ResourceID > 0", params)
+            pieces_data = cursor.fetchone()
+            nb_pieces = pieces_data['nb_pieces'] or 0
 
             # jauge TRG
             couleur_trg = "#22c55e" if trg >= 70 else ("#fde047" if trg >= 65 else "#ef4444")
@@ -171,30 +189,43 @@ def production():
             graph_capa = fig_capa.to_html(full_html=False)
 
             # ── Productivité par poste ─────────────────────────────────────
+            # Calcul par jour actif puis moyenne :
+            #   productivité_jour = (nb_pièces × cycle_reel_moy) / ouverture_journalière × 100
+            # Cela exclut automatiquement les longs trous (chaîne éteinte pendant des semaines)
+            # car un jour sans activité ne contribue pas à la moyenne.
             cursor.execute("""
                 SELECT
-                    f.ResourceID,
-                    r.ResourceName,
-                    COUNT(*)                                          AS nb_pieces,
-                    SUM(TIMESTAMPDIFF(SECOND, f.Start, f.End))       AS temps_poste,
-                    AVG(TIMESTAMPDIFF(SECOND, f.Start, f.End))       AS cycle_reel_poste
-                FROM tblfinstep f
-                LEFT JOIN tblresource r ON f.ResourceID = r.ResourceID
-                WHERE f.Start IS NOT NULL AND f.End IS NOT NULL AND f.ResourceID > 0
-                  AND TIMESTAMPDIFF(SECOND, f.Start, f.End) BETWEEN 1 AND 3600
-            """ + date_filter(table_alias='f') + resource_filter(table_alias='f') + """
-                GROUP BY f.ResourceID, r.ResourceName
-                ORDER BY f.ResourceID;
+                    sub.ResourceID,
+                    sub.ResourceName,
+                    ROUND(AVG(LEAST(sub.daily_prod, 100)), 1) AS productivite_pct
+                FROM (
+                    SELECT
+                        f.ResourceID,
+                        r.ResourceName,
+                        DATE(f.Start) AS jour,
+                        COUNT(pr.ID) * AVG(TIMESTAMPDIFF(SECOND, f.Start, f.End))
+                        / NULLIF(TIMESTAMPDIFF(SECOND, MIN(f.Start), MAX(f.End)), 0) * 100
+                            AS daily_prod
+                    FROM tblfinstep f
+                    LEFT JOIN tblresource r  ON r.ResourceID = f.ResourceID
+                    LEFT JOIN tblpartsreport pr
+                           ON pr.ResourceID = f.ResourceID
+                          AND DATE(pr.TimeStamp) = DATE(f.Start)
+                    WHERE f.Start IS NOT NULL AND f.End IS NOT NULL AND f.ResourceID > 0
+                      AND TIMESTAMPDIFF(SECOND, f.Start, f.End) BETWEEN 1 AND 3600
+                """ + date_filter(table_alias='f') + resource_filter(table_alias='f') + """
+                    GROUP BY f.ResourceID, r.ResourceName, DATE(f.Start)
+                    HAVING COUNT(f.StepNo) >= 3
+                ) sub
+                GROUP BY sub.ResourceID, sub.ResourceName
+                ORDER BY sub.ResourceID;
             """, params)
             poste_data = cursor.fetchall()
 
             postes, productivites, couleurs_postes = [], [], []
             for row in poste_data:
                 label = row['ResourceName'] or f"Poste {row['ResourceID']}"
-                if row['temps_poste'] and row['temps_poste'] > 0:
-                    prod = (row['nb_pieces'] * row['cycle_reel_poste'] / row['temps_poste']) * 100
-                else:
-                    prod = 0
+                prod = min(row['productivite_pct'] or 0, 100)
                 postes.append(label)
                 productivites.append(round(prod, 1))
                 couleurs_postes.append("#22c55e" if prod >= 80 else ("#fde047" if prod >= 70 else "#ef4444"))
@@ -295,12 +326,18 @@ def production():
             avg_wait_s = round(wait_data['avg_wait_s'] or 0, 1)
 
             # ── Suivi des OF ───────────────────────────────────────────────
+            of_date_clause = ""
+            if date_debut:
+                of_date_clause += " AND (PlannedStart >= %(date_debut)s OR Start >= %(date_debut)s)"
+            if date_fin:
+                of_date_clause += " AND (PlannedEnd <= %(date_fin)s OR End <= %(date_fin)s)"
             cursor.execute("""
                 SELECT ONo, PlannedStart, PlannedEnd, Start, End, State
                 FROM tblfinorder
-                ORDER BY PlannedStart DESC
-                LIMIT 15;
-            """)
+                WHERE 1=1
+            """ + of_date_clause + """
+                ORDER BY PlannedStart DESC;
+            """, params)
             ordres_raw = cursor.fetchall()
             ordres = []
             for o in ordres_raw:
@@ -352,7 +389,8 @@ def production():
                            resources=resources,
                            date_debut=request.args.get('date_debut',''),
                            date_fin=request.args.get('date_fin',''),
-                           selected_resources=request.args.getlist('resource_id'))
+                           selected_resources=request.args.getlist('resource_id'),
+                           current_role=session.get('role', ''))
 
 
 # ─────────────────────────────────────────────
@@ -363,6 +401,27 @@ def production():
 def qualite():
     db = get_db()
     try:
+        date_debut   = request.args.get('date_debut', '')
+        date_fin     = request.args.get('date_fin', '')
+        resource_ids = request.args.getlist('resource_id')
+        params = {'date_debut': date_debut, 'date_fin': date_fin}
+
+        def date_filter_q(col='TimeStamp', table_alias=''):
+            prefix = (table_alias + '.') if table_alias else ''
+            parts = []
+            if date_debut:
+                parts.append(f"{prefix}{col} >= %(date_debut)s")
+            if date_fin:
+                parts.append(f"{prefix}{col} <= %(date_fin)s")
+            return (' AND ' + ' AND '.join(parts)) if parts else ''
+
+        def res_filter_q(col='ResourceID', table_alias=''):
+            prefix = (table_alias + '.') if table_alias else ''
+            if resource_ids:
+                ids = ','.join(str(int(r)) for r in resource_ids if r.isdigit())
+                return f" AND {prefix}{col} IN ({ids})" if ids else ''
+            return ''
+
         with db.cursor() as cursor:
             # ── Taux NC global ────────────────────────────────────────────
             cursor.execute("""
@@ -370,8 +429,8 @@ def qualite():
                     COUNT(*)                                              AS total,
                     SUM(CASE WHEN ErrorID != 0 THEN 1 ELSE 0 END)        AS nc_count
                 FROM tblpartsreport
-                WHERE ResourceID > 0;
-            """)
+                WHERE ResourceID > 0
+            """ + date_filter_q() + res_filter_q() + ";", params)
             nc_data = cursor.fetchone()
             total_pieces = nc_data['total'] or 0
             nc_count     = nc_data['nc_count'] or 0
@@ -385,9 +444,10 @@ def qualite():
                     SUM(CASE WHEN ErrorID != 0 THEN 1 ELSE 0 END)        AS nc
                 FROM tblpartsreport
                 WHERE ResourceID > 0
+            """ + date_filter_q() + res_filter_q() + """
                 GROUP BY DATE(TimeStamp)
                 ORDER BY jour;
-            """)
+            """, params)
             nc_timeline = cursor.fetchall()
 
             if nc_timeline:
@@ -410,8 +470,6 @@ def qualite():
                 graph_nc = "<p style='color:#94a3b8;text-align:center;padding:40px'>Pas de données</p>"
 
             # ── Taux fiabilité IA (Resource 3 = caméra IA) ────────────────
-            # VP = IA détecte NC (ErrorID!=0 à poste 3) ET humain confirme NC (ErrorID!=0 à poste 6)
-            # Approximation : on compare les taux NC des deux postes
             cursor.execute("""
                 SELECT
                     SUM(CASE WHEN ResourceID=3 AND ErrorID!=0 THEN 1 ELSE 0 END) AS ia_nc,
@@ -420,8 +478,9 @@ def qualite():
                     SUM(CASE WHEN ResourceID=6 AND ErrorID=0  THEN 1 ELSE 0 END) AS hum_ok,
                     COUNT(CASE WHEN ResourceID=3 THEN 1 END)                     AS total_ia,
                     COUNT(CASE WHEN ResourceID=6 THEN 1 END)                     AS total_hum
-                FROM tblpartsreport;
-            """)
+                FROM tblpartsreport
+                WHERE 1=1
+            """ + date_filter_q() + ";", params)
             ia_row  = cursor.fetchone()
             ia_nc   = ia_row['ia_nc']  or 0
             ia_ok   = ia_row['ia_ok']  or 0
@@ -554,20 +613,29 @@ def qualite():
 def stock():
     db = get_db()
     try:
+        date_debut   = request.args.get('date_debut', '')
+        date_fin     = request.args.get('date_fin', '')
+        params = {'date_debut': date_debut, 'date_fin': date_fin}
+
+        def date_filter_s():
+            parts = []
+            if date_debut:
+                parts.append("PlannedStart >= %(date_debut)s")
+            if date_fin:
+                parts.append("PlannedStart <= %(date_fin)s")
+            return (' AND ' + ' AND '.join(parts)) if parts else ''
+
         with db.cursor() as cursor:
             # ── Stock via tblfinorder (tblbufferpos vide après simulation) ──
-            # WIP  = OF démarrés, non terminés
-            # PF   = OF terminés (State=100)
-            # MP   = OF planifiés, non démarrés
-
             cursor.execute("""
                 SELECT
                     SUM(CASE WHEN Start IS NOT NULL AND (End IS NULL OR State < 100) THEN 1 ELSE 0 END) AS wip_count,
                     SUM(CASE WHEN State = 100 THEN 1 ELSE 0 END)                                        AS pf_count,
                     SUM(CASE WHEN Start IS NULL THEN 1 ELSE 0 END)                                      AS mp_count,
                     COUNT(*)                                                                             AS total
-                FROM tblfinorder;
-            """)
+                FROM tblfinorder
+                WHERE 1=1
+            """ + date_filter_s() + ";", params)
             ord_row   = cursor.fetchone() or {}
             wip_count = ord_row.get('wip_count') or 0
             pf_count  = ord_row.get('pf_count')  or 0
@@ -599,13 +667,19 @@ def stock():
             graph_wip = fig_wip.to_html(full_html=False)
 
             # ── Évolution PF cumulés par jour (OF terminés) ────────────────
+            pf_date_clause = ""
+            if date_debut:
+                pf_date_clause += " AND End >= %(date_debut)s"
+            if date_fin:
+                pf_date_clause += " AND End <= %(date_fin)s"
             cursor.execute("""
                 SELECT DATE(End) AS jour, COUNT(*) AS qty
                 FROM tblfinorder
                 WHERE State = 100 AND End IS NOT NULL
+            """ + pf_date_clause + """
                 GROUP BY DATE(End)
                 ORDER BY jour;
-            """)
+            """, params)
             pf_timeline = cursor.fetchall()
 
             if pf_timeline:
@@ -677,6 +751,26 @@ def stock():
 def maintenance():
     db = get_db()
     try:
+        date_debut   = request.args.get('date_debut', '')
+        date_fin     = request.args.get('date_fin', '')
+        resource_ids = request.args.getlist('resource_id')
+        params = {'date_debut': date_debut, 'date_fin': date_fin}
+
+        def date_filter_m(col='TimeStamp', alias='mr'):
+            prefix = (alias + '.') if alias else ''
+            parts = []
+            if date_debut:
+                parts.append(f"{prefix}{col} >= %(date_debut)s")
+            if date_fin:
+                parts.append(f"{prefix}{col} <= %(date_fin)s")
+            return (' AND ' + ' AND '.join(parts)) if parts else ''
+
+        def res_filter_m(alias='mr'):
+            if resource_ids:
+                ids = ','.join(str(int(r)) for r in resource_ids if r.isdigit())
+                return f" AND {alias}.ResourceID IN ({ids})" if ids else ''
+            return ''
+
         with db.cursor() as cursor:
             # ── Nombre de pannes par machine et niveau ────────────────────
             cursor.execute("""
@@ -689,9 +783,10 @@ def maintenance():
                 FROM tblmachinereport mr
                 JOIN tblresource r ON mr.ResourceID = r.ResourceID
                 WHERE mr.ResourceID > 0
+            """ + date_filter_m() + res_filter_m() + """
                 GROUP BY mr.ResourceID, r.ResourceName
                 ORDER BY (SUM(mr.ErrorL0) + SUM(mr.ErrorL1) + SUM(mr.ErrorL2)) DESC;
-            """)
+            """, params)
             pannes_data = cursor.fetchall()
 
             if pannes_data:
@@ -714,8 +809,22 @@ def maintenance():
                 graph_pannes = "<p style='color:#94a3b8;text-align:center;padding:40px'>Pas de données</p>"
 
             # ── MTBF ──────────────────────────────────────────────────────
+            mtbf_res_clause = res_filter_m('').replace(' AND ResourceID', ' AND ResourceID') if resource_ids else ''
+            # build inline filter for window function subquery
+            maint_where_extra = ""
+            if date_debut:
+                maint_where_extra += " AND TimeStamp >= %(date_debut)s"
+            if date_fin:
+                maint_where_extra += " AND TimeStamp <= %(date_fin)s"
+            if resource_ids:
+                ids = ','.join(str(int(r)) for r in resource_ids if r.isdigit())
+                if ids:
+                    maint_where_extra += f" AND ResourceID IN ({ids})"
+
+            # MTBF : cap à 7200s (2h) — exclut les intervalles inter-sessions
+            # (nuits, week-ends, longues périodes d'inactivité entre séances)
             cursor.execute("""
-                SELECT AVG(TIMESTAMPDIFF(MINUTE, prev_ts, TimeStamp)) AS mtbf_min
+                SELECT AVG(TIMESTAMPDIFF(SECOND, prev_ts, TimeStamp)) / 60.0 AS mtbf_min
                 FROM (
                     SELECT
                         TimeStamp,
@@ -726,15 +835,17 @@ def maintenance():
                             OVER (PARTITION BY ResourceID ORDER BY TimeStamp)       AS prev_ts
                     FROM tblmachinereport
                     WHERE ResourceID > 0
+                """ + maint_where_extra + """
                 ) t
-                WHERE in_error = 1 AND prev_error = 0;
-            """)
+                WHERE in_error = 1 AND prev_error = 0
+                  AND TIMESTAMPDIFF(SECOND, prev_ts, TimeStamp) BETWEEN 10 AND 7200;
+            """, params)
             mtbf_row = cursor.fetchone()
             mtbf_min = round(mtbf_row['mtbf_min'] or 0, 1)
 
             # MTBF par machine (pour sparkline)
             cursor.execute("""
-                SELECT ResourceID, AVG(TIMESTAMPDIFF(MINUTE, prev_ts, TimeStamp)) AS mtbf_min
+                SELECT ResourceID, AVG(TIMESTAMPDIFF(SECOND, prev_ts, TimeStamp)) / 60.0 AS mtbf_min
                 FROM (
                     SELECT ResourceID, TimeStamp,
                         (ErrorL0=1 OR ErrorL1=1 OR ErrorL2=1) AS in_error,
@@ -742,16 +853,21 @@ def maintenance():
                             OVER (PARTITION BY ResourceID ORDER BY TimeStamp) AS prev_error,
                         LAG(TimeStamp)
                             OVER (PARTITION BY ResourceID ORDER BY TimeStamp) AS prev_ts
-                    FROM tblmachinereport WHERE ResourceID > 0
+                    FROM tblmachinereport
+                    WHERE ResourceID > 0
+                """ + maint_where_extra + """
                 ) t
                 WHERE in_error = 1 AND prev_error = 0
+                  AND TIMESTAMPDIFF(SECOND, prev_ts, TimeStamp) BETWEEN 10 AND 7200
                 GROUP BY ResourceID;
-            """)
+            """, params)
             mtbf_by_res = cursor.fetchall()
 
             # ── MTTR ──────────────────────────────────────────────────────
+            # Cap à 600s (10 min) — exclut les longues indisponibilités inter-sessions.
+            # Les réparations réelles durent quelques secondes à quelques minutes.
             cursor.execute("""
-                SELECT AVG(TIMESTAMPDIFF(MINUTE, prev_ts, TimeStamp)) AS mttr_min
+                SELECT AVG(TIMESTAMPDIFF(SECOND, prev_ts, TimeStamp)) / 60.0 AS mttr_min
                 FROM (
                     SELECT
                         TimeStamp,
@@ -762,11 +878,13 @@ def maintenance():
                             OVER (PARTITION BY ResourceID ORDER BY TimeStamp)       AS prev_ts
                     FROM tblmachinereport
                     WHERE ResourceID > 0
+                """ + maint_where_extra + """
                 ) t
-                WHERE in_error = 0 AND prev_error = 1;
-            """)
+                WHERE in_error = 0 AND prev_error = 1
+                  AND TIMESTAMPDIFF(SECOND, prev_ts, TimeStamp) BETWEEN 0 AND 600;
+            """, params)
             mttr_row = cursor.fetchone()
-            mttr_min = round(mttr_row['mttr_min'] or 0, 1)
+            mttr_min = round(mttr_row['mttr_min'] or 0, 2)
 
             # graphique MTTR vs objectif
             fig_mttr = go.Figure()
@@ -818,16 +936,50 @@ def alertes():
     alertes_list = []
 
     try:
+        date_debut   = request.args.get('date_debut', '')
+        date_fin     = request.args.get('date_fin', '')
+        resource_ids = request.args.getlist('resource_id')
+        params = {'date_debut': date_debut, 'date_fin': date_fin}
+
+        # Build filter clauses for each table
+        fs_date = ""
+        pr_date = ""
+        mr_date = ""
+        res_clause_fs = ""
+        res_clause_pr = ""
+        res_clause_mr = ""
+        if date_debut:
+            fs_date += " AND Start >= %(date_debut)s"
+            pr_date += " AND TimeStamp >= %(date_debut)s"
+            mr_date += " AND TimeStamp >= %(date_debut)s"
+        if date_fin:
+            fs_date += " AND End <= %(date_fin)s"
+            pr_date += " AND TimeStamp <= %(date_fin)s"
+            mr_date += " AND TimeStamp <= %(date_fin)s"
+        if resource_ids:
+            ids = ','.join(str(int(r)) for r in resource_ids if r.isdigit())
+            if ids:
+                res_clause_fs = f" AND ResourceID IN ({ids})"
+                res_clause_pr = f" AND ResourceID IN ({ids})"
+                res_clause_mr = f" AND ResourceID IN ({ids})"
+
         with db.cursor() as cursor:
-            # TRG
+            # TRG — même logique que la page production (moyenne journalière)
             cursor.execute("""
-                SELECT
-                    (COUNT(pr.ID) * AVG(TIMESTAMPDIFF(SECOND, f.Start, f.End)))
-                    / NULLIF(TIMESTAMPDIFF(SECOND, MIN(f.Start), MAX(f.End)), 0) * 100 AS trg
-                FROM tblfinstep f, tblpartsreport pr
-                WHERE f.Start IS NOT NULL AND f.End IS NOT NULL;
-            """)
-            trg_val = round((cursor.fetchone() or {}).get('trg') or 0, 1)
+                SELECT COALESCE(AVG(daily_trg), 0) AS trg_moyen
+                FROM (
+                    SELECT DATE(Start) AS jour,
+                        SUM(TIMESTAMPDIFF(SECOND, Start, End)) /
+                        NULLIF(TIMESTAMPDIFF(SECOND, MIN(Start), MAX(End)), 0) * 100 AS daily_trg
+                    FROM tblfinstep
+                    WHERE Start IS NOT NULL AND End IS NOT NULL
+                      AND TIMESTAMPDIFF(SECOND, Start, End) BETWEEN 1 AND 3600
+                """ + fs_date + res_clause_fs + """
+                    GROUP BY DATE(Start)
+                    HAVING COUNT(*) >= 5
+                ) t
+            """, params)
+            trg_val = round((cursor.fetchone() or {}).get('trg_moyen') or 0, 1)
             alertes_list.append({
                 'domaine': 'Production', 'kpi': 'TRG (Taux de rendement global)',
                 'valeur': f"{trg_val} %", 'seuil': '< 65 %',
@@ -835,20 +987,8 @@ def alertes():
                 'critique': trg_val < 50,
             })
 
-            # Capacité inutilisée
-            cursor.execute("""
-                SELECT
-                    TIMESTAMPDIFF(SECOND, MIN(Start), MAX(End)) AS ouv,
-                    AVG(WorkingTime)/1000 AS theo
-                FROM tblfinstep, tblresourceoperation
-                WHERE Start IS NOT NULL AND WorkingTime > 0;
-            """)
-            row_c = cursor.fetchone() or {}
-            ouv  = row_c.get('ouv') or 1
-            theo = row_c.get('theo') or 1
-            cursor.execute("SELECT COUNT(ID) AS n FROM tblpartsreport;")
-            n_p = (cursor.fetchone() or {}).get('n') or 0
-            capa_inu = round(max(0, 100 - (n_p / (ouv / theo)) * 100), 1) if ouv > 0 else 0
+            # Capacité inutilisée = 100 - TRG
+            capa_inu = round(max(0, 100 - trg_val), 1)
             alertes_list.append({
                 'domaine': 'Production', 'kpi': 'Capacité de production inutilisée',
                 'valeur': f"{capa_inu} %", 'seuil': '> 45 %',
@@ -858,21 +998,17 @@ def alertes():
 
             # Cycle moyen
             cursor.execute("""
-                SELECT AVG(TIMESTAMPDIFF(SECOND, Start, End)) AS cr,
-                       (SELECT AVG(WorkingTime)/1000 FROM tblresourceoperation WHERE WorkingTime>0) AS ct
+                SELECT AVG(TIMESTAMPDIFF(SECOND, Start, End)) AS cr
                 FROM tblfinstep
                 WHERE Start IS NOT NULL AND End IS NOT NULL
-                  AND TIMESTAMPDIFF(SECOND, Start, End) BETWEEN 1 AND 3600;
-            """)
-            cyc = cursor.fetchone() or {}
-            cr = cyc.get('cr') or 0
-            ct = cyc.get('ct') or 1
-            ecart_cyc = round(cr / ct * 100, 1) if ct > 0 else 100
+                  AND TIMESTAMPDIFF(SECOND, Start, End) BETWEEN 1 AND 3600
+            """ + fs_date + res_clause_fs + ";", params)
+            cr = round((cursor.fetchone() or {}).get('cr') or 0, 1)
             alertes_list.append({
-                'domaine': 'Production', 'kpi': 'Durée moyenne cycle (écart vs théorique)',
-                'valeur': f"{ecart_cyc} %", 'seuil': '> 115 % ou < 85 %',
-                'alerte': ecart_cyc > 115 or ecart_cyc < 85,
-                'critique': ecart_cyc > 130 or ecart_cyc < 70,
+                'domaine': 'Production', 'kpi': 'Durée moyenne cycle de production',
+                'valeur': f"{cr} s", 'seuil': '> 200 s',
+                'alerte': cr > 200,
+                'critique': cr > 300,
             })
 
             # Temps d'attente
@@ -880,9 +1016,11 @@ def alertes():
                 SELECT AVG(wait_s) AS aw FROM (
                     SELECT TIMESTAMPDIFF(SECOND,
                         LAG(End) OVER (PARTITION BY ONo ORDER BY StepNo), Start) AS wait_s
-                    FROM tblfinstep WHERE Start IS NOT NULL AND End IS NOT NULL AND ONo > 0
+                    FROM tblfinstep
+                    WHERE Start IS NOT NULL AND End IS NOT NULL AND ONo > 0
+                """ + fs_date + res_clause_fs + """
                 ) t WHERE wait_s BETWEEN 0 AND 600;
-            """)
+            """, params)
             aw_val = round((cursor.fetchone() or {}).get('aw') or 0, 1)
             alertes_list.append({
                 'domaine': 'Production', 'kpi': "Temps d'attente moyen entre opérations",
@@ -894,8 +1032,8 @@ def alertes():
             # NC rate
             cursor.execute("""
                 SELECT COUNT(*) AS t, SUM(CASE WHEN ErrorID!=0 THEN 1 ELSE 0 END) AS nc
-                FROM tblpartsreport WHERE ResourceID > 0;
-            """)
+                FROM tblpartsreport WHERE ResourceID > 0
+            """ + pr_date + res_clause_pr + ";", params)
             nc_r = cursor.fetchone() or {}
             nc_rate_val = round((nc_r.get('nc') or 0) / (nc_r.get('t') or 1) * 100, 2)
             alertes_list.append({
@@ -912,8 +1050,9 @@ def alertes():
                     SUM(CASE WHEN ResourceID=3 AND ErrorID=0  THEN 1 ELSE 0 END) AS ia_ok,
                     SUM(CASE WHEN ResourceID=6 AND ErrorID!=0 THEN 1 ELSE 0 END) AS hum_nc,
                     SUM(CASE WHEN ResourceID=6 AND ErrorID=0  THEN 1 ELSE 0 END) AS hum_ok
-                FROM tblpartsreport;
-            """)
+                FROM tblpartsreport
+                WHERE 1=1
+            """ + pr_date + ";", params)
             ia_r = cursor.fetchone() or {}
             ia_nc_v  = ia_r.get('ia_nc')  or 0
             ia_ok_v  = ia_r.get('ia_ok')  or 0
@@ -976,17 +1115,19 @@ def alertes():
                 'critique': pf_p < 40,
             })
 
-            # MTBF
+            # MTBF — cap 7200s (2h) pour exclure les intervalles inter-sessions
             cursor.execute("""
-                SELECT AVG(TIMESTAMPDIFF(MINUTE, prev_ts, TimeStamp)) AS mtbf FROM (
+                SELECT AVG(TIMESTAMPDIFF(SECOND, prev_ts, TimeStamp)) / 60.0 AS mtbf FROM (
                     SELECT TimeStamp,
                         (ErrorL0=1 OR ErrorL1=1 OR ErrorL2=1) AS in_error,
                         LAG((ErrorL0=1 OR ErrorL1=1 OR ErrorL2=1))
                             OVER (PARTITION BY ResourceID ORDER BY TimeStamp) AS prev_error,
                         LAG(TimeStamp) OVER (PARTITION BY ResourceID ORDER BY TimeStamp) AS prev_ts
                     FROM tblmachinereport WHERE ResourceID > 0
-                ) t WHERE in_error=1 AND prev_error=0;
-            """)
+                """ + mr_date + res_clause_mr + """
+                ) t WHERE in_error=1 AND prev_error=0
+                  AND TIMESTAMPDIFF(SECOND, prev_ts, TimeStamp) BETWEEN 10 AND 7200;
+            """, params)
             mtbf_v = round((cursor.fetchone() or {}).get('mtbf') or 0, 1)
             alertes_list.append({
                 'domaine': 'Maintenance', 'kpi': 'MTBF (Temps moyen entre pannes)',
@@ -995,18 +1136,20 @@ def alertes():
                 'critique': mtbf_v < 10,
             })
 
-            # MTTR
+            # MTTR — cap 600s (10 min) pour exclure les arrêts inter-sessions
             cursor.execute("""
-                SELECT AVG(TIMESTAMPDIFF(MINUTE, prev_ts, TimeStamp)) AS mttr FROM (
+                SELECT AVG(TIMESTAMPDIFF(SECOND, prev_ts, TimeStamp)) / 60.0 AS mttr FROM (
                     SELECT TimeStamp,
                         (ErrorL0=1 OR ErrorL1=1 OR ErrorL2=1) AS in_error,
                         LAG((ErrorL0=1 OR ErrorL1=1 OR ErrorL2=1))
                             OVER (PARTITION BY ResourceID ORDER BY TimeStamp) AS prev_error,
                         LAG(TimeStamp) OVER (PARTITION BY ResourceID ORDER BY TimeStamp) AS prev_ts
                     FROM tblmachinereport WHERE ResourceID > 0
-                ) t WHERE in_error=0 AND prev_error=1;
-            """)
-            mttr_v = round((cursor.fetchone() or {}).get('mttr') or 0, 1)
+                """ + mr_date + res_clause_mr + """
+                ) t WHERE in_error=0 AND prev_error=1
+                  AND TIMESTAMPDIFF(SECOND, prev_ts, TimeStamp) BETWEEN 0 AND 600;
+            """, params)
+            mttr_v = round((cursor.fetchone() or {}).get('mttr') or 0, 2)
             alertes_list.append({
                 'domaine': 'Maintenance', 'kpi': 'MTTR (Temps moyen de réparation)',
                 'valeur': f"{mttr_v} min", 'seuil': '> 15 min',
@@ -1028,6 +1171,174 @@ def alertes():
                            alertes_list=alertes_list,
                            nb_alertes=nb_alertes,
                            nb_critiques=nb_critiques,
+                           **get_sidebar_context())
+
+
+# ─────────────────────────────────────────────
+#  DONNÉES — upload .sql
+# ─────────────────────────────────────────────
+EXPECTED_TABLES = {
+    'tblfinorder', 'tblfinstep', 'tblpartsreport',
+    'tblmachinereport', 'tblresource', 'tblbufferpos',
+    'tblparts', 'tblmainterror', 'tblmaintsolutions',
+    'tblresourceoperation'
+}
+
+def _parse_sql_tables(sql_text):
+    """Retourne l'ensemble des tables mentionnées dans CREATE TABLE ou INSERT INTO."""
+    tables = set()
+    for m in re.finditer(
+        r'(?:CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?`?(\w+)`?'
+        r'|INSERT\s+INTO\s+`?(\w+)`?)',
+        sql_text, re.IGNORECASE
+    ):
+        tables.add((m.group(1) or m.group(2)).lower())
+    return tables
+
+def _split_statements(sql_text):
+    """Découpe le fichier SQL en statements individuels (heuristique simple)."""
+    # On supprime les commentaires ligne
+    sql_text = re.sub(r'--[^\n]*', '', sql_text)
+    sql_text = re.sub(r'/\*.*?\*/', '', sql_text, flags=re.DOTALL)
+    statements = [s.strip() for s in sql_text.split(';') if s.strip()]
+    return statements
+
+@app.route("/donnees", methods=["GET", "POST"])
+@role_required("admin")
+def donnees():
+    message = None
+    msg_type = "info"  # "success" | "error" | "info"
+
+    if request.method == "POST":
+        uploaded = request.files.get("sql_file")
+        if not uploaded or not uploaded.filename.endswith(".sql"):
+            message = "Veuillez sélectionner un fichier .sql valide."
+            msg_type = "error"
+        else:
+            try:
+                raw = uploaded.read().decode("utf-8", errors="replace")
+
+                # ── 1. Valider la structure ───────────────────────────────
+                found_tables = _parse_sql_tables(raw)
+                missing = EXPECTED_TABLES - found_tables
+                unknown = found_tables - {t.lower() for t in EXPECTED_TABLES}
+
+                if missing and not found_tables.intersection(EXPECTED_TABLES):
+                    message = (
+                        f"Structure invalide : aucune table reconnue dans le fichier. "
+                        f"Tables attendues : {', '.join(sorted(EXPECTED_TABLES))}."
+                    )
+                    msg_type = "error"
+                elif unknown and not found_tables.intersection(EXPECTED_TABLES):
+                    message = (
+                        f"Structure invalide : tables inconnues ({', '.join(sorted(unknown))}). "
+                        f"Ce fichier ne correspond pas à la base de données MES."
+                    )
+                    msg_type = "error"
+                else:
+                    # ── 2. Injecter les données ───────────────────────────
+                    statements = _split_statements(raw)
+                    db = get_db()
+                    inserted = 0
+                    skipped = 0
+                    errors_inj = []
+                    try:
+                        with db.cursor() as cursor:
+                            for stmt in statements:
+                                upper = stmt.upper().lstrip()
+                                # On n'exécute que les INSERT (pas DROP/CREATE/ALTER
+                                # pour ne pas écraser le schéma existant)
+                                if not upper.startswith("INSERT"):
+                                    continue
+                                # Réécrire INSERT INTO → INSERT IGNORE INTO
+                                stmt_safe = re.sub(
+                                    r'^INSERT\s+INTO\b',
+                                    'INSERT IGNORE INTO',
+                                    stmt,
+                                    count=1,
+                                    flags=re.IGNORECASE
+                                )
+                                try:
+                                    cursor.execute(stmt_safe)
+                                    if cursor.rowcount > 0:
+                                        inserted += cursor.rowcount
+                                    else:
+                                        skipped += 1
+                                except Exception as e_stmt:
+                                    errors_inj.append(str(e_stmt)[:120])
+                            db.commit()
+                    finally:
+                        db.close()
+
+                    if errors_inj:
+                        message = (
+                            f"Injection partielle : {inserted} ligne(s) insérée(s), "
+                            f"{skipped} doublon(s) ignoré(s). "
+                            f"{len(errors_inj)} erreur(s) : {errors_inj[0]}"
+                        )
+                        msg_type = "error"
+                    else:
+                        message = (
+                            f"Injection réussie : {inserted} ligne(s) insérée(s), "
+                            f"{skipped} doublon(s) ignoré(s) (données existantes conservées)."
+                        )
+                        msg_type = "success"
+
+            except Exception as e:
+                import traceback; traceback.print_exc()
+                message = f"Erreur lors du traitement du fichier : {e}"
+                msg_type = "error"
+
+    return render_template("donnees.html",
+                           message=message,
+                           msg_type=msg_type,
+                           **get_sidebar_context())
+
+
+# ─────────────────────────────────────────────
+#  SUGGESTIONS
+# ─────────────────────────────────────────────
+@app.route("/suggestions", methods=["GET", "POST"])
+@role_required("admin", "operateur")
+def suggestions():
+    db = get_db()
+    message = None
+    msg_type = "info"
+
+    if request.method == "POST" and session.get("role") == "operateur":
+        contenu = request.form.get("contenu", "").strip()
+        if contenu:
+            try:
+                with db.cursor() as cursor:
+                    cursor.execute(
+                        "INSERT INTO suggestions (username, contenu) VALUES (%s, %s)",
+                        (session["user"], contenu)
+                    )
+                db.commit()
+                message = "Votre suggestion a bien été enregistrée."
+                msg_type = "success"
+            except Exception as e:
+                message = f"Erreur lors de l'enregistrement : {e}"
+                msg_type = "error"
+        else:
+            message = "Le message ne peut pas être vide."
+            msg_type = "error"
+
+    try:
+        with db.cursor() as cursor:
+            cursor.execute(
+                "SELECT id, username, contenu, created_at FROM suggestions ORDER BY created_at DESC;"
+            )
+            all_suggestions = cursor.fetchall()
+    except Exception:
+        all_suggestions = []
+    finally:
+        db.close()
+
+    return render_template("suggestions.html",
+                           all_suggestions=all_suggestions,
+                           message=message,
+                           msg_type=msg_type,
                            **get_sidebar_context())
 
 

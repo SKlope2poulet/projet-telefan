@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% set active_page = "donnees" %}
+
+{% block title %}Données — Performance & Flux{% endblock %}
+
+{% block content %}
+
+        <div class="kpi-card full-width">
+            <h3>Injection de données — Importer un fichier .sql</h3>
+
+            <p style="color:#64748b;font-size:13px;margin-bottom:20px;">
+                Sélectionnez un fichier <strong>.sql</strong> exporté depuis la même structure de base de données MES.
+                Les doublons sont ignorés automatiquement (les données existantes sont conservées).
+            </p>
+
+            {% if message %}
+            <div style="margin-bottom:20px;padding:14px 20px;border-radius:10px;font-size:14px;font-weight:600;
+                {% if msg_type == 'success' %}background:#f0fdf4;border:2px solid #22c55e;color:#14532d;
+                {% elif msg_type == 'error' %}background:#fef2f2;border:2px solid #ef4444;color:#7f1d1d;
+                {% else %}background:#eff6ff;border:2px solid #3b82f6;color:#1e3a8a;{% endif %}">
+                {% if msg_type == 'success' %}✅{% elif msg_type == 'error' %}❌{% else %}ℹ️{% endif %}
+                {{ message }}
+                {% if msg_type == 'success' %}
+                <div style="margin-top:12px;">
+                    <a href="{{ url_for('production') }}" style="display:inline-block;padding:8px 18px;background:#1355B8;color:white;border-radius:8px;font-size:13px;text-decoration:none;font-weight:600;">
+                        Actualiser le tableau de bord →
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <form method="POST" enctype="multipart/form-data"
+                  style="display:flex;flex-direction:column;gap:16px;max-width:480px;">
+                <div style="display:flex;flex-direction:column;gap:6px;">
+                    <label style="font-size:13px;font-weight:600;color:#374151;">Fichier SQL :</label>
+                    <input type="file" name="sql_file" accept=".sql" required
+                           style="border:2px dashed #cbd5e1;border-radius:8px;padding:10px 14px;
+                                  font-size:13px;background:#f8fafc;cursor:pointer;">
+                </div>
+                <button type="submit"
+                        style="padding:10px 24px;background:#1355B8;color:white;border:none;
+                               border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;
+                               align-self:flex-start;transition:background .2s;">
+                    Injecter les données
+                </button>
+            </form>
+
+            <div style="margin-top:32px;padding:16px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0;">
+                <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">
+                    Tables attendues dans le fichier
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                    {% for t in [
+                        'tblfinorder','tblfinstep','tblpartsreport','tblmachinereport',
+                        'tblresource','tblbufferpos','tblparts','tblmainterror',
+                        'tblmaintsolutions','tblresourceoperation'
+                    ] %}
+                    <span style="background:#dbeafe;color:#1e40af;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;">
+                        {{ t }}
+                    </span>
+                    {% endfor %}
+                </div>
+                <p style="font-size:11px;color:#94a3b8;margin-top:10px;margin-bottom:0;">
+                    Le fichier doit contenir au moins des instructions <code>INSERT INTO</code> pour une ou plusieurs de ces tables.
+                    Les instructions <code>CREATE TABLE</code>, <code>DROP</code> et <code>ALTER</code> sont ignorées pour préserver le schéma existant.
+                </p>
+            </div>
+        </div>
+
+{% endblock %}

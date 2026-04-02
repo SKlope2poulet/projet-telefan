@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% set active_page = "suggestions" %}
+
+{% block title %}Suggestions — Performance & Flux{% endblock %}
+
+{% block content %}
+
+        {# ── Formulaire — visible uniquement pour l'opérateur ── #}
+        {% if current_role == 'operateur' %}
+        <div class="kpi-card full-width">
+            <h3>Écrire une suggestion</h3>
+
+            {% if message %}
+            <div style="margin-bottom:16px;padding:12px 18px;border-radius:8px;font-size:14px;font-weight:600;
+                {% if msg_type == 'success' %}background:#f0fdf4;border:2px solid #22c55e;color:#14532d;
+                {% else %}background:#fef2f2;border:2px solid #ef4444;color:#7f1d1d;{% endif %}">
+                {% if msg_type == 'success' %}✅{% else %}❌{% endif %} {{ message }}
+            </div>
+            {% endif %}
+
+            <form method="POST" style="display:flex;flex-direction:column;gap:14px;max-width:600px;">
+                <textarea name="contenu" rows="5" required
+                    placeholder="Décrivez votre suggestion, observation ou remarque..."
+                    style="border:2px solid #e2e8f0;border-radius:8px;padding:12px;font-size:14px;
+                           font-family:inherit;resize:vertical;outline:none;"></textarea>
+                <button type="submit"
+                        style="padding:10px 24px;background:#9d174d;color:white;border:none;
+                               border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;
+                               align-self:flex-start;">
+                    Envoyer la suggestion
+                </button>
+            </form>
+        </div>
+        {% endif %}
+
+        {# ── Liste des suggestions — admin voit tout, opérateur voit aussi #}
+        <div class="kpi-card full-width">
+            <h3>
+                Suggestions enregistrées
+                <span style="font-size:12px;font-weight:400;color:#94a3b8;">({{ all_suggestions|length }})</span>
+            </h3>
+
+            {% if all_suggestions %}
+            <div style="display:flex;flex-direction:column;gap:14px;max-height:600px;overflow-y:auto;">
+                {% for s in all_suggestions %}
+                <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px 20px;
+                            border-left:4px solid #9d174d;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                        <span style="font-size:12px;font-weight:700;color:#9d174d;">
+                            {{ s.username }}
+                        </span>
+                        <span style="font-size:11px;color:#94a3b8;">
+                            {{ s.created_at.strftime('%d/%m/%Y %H:%M') if s.created_at else '' }}
+                        </span>
+                    </div>
+                    <p style="margin:0;font-size:14px;color:#1e293b;line-height:1.6;white-space:pre-wrap;">{{ s.contenu }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="color:#94a3b8;text-align:center;padding:30px;font-size:14px;">
+                Aucune suggestion pour le moment.
+            </p>
+            {% endif %}
+        </div>
+
+{% endblock %}

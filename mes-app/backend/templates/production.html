@@ -59,9 +59,32 @@
         </div>
 
         <div class="kpi-card full-width">
-            <h3>Suivi des OF</h3>
-            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
-                <thead>
+            <h3>Suivi des OF <span style="font-size:12px;font-weight:400;color:#94a3b8;">({{ ordres|length }} OF)</span></h3>
+
+            {# Dropdown de filtrage rapide #}
+            <div style="margin-bottom:12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                <label style="font-size:13px;font-weight:600;color:#374151;">Filtrer par N° OF :</label>
+                <select id="of-filter"
+                        style="border:1px solid #cbd5e1;border-radius:6px;padding:6px 12px;font-size:13px;
+                               background:white;cursor:pointer;min-width:180px;"
+                        onchange="filterOF(this.value)">
+                    <option value="">— Tous les OF —</option>
+                    {% for of in ordres %}
+                    <option value="{{ of.OrderID }}">OF #{{ of.OrderID }}
+                        {% if of.retard %} ⚠{% elif of.Status == 'Terminé' %} ✓{% endif %}
+                    </option>
+                    {% endfor %}
+                </select>
+                <button onclick="filterOF('');document.getElementById('of-filter').value='';"
+                        style="padding:6px 14px;background:#f1f5f9;border:1px solid #cbd5e1;
+                               border-radius:6px;font-size:13px;cursor:pointer;color:#374151;">
+                    Réinitialiser
+                </button>
+            </div>
+
+            <div style="max-height:420px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;">
+            <table id="of-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
+                <thead style="position:sticky;top:0;z-index:1;">
                     <tr style="border-bottom: 2px solid #e2e8f0; color: #1e3a8a;">
                         <th style="padding: 10px;">N° OF</th>
                         <th style="padding: 10px;">Début Prévu</th>
@@ -73,7 +96,7 @@
                 </thead>
                 <tbody>
                     {% for of in ordres %}
-                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <tr data-of="{{ of.OrderID }}" style="border-bottom: 1px solid #f1f5f9;">
                         <td style="padding: 10px; font-weight: bold;">{{ of.OrderID }}</td>
                         <td style="padding: 10px;">{{ of.PlannedStart }}</td>
                         <td style="padding: 10px;">{{ of.PlannedEnd }}</td>
@@ -94,6 +117,16 @@
                     {% endfor %}
                 </tbody>
             </table>
+            </div>
         </div>
+
+        <script>
+        function filterOF(val) {
+            const rows = document.querySelectorAll('#of-table tbody tr[data-of]');
+            rows.forEach(function(row) {
+                row.style.display = (!val || row.dataset.of === String(val)) ? '' : 'none';
+            });
+        }
+        </script>
 
 {% endblock %}
