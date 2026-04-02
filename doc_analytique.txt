@@ -1,0 +1,50 @@
+Documentation Analytique : Traduction des Besoins Métier en Logique Décisionnelle
+Dans le cadre du projet MES 4.0, notre rôle de prestataire vis-à-vis du client QLIO a été d'implémenter les 12 indicateurs de pilotage exigés. Notre valeur ajoutée analytique a résidé dans le traitement des données brutes pour garantir que la restitution visuelle réponde aux enjeux de réactivité, performance, qualité et traçabilité définis par le client.
+
+1. Traduction des Enjeux de Performance (Production)
+Le client souhaitait optimiser sa production et identifier les goulots d'étranglement sur sa ligne semi-automatisée.
+
+TRG & Capacité inutilisée :
+
+Le besoin QLIO : Obtenir la productivité globale de la ligne (objectif > 70%) et chiffrer la perte de capacité.
+
+Notre approche analytique : Les données brutes intégraient des jours sans activité usine (week-ends, jours fériés), ce qui écrasait mathématiquement le TRG vers 0%. Nous avons analytiquement redéfini le périmètre de calcul pour réaliser une moyenne uniquement sur les jours de production active. Le TRG calculé (~17.7%) reflète désormais la vraie dynamique d'exploitation.
+
+Productivité par poste :
+
+Le besoin QLIO : Suivre la productivité individuelle des ressources automatisées pour identifier les inefficacités.
+
+Notre approche analytique : La formule métier standardisée aboutissait systématiquement à 100% à cause d'un biais mathématique entre le temps théorique et le décompte des étapes. Nous avons modifié l'algorithme pour baser le calcul sur le comptage réel des pièces (tblpartsreport) par rapport à une fenêtre journalière, permettant de révéler de vraies disparités de performance (de 0.7% à 70% selon la machine).
+
+2. Réponse aux Exigences de Qualité
+La détection de la non-conformité et la fiabilité de l'inspection automatisée étaient des points de vigilance critiques.
+
+Matrice de fiabilité de l'IA :
+
+Le besoin QLIO : Évaluer l'exactitude de la caméra intelligente (CP-AM-CAM) qui inspecte l'assemblage.
+
+Notre approche analytique : Nous avons modélisé une matrice de confusion (Vrai Positif, Faux Négatif, etc.). Analytiquement, cet indicateur est vital : il permet de savoir si une baisse du TRG est due à un vrai défaut de production, ou à un modèle IA sous-entraîné qui rejette des pièces conformes (Faux Positifs).
+
+Pareto des défauts & Plan d'action :
+
+Le besoin QLIO : Analyser les erreurs récurrentes pour cibler les actions correctives.
+
+Notre approche analytique : Nous avons croisé les tables tblmainterror et tblmaintsolutions pour transformer un simple code d'erreur (ex: E11) en une donnée immédiatement exploitable par l'opérateur (cause et solution) via l'interface.
+
+3. Modélisation des Flux (Stock)
+Le pilotage d'une ligne d'assemblage nécessite un contrôle strict des en-cours pour éviter l'engorgement.
+
+Évolution des en-cours (WIP), Matières Premières et Produits Finis :
+
+Le besoin QLIO : Suivre les variations de stock dans les buffers et s'assurer que le WIP reste sous les 30%.
+
+Notre approche analytique : Face à des jeux de données présentant des interruptions de plusieurs mois (vides de production), un simple tracé chronologique aurait généré des courbes trompeuses. Nous avons implémenté la fonction fill_gaps() pour injecter des valeurs nulles au-delà de 30 jours d'inactivité, forçant une rupture visuelle sémantiquement correcte.
+
+4. Pilotage de la Disponibilité (Maintenance)
+Anticiper les pannes est essentiel pour le client afin d'assurer la performance continue de la ligne FESTO.
+
+MTBF (Temps Moyen Entre Pannes) et MTTR (Temps Moyen de Réparation) :
+
+Le besoin QLIO : Évaluer la fréquence des pannes (MTBF) et le temps nécessaire pour les résoudre (MTTR) afin d'ajuster le planning.
+
+Notre approche analytique : Les données d'horodatage (TimeStamp) des pannes ne tenaient pas compte des périodes de fermeture de l'usine. Une machine laissée en erreur un vendredi soir affichait un MTTR aberrant le lundi matin. À défaut d'avoir une table de calendrier d'ouverture (heures ouvrées), nous avons appliqué un nettoyage statistique strict : un plafonnement des durées aberrantes (2h pour le MTBF, 10 min pour le MTTR). Ces seuils, bien qu'artificiels, ont permis de restaurer l'ordre de grandeur réel des micro-arrêts subis par les opérateurs de la ligne (MTTR moyen redressé à ~44 secondes).
