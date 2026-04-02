@@ -1,0 +1,52 @@
+Documentation Technique des Fonctionnalités : WebApp TEleFan MES 4.0
+1. Sécurité et Gestion des Accès
+L'application intègre un système d'authentification sécurisé répondant aux exigences du projet.
+
+Authentification : Connexion obligatoire via une page de login. Les mots de passe des utilisateurs sont hachés en base de données pour garantir la sécurité.
+
+Déconnexion : Un bouton "Déconnexion" est présent en permanence dans le bandeau supérieur droit.
+
+Gestion des droits (RBAC) : L'accès aux 7 onglets est conditionné par le rôle de l'utilisateur.
+
+Utilisateur (Membre Externe / Standard) : Accès en lecture seule aux 5 onglets de pilotage principaux (Production, Qualité, Stock, Maintenance, Alertes).
+
+Opérateur : Hérite des droits de l'Utilisateur et accède en plus à l'onglet Suggestions pour faire remonter des informations ou commentaires.
+
+Administrateur : Accès total. Hérite des droits de l'Opérateur et accède à l'onglet Données pour l'injection et la gestion des fichiers SQL/CSV.
+
+2. Filtres Globaux
+Un bandeau latéral gauche est présent sur toutes les pages pour permettre le filtrage dynamique des indicateurs.
+
+Filtre Temporel : Permet à l'utilisateur de sélectionner une date de début et une date de fin. Les graphiques s'actualisent en temps réel.
+
+Filtre Machine/Poste : Permet de cibler l'analyse sur une ressource spécifique (ex: CP-F-ASRS32-P, CP-F-COBOT, etc.) via des cases à cocher.
+
+3. Description des Onglets et Indicateurs (KPIs)
+Le tableau de bord est divisé en espaces thématiques pour répondre aux besoins de pilotage de la ligne de production.
+
+Production : Suivi de l'efficacité de la ligne. Affiche le TRG (Taux de Rendement Global), la capacité inutilisée, le cycle moyen de production par poste, la productivité par ressource et les temps d'attente.
+
+Qualité : Contrôle des rebuts et fiabilité. Présente le taux de produits Non-Conformes (NC), la fiabilité de l'IA (matrice de confusion), un diagramme de Pareto des défauts et le plan d'action.
+
+Stock : Gestion des flux. Visualisation du niveau des en-cours (WIP), de la répartition des Ordres de Fabrication (OF), et de l'évolution temporelle des Produits Finis (PF).
+
+Maintenance : Suivi de la santé des machines. Calcul du MTBF, du MTTR, et affichage du nombre de pannes réparties par niveau de criticité et par machine.
+
+Alertes : Vue consolidée affichant en rouge tous les KPIs ayant franchi leur seuil critique (ex: TRG < 65% ou MTTR > 15 min).
+
+Suggestions (Opérateur & Admin) : Interface permettant d'enregistrer et de consulter les retours terrain.
+
+Données (Admin uniquement) : Module d'importation de fichiers .sql pour alimenter la base de données (tables tblfinorder, tblfinstep, etc.).
+
+4. Ingénierie des Données : Ajustements et Traitements Analytiques
+Afin de rendre l'outil décisionnel pertinent et de pallier les anomalies liées aux périodes d'inactivité de la ligne (nuits, week-ends, vacances), plusieurs formules ont été retraitées mathématiquement.
+
+TRG (Taux de Rendement Global) & Capacité inutilisée : Le calcul est désormais effectué par jour de production effectif. La moyenne est lissée uniquement sur les jours actifs pour éviter que les jours de fermeture de l'usine ne tirent la valeur vers 0%. Le TRG s'établit ainsi à une valeur réaliste de ~17.7%, et la capacité inutilisée est déduite automatiquement (100% - TRG = ~82.3%).
+
+Productivité par poste : L'ancienne formule générait un biais mathématique aboutissant systématiquement à 100%. La nouvelle méthode utilise la formule : COUNT(pièces) × AVG(durée_step) / fenêtre_journalière. Les résultats sont plafonnés à 100% par jour puis moyennés sur les jours d'activité, offrant une amplitude réaliste de 0.7% à 70% selon le poste.
+
+MTBF (Temps Moyen Entre Pannes) : Pour éviter que les nuits et week-ends sans utilisation de la ligne ne gonflent artificiellement le temps de bon fonctionnement, l'intervalle maximum pris en compte a été réduit d'un plafond de 86 400s (24h) à 7 200s (2h). La moyenne obtenue est d'environ 10 minutes.
+
+MTTR (Temps Moyen de Réparation) : Les réparations s'étendant virtuellement sur plusieurs jours en raison d'une ligne éteinte faussaient la moyenne. Le plafond de calcul a été réduit de 28 800s (8h) à 600s (10 min). Le MTTR s'établit à ~0.73 minute, ce qui reflète les véritables interventions humaines.
+
+Traitement graphique (Qualité / Stock) : Implémentation d'une fonction fill_gaps(). Si un écart de plus de 30 jours sans données est détecté, une valeur None est insérée. Cela empêche la librairie graphique de tracer des lignes artificielles reliant des périodes séparées par des mois d'inactivité.
