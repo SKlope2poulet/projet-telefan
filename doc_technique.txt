@@ -1,0 +1,22 @@
+Documentation technique de l'application, suivez les étapes avec précision.
+
+- Installer Docker Desktop: https://www.docker.com/products/docker-desktop/ (selectionner "Download docker desktop" puis "Download fort Windows AMD64")
+- Lancer Docker Desktop et attendre que le docker engine ai fini de se lancer
+- dézipper le projet
+- dans le projet il y a un dossier nommé mes-app, fait un clique droit dessus et cliquer copier en tant que chemin d'accès.
+- dans la barre de recherche Windows tapper cdm et ouvrir l'invité de commande.
+- tapez la commande suivante: cd remplacer_ce_texte_par_le_chemin_que_vous_venez_de_copier
+- appuyer sur entrer pour executer la commande
+- tapez la commande suivante: docker compose up --build
+- appuyer sur entrer pour executer la commande
+- attendez que ce message s'affiche dans l'invité de commande:
+mes_web  | WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+mes_web  |  * Running on all addresses (0.0.0.0)
+mes_web  |  * Running on http://127.0.0.1:5000
+mes_web  |  * Running on http://172.20.0.3:5000
+
+- accédez à l'adresse http://localhost:5000/ et rentrer les identifiants ci dessous:
+
+user: admin ; mdp:admin1234
+user: operateur ; mdp:operateur1234
+user: utilisateur ; mdp:utilisateur1234
